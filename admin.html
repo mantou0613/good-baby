@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>審核者畫面 👑</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
@@ -24,12 +24,11 @@
   .greeting { font-size: 13px; color: var(--text-light); font-weight: 700; }
   .uname { font-size: 22px; font-weight: 900; color: var(--purple-deep); }
   .logout-btn { background: none; border: none; font-size: 13px; color: var(--text-light); cursor: pointer; font-family: 'Nunito', sans-serif; font-weight: 700; }
-  .nav-tabs { display: flex; gap: 2px; }
-  .nav-tab { flex: 1; text-align: center; padding: 10px 0; font-size: 11px; font-weight: 700; color: var(--text-light); border-bottom: 3px solid transparent; cursor: pointer; transition: all 0.2s; }
+  .nav-tabs { display: flex; gap: 2px; overflow-x: auto; }
+  .nav-tab { flex-shrink: 0; text-align: center; padding: 10px 10px; font-size: 11px; font-weight: 700; color: var(--text-light); border-bottom: 3px solid transparent; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
   .nav-tab.active { color: var(--purple-dark); border-bottom-color: var(--purple-dark); }
 
   .section-title { font-size: 16px; font-weight: 900; color: var(--text); margin: 0 16px 10px; display: flex; align-items: center; gap: 6px; }
-
   .tab-sec { display: none; }
   .tab-sec.active { display: block; }
 
@@ -57,7 +56,7 @@
   .btn-reject { background: var(--red); color: var(--red-deep); }
   .btn-reject:hover { background: var(--red-dark); color: white; }
 
-  /* PROPOSAL CARDS */
+  /* PROPOSAL */
   .proposal-list { padding: 0 16px; display: flex; flex-direction: column; gap: 12px; margin-bottom: 22px; }
   .proposal-card { background: white; border-radius: 16px; padding: 16px; border: 2px dashed var(--gold-dark); }
   .proposal-top { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; }
@@ -72,58 +71,60 @@
   .proposal-pts-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
   .proposal-pts-label { font-size: 13px; font-weight: 700; color: var(--text); white-space: nowrap; }
   .proposal-pts-input { flex: 1; background: #FFFDF0; border: 1.5px solid var(--gold-dark); border-radius: 10px; padding: 8px 12px; font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 900; color: var(--gold-deep); outline: none; }
-  .proposal-actions { display: flex; gap: 8px; }
+  .proposal-actions { display: flex; gap: 6px; flex-wrap: wrap; }
   .btn-add-task { background: var(--mint); color: var(--mint-deep); }
   .btn-add-task:hover { background: var(--mint-dark); color: white; }
   .btn-one-time { background: var(--blue); color: var(--blue-deep); }
   .btn-one-time:hover { background: var(--blue-dark); color: white; }
 
-  /* PLAYER CARDS */
+  /* PLAYER */
   .player-list { padding: 0 16px; display: flex; flex-direction: column; gap: 14px; margin-bottom: 22px; }
   .player-card { background: white; border-radius: 20px; padding: 18px 16px; border: 1.5px solid var(--blue); }
   .player-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
   .player-avatar { font-size: 34px; }
   .player-name { font-size: 18px; font-weight: 900; color: var(--text); }
   .player-pts-badge { margin-left: auto; background: var(--blue); border-radius: 14px; padding: 5px 14px; font-size: 13px; font-weight: 900; color: var(--blue-deep); }
-  .pts-input { flex: 1; background: #F8F7FC; border: 1.5px solid var(--purple); border-radius: 12px; padding: 10px 14px; font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 700; color: var(--text); outline: none; transition: border-color 0.2s; }
-  .pts-input:focus { border-color: var(--purple-dark); }
-  .pts-btn { border: none; border-radius: 12px; padding: 10px 16px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 900; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+  .pts-input { flex: 1; background: #F8F7FC; border: 1.5px solid var(--purple); border-radius: 12px; padding: 10px 14px; font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 700; color: var(--text); outline: none; }
+  .pts-btn { border: none; border-radius: 12px; padding: 10px 16px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 900; cursor: pointer; white-space: nowrap; }
   .pts-btn:active { transform: scale(0.96); }
   .btn-add { background: var(--mint); color: var(--mint-deep); }
   .btn-add:hover { background: var(--mint-dark); color: white; }
   .btn-sub { background: var(--red); color: var(--red-deep); }
   .btn-sub:hover { background: var(--red-dark); color: white; }
-  .pts-reason { width: 100%; background: #F8F7FC; border: 1.5px solid var(--purple); border-radius: 12px; padding: 10px 14px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700; color: var(--text); outline: none; margin-top: 8px; transition: border-color 0.2s; }
-  .pts-reason:focus { border-color: var(--purple-dark); }
-  .pts-adjust { display: flex; gap: 8px; align-items: center; }
+  .pts-reason { width: 100%; background: #F8F7FC; border: 1.5px solid var(--purple); border-radius: 12px; padding: 10px 14px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700; color: var(--text); outline: none; margin-top: 8px; }
+  .pts-adjust { display: flex; gap: 8px; align-items: center; margin-top: 8px; }
   .player-level { font-size: 11px; color: var(--text-light); font-weight: 700; margin-top: 8px; }
 
-  /* SHOP MANAGE */
+  /* GACHA SECTION IN PLAYER CARD */
+  .gacha-section { margin-top: 12px; padding-top: 12px; border-top: 1.5px solid #F0EEF8; }
+  .gacha-section-title { font-size: 12px; font-weight: 900; color: var(--purple-deep); margin-bottom: 8px; }
+  .gacha-send-row { display: flex; gap: 8px; align-items: center; }
+  .gacha-count-badge { background: var(--pink); color: var(--pink-deep); border-radius: 10px; padding: 4px 10px; font-size: 12px; font-weight: 900; }
+  .btn-gacha { background: linear-gradient(135deg, var(--pink), var(--purple)); color: white; }
+
+  /* SHOP / TASK MANAGE */
   .shop-manage { padding: 0 16px; margin-bottom: 22px; }
   .shop-item { background: white; border-radius: 14px; padding: 12px 14px; border: 1.5px solid var(--peach); display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
   .shop-item-icon { font-size: 26px; }
   .shop-item-info { flex: 1; }
   .shop-item-name { font-size: 14px; font-weight: 700; color: var(--text); }
   .shop-item-cost { font-size: 12px; color: var(--peach-deep); font-weight: 700; }
-  .shop-del-btn { background: var(--red); color: var(--red-deep); border: none; border-radius: 10px; padding: 6px 12px; font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.15s; }
+  .shop-del-btn { background: var(--red); color: var(--red-deep); border: none; border-radius: 10px; padding: 6px 12px; font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 700; cursor: pointer; }
   .shop-del-btn:hover { background: var(--red-dark); color: white; }
   .add-form { background: white; border-radius: 16px; padding: 16px; border: 1.5px solid var(--mint); }
   .form-title { font-size: 14px; font-weight: 900; color: var(--mint-deep); margin-bottom: 12px; }
   .form-row { display: flex; gap: 8px; margin-bottom: 8px; }
   .form-input { flex: 1; background: #F8FCF9; border: 1.5px solid var(--mint); border-radius: 10px; padding: 10px 12px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700; color: var(--text); outline: none; min-width: 0; }
-  .form-input:focus { border-color: var(--mint-dark); }
   .form-input-sm { width: 80px; flex: none; }
-  .form-submit { background: var(--mint-dark); color: white; border: none; border-radius: 10px; padding: 10px 16px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 900; cursor: pointer; transition: all 0.15s; }
-  .form-submit:hover { opacity: 0.85; }
+  .form-submit { background: var(--mint-dark); color: white; border: none; border-radius: 10px; padding: 10px 16px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 900; cursor: pointer; }
 
-  /* TASK MANAGE */
   .task-manage { padding: 0 16px; margin-bottom: 22px; }
   .task-manage-item { background: white; border-radius: 14px; padding: 12px 14px; border: 1.5px solid var(--purple); display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
   .task-manage-icon { font-size: 26px; }
   .task-manage-info { flex: 1; }
   .task-manage-name { font-size: 14px; font-weight: 700; color: var(--text); }
   .task-manage-pts { font-size: 12px; color: var(--purple-deep); font-weight: 700; }
-  .task-del-btn { background: var(--red); color: var(--red-deep); border: none; border-radius: 10px; padding: 6px 12px; font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.15s; }
+  .task-del-btn { background: var(--red); color: var(--red-deep); border: none; border-radius: 10px; padding: 6px 12px; font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 700; cursor: pointer; }
   .task-del-btn:hover { background: var(--red-dark); color: white; }
   .add-task-form { background: white; border-radius: 16px; padding: 16px; border: 1.5px solid var(--blue); }
   .form-title-blue { font-size: 14px; font-weight: 900; color: var(--blue-deep); margin-bottom: 12px; }
@@ -144,8 +145,7 @@
   .empty-icon { font-size: 44px; margin-bottom: 10px; }
   .badge { display: inline-block; background: var(--peach); color: var(--peach-deep); border-radius: 12px; padding: 2px 10px; font-size: 11px; font-weight: 900; margin-left: 6px; }
   .badge-gold { background: var(--gold); color: var(--gold-deep); }
-
-  .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-80px); background: #3A4A3A; color: white; border-radius: 20px; padding: 12px 24px; font-size: 14px; font-weight: 700; z-index: 999; transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1); white-space: nowrap; }
+  .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-80px); background: #3A4A3A; color: white; border-radius: 20px; padding: 12px 24px; font-size: 14px; font-weight: 700; z-index: 999; transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1); white-space: nowrap; max-width: 90vw; text-align: center; }
   .toast.show { transform: translateX(-50%) translateY(0); }
 </style>
 </head>
@@ -195,15 +195,13 @@
 <!-- PROPOSALS TAB -->
 <div id="tab-proposals" class="tab-sec">
   <div class="section-title" style="margin-top:6px">💡 自訂任務申請 <span class="badge badge-gold" id="proposalBadge">0</span></div>
-  <p style="padding:0 16px;margin-bottom:14px;font-size:12px;color:var(--text-light);font-weight:700;">
-    孩子提出的新任務提案，可以調整星星數後「加入任務列表」，或者「一次性給點數」後駁回。
-  </p>
+  <p style="padding:0 16px;margin-bottom:14px;font-size:12px;color:var(--text-light);font-weight:700;">孩子提出的新任務提案，調整星星數後可以「加入任務列表」或「一次性給點數」。</p>
   <div class="proposal-list" id="proposalList"></div>
 </div>
 
 <!-- POINTS TAB -->
 <div id="tab-points" class="tab-sec">
-  <div class="section-title" style="margin-top:6px">⭐ 點數管理</div>
+  <div class="section-title" style="margin-top:6px">⭐ 點數與扭蛋管理</div>
   <div class="player-list" id="playerList"></div>
 </div>
 
@@ -294,6 +292,7 @@ function render() {
   const pending = allData.pending || {};
   const proposals = allData.proposals || {};
   const history = allData.history ? Object.values(allData.history) : [];
+  const gacha = allData.gacha || {};
 
   const pendingArr = Object.entries(pending);
   const proposalArr = Object.entries(proposals);
@@ -301,26 +300,24 @@ function render() {
   const todayStr = `${today.getMonth()+1}/${today.getDate()}`;
   const todayApproved = history.filter(h => h.pts > 0 && h.time && h.time.startsWith(todayStr)).length;
 
-  // Stats
   document.getElementById('pendingCount').textContent = pendingArr.length;
   document.getElementById('proposalCount').textContent = proposalArr.length;
   document.getElementById('approvedCount').textContent = todayApproved;
   document.getElementById('pendingBadge').textContent = pendingArr.length;
   document.getElementById('proposalBadge').textContent = proposalArr.length;
 
-  // Pending list
+  // Pending
   document.getElementById('pendingList').innerHTML = pendingArr.length === 0
     ? `<div class="empty"><div class="empty-icon">🎉</div>沒有待審核的任務！</div>`
     : pendingArr.map(([pid, p]) => {
         const u = USERS[p.user] || { name: p.user, avatar: '👤' };
         const task = tasks[p.taskId] || {};
-        const icon = task.icon || p.icon || '⭐';
         return `<div class="pending-card">
           <div class="pending-top">
             <div class="pending-avatar">${u.avatar}</div>
             <div class="pending-info">
               <div class="pending-who">${u.name}</div>
-              <div class="pending-task">${icon} ${p.taskName || task.name || '任務'}</div>
+              <div class="pending-task">${task.icon||'⭐'} ${p.taskName || task.name || '任務'}</div>
               <div class="pending-pts">+${p.pts} 顆星星</div>
             </div>
             <div class="pending-time">${p.time || ''}</div>
@@ -332,7 +329,7 @@ function render() {
         </div>`;
       }).join('');
 
-  // Proposals list
+  // Proposals
   document.getElementById('proposalList').innerHTML = proposalArr.length === 0
     ? `<div class="empty"><div class="empty-icon">💡</div>目前沒有自訂任務申請</div>`
     : proposalArr.map(([pid, p]) => {
@@ -341,10 +338,7 @@ function render() {
           <div class="proposal-top">
             <div class="proposal-avatar">${u.avatar}</div>
             <div class="proposal-info">
-              <div class="proposal-who">
-                ${u.name}
-                <span class="custom-badge">✏️ 自訂</span>
-              </div>
+              <div class="proposal-who">${u.name} <span class="custom-badge">✏️ 自訂</span></div>
               <div class="proposal-name">${p.icon||'💡'} ${p.name}</div>
               ${p.reason ? `<div class="proposal-reason">「${p.reason}」</div>` : ''}
               <div class="proposal-suggest">孩子建議：${p.suggestPts} 顆星星</div>
@@ -357,20 +351,21 @@ function render() {
             <div class="proposal-pts-label" style="color:var(--gold-deep)">⭐</div>
           </div>
           <div class="proposal-actions">
-            <button class="action-btn btn-add-task" onclick="approveProposalAddTask('${pid}')">➕ 加入任務列表</button>
+            <button class="action-btn btn-add-task" onclick="approveProposalAddTask('${pid}')">➕ 加入任務</button>
             <button class="action-btn btn-one-time" onclick="approveProposalOneTime('${pid}')">⭐ 一次性給點</button>
             <button class="action-btn btn-reject" onclick="rejectProposal('${pid}')">✗ 拒絕</button>
           </div>
         </div>`;
       }).join('');
 
-  // Player list
+  // Players + Gacha management
   document.getElementById('playerList').innerHTML = Object.entries(USERS).map(([uid, u]) => {
     const p = players[uid] || { points: 0, totalEarned: 0 };
     const pts = p.points || 0;
     const total = p.totalEarned || 0;
     let lv = LEVELS[0];
     for (const l of LEVELS) { if (total >= l.need) lv = l; }
+    const gachaCount = gacha[uid]?.count || 0;
     return `<div class="player-card">
       <div class="player-header">
         <div class="player-avatar">${u.avatar}</div>
@@ -382,60 +377,70 @@ function render() {
       </div>
       <input class="pts-input" type="number" id="amt-${uid}" placeholder="輸入點數數量" min="1">
       <input class="pts-reason" id="reason-${uid}" placeholder="原因（選填）">
-      <div class="pts-adjust" style="margin-top:8px">
+      <div class="pts-adjust">
         <button class="pts-btn btn-add" onclick="adjustPts('${uid}',1)">➕ 給點數</button>
         <button class="pts-btn btn-sub" onclick="adjustPts('${uid}',-1)">➖ 扣點數</button>
+      </div>
+      <div class="gacha-section">
+        <div class="gacha-section-title">🎰 扭蛋管理</div>
+        <div class="gacha-send-row">
+          <div class="gacha-count-badge">現有 ${gachaCount} 顆</div>
+          <input class="pts-input" type="number" id="gacha-amt-${uid}" placeholder="發放數量" min="1" style="max-width:120px">
+          <button class="pts-btn btn-gacha" onclick="sendGacha('${uid}')">🎰 發放扭蛋</button>
+        </div>
       </div>
     </div>`;
   }).join('');
 
-  // Task manage
+  // Tasks
   const taskEntries = Object.entries(tasks);
   document.getElementById('taskManageList').innerHTML = taskEntries.length === 0
     ? `<div class="empty"><div class="empty-icon">📋</div>還沒有任務</div>`
     : taskEntries.map(([tid, t]) =>
         `<div class="task-manage-item">
           <div class="task-manage-icon">${t.icon}</div>
-          <div class="task-manage-info">
-            <div class="task-manage-name">${t.name}</div>
-            <div class="task-manage-pts">+${t.pts} 顆星星</div>
-          </div>
+          <div class="task-manage-info"><div class="task-manage-name">${t.name}</div><div class="task-manage-pts">+${t.pts} 顆星星</div></div>
           <button class="task-del-btn" onclick="deleteTask('${tid}')">刪除</button>
-        </div>`
-      ).join('');
+        </div>`).join('');
 
-  // Shop manage
+  // Shop
   const shopEntries = Object.entries(shop);
   document.getElementById('shopManageList').innerHTML = shopEntries.length === 0
     ? `<div class="empty"><div class="empty-icon">🛍</div>商店是空的</div>`
     : shopEntries.map(([sid, s]) =>
         `<div class="shop-item">
           <div class="shop-item-icon">${s.icon}</div>
-          <div class="shop-item-info">
-            <div class="shop-item-name">${s.name}</div>
-            <div class="shop-item-cost">-${s.cost} 顆星星</div>
-          </div>
+          <div class="shop-item-info"><div class="shop-item-name">${s.name}</div><div class="shop-item-cost">-${s.cost} 顆星星</div></div>
           <button class="shop-del-btn" onclick="deleteShopItem('${sid}')">刪除</button>
-        </div>`
-      ).join('');
+        </div>`).join('');
 
-  // All history
+  // History
   const histArr = allData.history ? Object.values(allData.history).reverse() : [];
-  document.getElementById('allHistoryList').innerHTML = histArr.slice(0, 50).map(h => {
+  document.getElementById('allHistoryList').innerHTML = histArr.slice(0,50).map(h => {
     const u = USERS[h.user] || { name: h.user, avatar: '👤' };
-    const pos = h.pts > 0, neutral = h.pts === 0;
+    const pos=h.pts>0, neutral=h.pts===0;
     return `<div class="hist-item">
-      <div class="h-icon">${h.icon || '⭐'}</div>
-      <div class="h-info">
-        <div class="h-desc">${u.avatar} ${u.name}｜${h.desc}</div>
-        <div class="h-time">${h.time || ''}</div>
-      </div>
-      <div class="h-pts ${neutral ? 'pts-neutral' : pos ? 'pts-pos' : 'pts-neg'}">${pos ? '+' : ''}${h.pts}</div>
+      <div class="h-icon">${h.icon||'⭐'}</div>
+      <div class="h-info"><div class="h-desc">${u.avatar} ${u.name}｜${h.desc}</div><div class="h-time">${h.time||''}</div></div>
+      <div class="h-pts ${neutral?'pts-neutral':pos?'pts-pos':'pts-neg'}">${pos?'+':''}${h.pts}</div>
     </div>`;
   }).join('') || `<div class="empty"><div class="empty-icon">📜</div>還沒有紀錄</div>`;
 }
 
-// Approve task completion
+// === GACHA SEND ===
+window.sendGacha = async function(uid) {
+  const amtStr = document.getElementById(`gacha-amt-${uid}`).value;
+  const amt = parseInt(amtStr);
+  if (!amt || amt <= 0) { toast('請輸入有效的扭蛋數量！'); return; }
+  const gachaRef = ref(db, `gacha/${uid}`);
+  const snap = await get(gachaRef);
+  const current = snap.val()?.count || 0;
+  await set(gachaRef, { count: current + amt });
+  await push(ref(db, 'history'), { user: uid, desc: `收到 ${amt} 顆扭蛋！`, icon: '🎰', pts: 0, time: now() });
+  document.getElementById(`gacha-amt-${uid}`).value = '';
+  toast(`🎰 已給 ${USERS[uid]?.name} ${amt} 顆扭蛋！`);
+};
+
 window.approvePending = async function(pid) {
   const p = (allData.pending || {})[pid];
   if (!p) return;
@@ -443,77 +448,64 @@ window.approvePending = async function(pid) {
   const playerSnap = await get(playerRef);
   const player = playerSnap.val() || { points: 0, totalEarned: 0 };
   const task = (allData.tasks || {})[p.taskId] || {};
-  const icon = task.icon || '⭐';
-  await update(playerRef, {
-    points: (player.points || 0) + p.pts,
-    totalEarned: (player.totalEarned || 0) + p.pts
-  });
-  await push(ref(db, 'history'), { user: p.user, desc: `完成「${p.taskName}」`, icon, pts: p.pts, time: now() });
+  await update(playerRef, { points:(player.points||0)+p.pts, totalEarned:(player.totalEarned||0)+p.pts });
+  await push(ref(db,'history'), { user:p.user, desc:`完成「${p.taskName}」`, icon:task.icon||'⭐', pts:p.pts, time:now() });
   await remove(ref(db, `pending/${pid}`));
-  toast(`✓ 已核准！給 ${USERS[p.user]?.name || p.user} +${p.pts} 顆星星`);
+  toast(`✓ 已核准！給 ${USERS[p.user]?.name||p.user} +${p.pts} 顆星星`);
 };
 
 window.rejectPending = async function(pid) {
-  const p = (allData.pending || {})[pid];
+  const p = (allData.pending||{})[pid];
   if (!p) return;
   await remove(ref(db, `pending/${pid}`));
-  toast(`✗ 已退回 ${USERS[p.user]?.name || p.user} 的申報`);
+  toast(`✗ 已退回 ${USERS[p.user]?.name||p.user} 的申報`);
 };
 
-// Approve proposal: add as permanent task
 window.approveProposalAddTask = async function(pid) {
-  const p = (allData.proposals || {})[pid];
+  const p = (allData.proposals||{})[pid];
   if (!p) return;
   const pts = parseInt(document.getElementById(`pptsInput-${pid}`)?.value) || p.suggestPts;
-  await push(ref(db, 'tasks'), { icon: p.icon || '💡', name: p.name, pts });
-  await push(ref(db, 'history'), {
-    user: p.user, desc: `自訂任務「${p.name}」已加入任務列表`, icon: p.icon || '💡', pts: 0, time: now()
-  });
+  await push(ref(db,'tasks'), { icon:p.icon||'💡', name:p.name, pts });
+  await push(ref(db,'history'), { user:p.user, desc:`自訂任務「${p.name}」已加入任務列表`, icon:p.icon||'💡', pts:0, time:now() });
   await remove(ref(db, `proposals/${pid}`));
   toast(`✓ 「${p.name}」已加入任務列表（${pts} 顆星星）`);
 };
 
-// Approve proposal: one-time points grant
 window.approveProposalOneTime = async function(pid) {
-  const p = (allData.proposals || {})[pid];
+  const p = (allData.proposals||{})[pid];
   if (!p) return;
   const pts = parseInt(document.getElementById(`pptsInput-${pid}`)?.value) || p.suggestPts;
   const playerRef = ref(db, `players/${p.user}`);
   const snap = await get(playerRef);
-  const player = snap.val() || { points: 0, totalEarned: 0 };
-  await update(playerRef, { points: (player.points || 0) + pts, totalEarned: (player.totalEarned || 0) + pts });
-  await push(ref(db, 'history'), {
-    user: p.user, desc: `自訂任務「${p.name}」一次性獎勵`, icon: p.icon || '💡', pts, time: now()
-  });
+  const player = snap.val() || { points:0, totalEarned:0 };
+  await update(playerRef, { points:(player.points||0)+pts, totalEarned:(player.totalEarned||0)+pts });
+  await push(ref(db,'history'), { user:p.user, desc:`自訂任務「${p.name}」一次性獎勵`, icon:p.icon||'💡', pts, time:now() });
   await remove(ref(db, `proposals/${pid}`));
-  toast(`✓ 已給 ${USERS[p.user]?.name || p.user} +${pts} 顆星星（一次性）`);
+  toast(`✓ 已給 ${USERS[p.user]?.name||p.user} +${pts} 顆星星（一次性）`);
 };
 
-// Reject proposal
 window.rejectProposal = async function(pid) {
-  const p = (allData.proposals || {})[pid];
+  const p = (allData.proposals||{})[pid];
   if (!p) return;
   await remove(ref(db, `proposals/${pid}`));
-  toast(`✗ 已拒絕 ${USERS[p.user]?.name || p.user} 的申請`);
+  toast(`✗ 已拒絕 ${USERS[p.user]?.name||p.user} 的申請`);
 };
 
-// Adjust points manually
 window.adjustPts = async function(uid, sign) {
-  const amtStr = document.getElementById(`amt-${uid}`).value;
-  const amt = parseInt(amtStr);
+  const amt = parseInt(document.getElementById(`amt-${uid}`).value);
   if (!amt || amt <= 0) { toast('請輸入有效的點數數量！'); return; }
   const reason = document.getElementById(`reason-${uid}`).value || (sign > 0 ? '手動加點' : '手動扣點');
   const playerRef = ref(db, `players/${uid}`);
   const snap = await get(playerRef);
-  const player = snap.val() || { points: 0, totalEarned: 0 };
+  const player = snap.val() || { points:0, totalEarned:0 };
   const delta = sign * amt;
-  const newPts = Math.max(0, (player.points || 0) + delta);
-  const newTotal = sign > 0 ? (player.totalEarned || 0) + amt : (player.totalEarned || 0);
-  await update(playerRef, { points: newPts, totalEarned: newTotal });
-  await push(ref(db, 'history'), { user: uid, desc: reason, icon: sign > 0 ? '⭐' : '💸', pts: delta, time: now() });
+  const newPts = Math.max(0, (player.points||0) + delta);
+  const newTotal = sign > 0 ? (player.totalEarned||0)+amt : (player.totalEarned||0);
+  await update(playerRef, { points:newPts, totalEarned:newTotal });
+  await push(ref(db,'history'), { user:uid, desc:reason, icon:sign>0?'⭐':'💸', pts:delta, time:now() });
   document.getElementById(`amt-${uid}`).value = '';
   document.getElementById(`reason-${uid}`).value = '';
-  toast(`${USERS[uid]?.name} ${sign > 0 ? '+' : ''}${delta} 顆星星 ✦`);
+  toast(`${USERS[uid]?.name} ${sign>0?'+':''}${delta} 顆星星 ✦`);
 };
 
 window.addTask = async function() {
@@ -521,10 +513,10 @@ window.addTask = async function() {
   const name = document.getElementById('newTaskName').value.trim();
   const pts = parseInt(document.getElementById('newTaskPts').value);
   if (!name || !pts || pts <= 0) { toast('請填寫任務名稱和點數！'); return; }
-  await push(ref(db, 'tasks'), { icon, name, pts });
-  document.getElementById('newTaskIcon').value = '';
-  document.getElementById('newTaskName').value = '';
-  document.getElementById('newTaskPts').value = '';
+  await push(ref(db,'tasks'), { icon, name, pts });
+  document.getElementById('newTaskIcon').value='';
+  document.getElementById('newTaskName').value='';
+  document.getElementById('newTaskPts').value='';
   toast(`任務「${name}」已新增 ✦`);
 };
 
@@ -538,10 +530,10 @@ window.addShopItem = async function() {
   const name = document.getElementById('newShopName').value.trim();
   const cost = parseInt(document.getElementById('newShopCost').value);
   if (!name || !cost || cost <= 0) { toast('請填寫獎勵名稱和費用！'); return; }
-  await push(ref(db, 'shop'), { icon, name, cost });
-  document.getElementById('newShopIcon').value = '';
-  document.getElementById('newShopName').value = '';
-  document.getElementById('newShopCost').value = '';
+  await push(ref(db,'shop'), { icon, name, cost });
+  document.getElementById('newShopIcon').value='';
+  document.getElementById('newShopName').value='';
+  document.getElementById('newShopCost').value='';
   toast(`獎勵「${name}」已新增 ♡`);
 };
 
@@ -554,7 +546,7 @@ window.showTab = function(tab, el) {
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
   if (el) el.classList.add('active');
   document.querySelectorAll('.tab-sec').forEach(s => s.classList.remove('active'));
-  document.getElementById('tab-' + tab).classList.add('active');
+  document.getElementById('tab-'+tab).classList.add('active');
 };
 
 function now() {
