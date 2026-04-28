@@ -523,7 +523,7 @@ window.adjustPts = async function(uid, sign) {
 await push(ref(db,'history'), { user:uid, desc:reason, icon:sign>0?'⭐':'💸', pts:actualDelta, time:t5.time, date:t5.date });
   document.getElementById(`amt-${uid}`).value = '';
   document.getElementById(`reason-${uid}`).value = '';
-  toast(`${USERS[uid]?.name} ${sign>0?'+':''}${delta} 顆星星 ✦`);
+  toast(`${USERS[uid]?.name} ${actualDelta >= 0?'+':''}${actualDelta} 顆星星 ✦`);
 };
 
 window.addTask = async function() {
