@@ -40,16 +40,19 @@
     transition: all 0.2s; font-family: 'Nunito', sans-serif;
   }
   .user-btn:hover { border-color: var(--pink-dark); background: #FDF5F7; transform: translateY(-2px); }
-  .user-btn.selected { border-color: var(--pink-dark); background: #FDF0F3; transform: translateY(-2px); }
+  .user-btn.selected { border-color: var(--pink-dark); background: #FDF0F3; transform: translateY(-2px); box-shadow: 0 4px 16px rgba(212,132,154,0.3); }
   .user-btn .avatar { font-size: 32px; margin-bottom: 6px; }
   .user-btn .uname { font-size: 12px; font-weight: 700; color: var(--pink-deep); }
+  .pw-wrap { position: relative; margin-bottom: 12px; }
   .pw-input {
     width: 100%; background: white; border: 2px solid var(--pink);
-    border-radius: 14px; padding: 14px 18px; font-family: 'Nunito', sans-serif;
-    font-size: 16px; color: var(--text); margin-bottom: 12px;
+    border-radius: 14px; padding: 14px 48px 14px 18px; font-family: 'Nunito', sans-serif;
+    font-size: 16px; color: var(--text);
     outline: none; transition: border-color 0.2s;
+    -webkit-appearance: none;
   }
   .pw-input:focus { border-color: var(--pink-dark); }
+  .pw-toggle { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 18px; padding: 4px; }
   .error-msg { font-size: 13px; color: var(--pink-dark); text-align: center; margin-bottom: 10px; min-height: 20px; font-weight: 700; }
   .login-btn {
     display: block; width: 100%; background: var(--pink-dark); color: white;
@@ -60,6 +63,7 @@
   .login-btn:active { transform: scale(0.97); }
   .deco-dots { display: flex; justify-content: center; gap: 8px; margin-top: 24px; }
   .dot { width: 9px; height: 9px; border-radius: 50%; }
+  .pw-hint { font-size: 11px; color: var(--text-light); text-align: center; margin-top: 14px; font-weight: 700; }
   .toast {
     position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-80px);
     background: #4A3A4A; color: white; border-radius: 20px; padding: 12px 24px;
@@ -97,9 +101,13 @@
       <div class="uname">審核者</div>
     </div>
   </div>
-  <input class="pw-input" type="password" id="pwInput" placeholder="🔒 輸入你的密碼..." autocomplete="off">
+  <div class="pw-wrap">
+    <input class="pw-input" type="password" id="pwInput" placeholder="🔒 輸入密碼..." autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false">
+    <button class="pw-toggle" onclick="togglePw()" id="pwToggle" tabindex="-1">🙈</button>
+  </div>
   <div class="error-msg" id="errorMsg"></div>
   <button class="login-btn" onclick="doLogin()">進入我的世界 ✦</button>
+  <div class="pw-hint" id="pwHint">← 請先選擇角色</div>
   <div class="deco-dots">
     <div class="dot" style="background:var(--pink)"></div>
     <div class="dot" style="background:var(--blue)"></div>
@@ -118,26 +126,46 @@
     admin:  "admin888"
   };
 
+  const HINTS = {
+    child1: '小花的密碼 🐰',
+    child2: '小明的密碼 🐻',
+    admin:  '審核者密碼 👑',
+  };
+
   let selectedUser = null;
+  let pwVisible = false;
 
   function selectUser(user) {
     selectedUser = user;
     document.querySelectorAll('.user-btn').forEach(b => b.classList.remove('selected'));
     document.getElementById('btn-' + user).classList.add('selected');
+    document.getElementById('pwInput').value = '';
     document.getElementById('pwInput').focus();
     document.getElementById('errorMsg').textContent = '';
+    document.getElementById('pwHint').textContent = HINTS[user] || '';
+  }
+
+  function togglePw() {
+    pwVisible = !pwVisible;
+    const inp = document.getElementById('pwInput');
+    inp.type = pwVisible ? 'text' : 'password';
+    document.getElementById('pwToggle').textContent = pwVisible ? '👁️' : '🙈';
   }
 
   function doLogin() {
     if (!selectedUser) {
       showError('請先選擇角色！'); return;
     }
-    const pw = document.getElementById('pwInput').value;
+    // Trim whitespace in case of accidental spaces
+    const pw = document.getElementById('pwInput').value.trim();
     if (!pw) {
       showError('請輸入密碼！'); return;
     }
     if (pw !== PASSWORDS[selectedUser]) {
-      showError('密碼不對喔，再試試看！♡'); return;
+      showError('密碼不對喔，再試試看！♡');
+      document.getElementById('pwInput').value = '';
+      document.getElementById('pwInput').focus();
+      return;
     }
     if (selectedUser === 'admin') {
       window.location.href = 'admin.html';
@@ -150,13 +178,6 @@
 
   function showError(msg) {
     document.getElementById('errorMsg').textContent = msg;
-  }
-
-  function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 2500);
   }
 
   document.getElementById('pwInput').addEventListener('keydown', e => {
