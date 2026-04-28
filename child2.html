@@ -373,6 +373,7 @@ const firebaseConfig = {
 
 const ME = 'child2';
 const SIGN = '射手座';
+  
 const LEVELS = [
   {lv:1,name:"青銅",need:0,next:10},
   {lv:2,name:"白銀",need:10,next:30},
@@ -385,6 +386,17 @@ const LEVELS = [
   {lv:9,name:"絕世傳說",need:1500,next:2300},
   {lv:10,name:"永恆傳說",need:2300,next:999999},
 ];
+  const LEVEL_REWARDS = {
+  2: { type:'pts', amount:3 },
+  3: { type:'pts', amount:5 },
+  4: { type:'pts', amount:8 },
+  5: { type:'pts', amount:10 },
+  6: { type:'gacha', amount:1 },
+  7: { type:'gacha', amount:2 },
+  8: { type:'gacha', amount:3 },
+  9: { type:'gacha', amount:4 },
+  10: { type:'pts', amount:100 },
+};
 const GACHA_TABLE = [
   { weight:50, type:'pts', pts:1,  icon:'⭐',  title:'獲得 1 顆星星！', desc:'繼續加油，下次更多！' },
   { weight:30, type:'pts', pts:3,  icon:'⭐⭐⭐', title:'獲得 3 顆星星！', desc:'不錯喔！繼續努力！' },
@@ -566,13 +578,42 @@ function startListen(){
     render();
   });
 }
+  async function handleLevelUp(newLv) {
+  const reward = LEVEL_REWARDS[newLv];
+  if (!reward) return;
+  const t = now();
+  if (reward.type === 'pts') {
+    const pr = ref(db, `players/${ME}`);
+    const ps = await get(pr);
+    const pl = ps.val() || { points:0, totalEarned:0 };
+    await update(pr, { points:(pl.points||0)+reward.amount, totalEarned:(pl.totalEarned||0)+reward.amount });
+    await push(ref(db,'history'), { user:ME, desc:`🎉 升等到 Lv.${newLv}！獲得 ${reward.amount} 顆星星獎勵！`, icon:'🏆', pts:reward.amount, time:t.time, date:t.date });
+    toast(`🏆 升等到 Lv.${newLv}！獲得 ${reward.amount} 顆星星！`);
+    rainStars();
+  } else if (reward.type === 'gacha') {
+    const gr = ref(db, `gacha/${ME}`);
+    const gs = await get(gr);
+    const gc = gs.val()?.count || 0;
+    await update(gr, { count: gc + reward.amount });
+    await push(ref(db,'history'), { user:ME, desc:`🎉 升等到 Lv.${newLv}！獲得 ${reward.amount} 顆扭蛋！`, icon:'🏆', pts:0, time:t.time, date:t.date });
+    toast(`🏆 升等到 Lv.${newLv}！獲得 ${reward.amount} 顆扭蛋！`);
+    rainStars();
+  }
+}
 
 function render(){
   const pts=data.points||0,total=data.totalEarned||0;
   document.getElementById('ptsDisplay').textContent=pts;
   document.getElementById('shopPtsShow').textContent=pts;
-  let lv=LEVELS[0]; for(const l of LEVELS){if(total>=l.need)lv=l;}
-  document.getElementById('lvDisplay').textContent=`Lv.${lv.lv} ${lv.name}`;
+let lv = LEVELS[0];
+  for (const l of LEVELS) { if (total >= l.need) lv = l; }
+  document.getElementById('lvDisplay').textContent = `Lv.${lv.lv} ${lv.name}`;
+
+  // 升等偵測
+  if (lastLevel > 0 && lv.lv > lastLevel) {
+    handleLevelUp(lv.lv);
+  }
+  lastLevel = lv.lv;
   const pct=lv.next===999999?100:Math.min(100,Math.round((total-lv.need)/(lv.next-lv.need)*100));
   document.getElementById('progBar').style.width=pct+'%';
   document.getElementById('progLeft').textContent=lv.next===999999?'🏆 已達最高等級！':`距離升級還差 ${lv.next-total} 顆`;
@@ -599,7 +640,8 @@ window.submitTask=async()=>{if(!pendingTask)return;
 await push(ref(db,'pending'),{user:ME,taskId:pendingTask.id,taskName:pendingTask.name,pts:pendingTask.pts,time:t4.time,date:t4.date});
                             closeModal('taskOverlay');toast(`「${pendingTask.name}」已申報！等待審核 ✦`);pendingTask=null;};
 window.openShopModal=(id,name,icon,cost)=>{pendingShop={id,name,icon,cost};document.getElementById('mShopIcon').textContent=icon;document.getElementById('mShopName').textContent=name;document.getElementById('mShopCost').textContent=cost;document.getElementById('shopOverlay').classList.add('open');};
-window.redeemShop=async()=>{if(!pendingShop)return;const pts=data.points||0;if(pts<pendingShop.cost){toast('星星不夠喔！繼續加油 ♡');closeModal('shopOverlay');return;}await update(ref(db,`players/${ME}`),{points:Math.max(0,pts-pendingShop.cost)});
+window.redeemShop=async()=>{if(!pendingShop)return;const pts=data.points||0;
+                            if(pts<pendingShop.cost){toast('星星不夠喔！繼續加油 ♡');closeModal('shopOverlay');return;}await update(ref(db,`players/${ME}`),{points:Math.max(0,pts-pendingShop.cost)});
                             const t5=now();
 await push(ref(db,'history'),{user:ME,desc:`兌換「${pendingShop.name}」`,icon:pendingShop.icon,pts:-pendingShop.cost,time:t5.time,date:t5.date});
                             closeModal('shopOverlay');toast(`兌換成功！享受你的 ${pendingShop.name} ♡`);pendingShop=null;};
