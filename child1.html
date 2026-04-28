@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>小花的冒險日記 🐰</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
@@ -12,6 +12,7 @@
     --purple: #D4C5E8; --purple-dark: #9A80B8; --purple-deep: #6A4A90;
     --peach: #F5D5C8; --peach-dark: #D08060; --peach-deep: #9A5038;
     --mint: #C8E8D8; --mint-dark: #6AAA88; --mint-deep: #2A6A48;
+    --gold: #FFF0C0; --gold-dark: #C8902A; --gold-deep: #8A6010;
     --cream: #FAF7F2; --text: #5A4A5A; --text-light: #9A8AA0;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -23,12 +24,47 @@
   .uname { font-size: 22px; font-weight: 900; color: var(--blue-deep); }
   .logout-btn { background: none; border: none; font-size: 13px; color: var(--text-light); cursor: pointer; font-family: 'Nunito', sans-serif; font-weight: 700; }
   .nav-tabs { display: flex; gap: 2px; }
-  .nav-tab { flex: 1; text-align: center; padding: 10px 0; font-size: 12px; font-weight: 700; color: var(--text-light); border-bottom: 3px solid transparent; cursor: pointer; transition: all 0.2s; }
+  .nav-tab { flex: 1; text-align: center; padding: 10px 0; font-size: 11px; font-weight: 700; color: var(--text-light); border-bottom: 3px solid transparent; cursor: pointer; transition: all 0.2s; }
   .nav-tab.active { color: var(--blue-dark); border-bottom-color: var(--blue-dark); }
+
+  /* HOROSCOPE BANNER */
+  .horoscope-banner { margin: 0 16px 14px; background: linear-gradient(135deg, #E8F0FF, #F0E8FF); border-radius: 18px; padding: 14px 16px; border: 1.5px solid var(--blue); display: flex; align-items: center; gap: 12px; }
+  .horo-icon { font-size: 28px; flex-shrink: 0; }
+  .horo-info { flex: 1; }
+  .horo-title { font-size: 11px; color: var(--text-light); font-weight: 700; }
+  .horo-text { font-size: 13px; color: var(--purple-deep); font-weight: 700; line-height: 1.4; margin-top: 2px; }
+  .horo-luck { font-size: 11px; color: var(--blue-dark); font-weight: 700; margin-top: 3px; }
+
+  /* CHECKIN */
+  .checkin-wrap { margin: 0 16px 14px; background: white; border-radius: 18px; padding: 14px 16px; border: 1.5px solid var(--mint); }
+  .checkin-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .checkin-title { font-size: 14px; font-weight: 900; color: var(--mint-deep); }
+  .checkin-streak { font-size: 12px; font-weight: 700; color: var(--mint-dark); background: var(--mint); border-radius: 10px; padding: 3px 10px; }
+  .checkin-days { display: flex; gap: 6px; margin-bottom: 10px; }
+  .day-dot { flex: 1; aspect-ratio: 1; border-radius: 50%; background: #F0F0F0; display: flex; align-items: center; justify-content: center; font-size: 14px; position: relative; }
+  .day-dot.done { background: var(--mint); }
+  .day-dot.today { background: var(--mint-dark); box-shadow: 0 2px 8px rgba(106,170,136,0.4); }
+  .day-label { text-align: center; font-size: 9px; color: var(--text-light); font-weight: 700; margin-top: 3px; }
+  .day-col { flex: 1; text-align: center; }
+  .checkin-btn { width: 100%; background: var(--mint-dark); color: white; border: none; border-radius: 12px; padding: 10px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 900; cursor: pointer; transition: all 0.15s; }
+  .checkin-btn:disabled { background: #CCC; color: #999; cursor: not-allowed; }
+  .checkin-btn:active:not(:disabled) { transform: scale(0.97); }
+  .checkin-reward { font-size: 11px; color: var(--text-light); font-weight: 700; text-align: center; margin-top: 6px; }
+
+  /* GACHA */
+  .gacha-wrap { margin: 0 16px 14px; }
+  .gacha-btn-card { background: linear-gradient(135deg, #FFE8F0, #F0E8FF); border-radius: 18px; padding: 16px; border: 2px solid var(--pink-dark); text-align: center; cursor: pointer; transition: all 0.2s; }
+  .gacha-btn-card:hover { transform: translateY(-2px); }
+  .gacha-btn-card:active { transform: scale(0.97); }
+  .gacha-btn-icon { font-size: 36px; margin-bottom: 6px; animation: wiggle 3s infinite; }
+  @keyframes wiggle { 0%,100%{transform:rotate(-5deg)} 50%{transform:rotate(5deg)} }
+  .gacha-btn-title { font-size: 16px; font-weight: 900; color: var(--pink-deep); }
+  .gacha-btn-sub { font-size: 11px; color: var(--text-light); font-weight: 700; margin-top: 4px; }
+  .gacha-avail { font-size: 12px; color: var(--pink-dark); font-weight: 900; margin-top: 6px; }
 
   .points-hero { margin: 0 16px 18px; background: white; border-radius: 24px; padding: 22px; text-align: center; border: 1.5px solid var(--blue); }
   .pts-label { font-size: 12px; color: var(--text-light); font-weight: 700; margin-bottom: 4px; }
-  .pts-big { font-size: 76px; font-weight: 900; color: var(--blue-deep); line-height: 1; margin: 6px 0; }
+  .pts-big { font-size: 72px; font-weight: 900; color: var(--blue-deep); line-height: 1; margin: 6px 0; }
   .pts-unit { font-size: 16px; color: var(--blue-dark); font-weight: 700; }
   .level-pill { display: inline-block; background: var(--blue); border-radius: 20px; padding: 5px 18px; font-size: 12px; font-weight: 700; color: var(--blue-deep); margin-top: 10px; }
   .progress-wrap { margin-top: 12px; }
@@ -37,7 +73,6 @@
   .progress-text { display: flex; justify-content: space-between; font-size: 10px; color: var(--text-light); font-weight: 700; margin-top: 4px; }
 
   .section-title { font-size: 16px; font-weight: 900; color: var(--text); margin: 0 16px 10px; display: flex; align-items: center; gap: 6px; }
-
   .task-list { padding: 0 16px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
   .task-card { background: white; border-radius: 16px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; border: 1.5px solid var(--purple); cursor: pointer; transition: all 0.2s; }
   .task-card:hover { border-color: var(--purple-dark); background: #FAF8FD; transform: translateY(-1px); }
@@ -68,7 +103,6 @@
   .pts-pos { color: var(--mint-deep); }
   .pts-neg { color: #C04060; }
 
-  /* CUSTOM TASK PROPOSAL */
   .propose-wrap { padding: 0 16px; margin-bottom: 22px; }
   .propose-card { background: white; border-radius: 20px; padding: 18px; border: 2px dashed var(--pink-dark); }
   .propose-header { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
@@ -79,20 +113,14 @@
   .propose-input { flex: 1; background: #FFF6F8; border: 1.5px solid var(--pink); border-radius: 12px; padding: 10px 14px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700; color: var(--text); outline: none; transition: border-color 0.2s; min-width: 0; }
   .propose-input:focus { border-color: var(--pink-dark); }
   .propose-input-sm { width: 80px; flex: none; }
-  .propose-textarea { width: 100%; background: #FFF6F8; border: 1.5px solid var(--pink); border-radius: 12px; padding: 10px 14px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700; color: var(--text); outline: none; resize: none; margin-bottom: 10px; transition: border-color 0.2s; }
-  .propose-textarea:focus { border-color: var(--pink-dark); }
   .propose-btn { width: 100%; background: var(--pink-dark); color: white; border: none; border-radius: 50px; padding: 13px; font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 900; cursor: pointer; transition: all 0.2s; }
   .propose-btn:hover { opacity: 0.88; }
   .propose-btn:active { transform: scale(0.97); }
 
-  /* MY PROPOSALS */
-  .proposal-item { background: white; border-radius: 14px; padding: 13px 15px; display: flex; align-items: center; gap: 10px; border: 1.5px solid var(--pink); }
-  .proposal-badge { font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 8px; white-space: nowrap; }
-  .badge-waiting { background: var(--peach); color: var(--peach-deep); }
-
   .tab-sec { display: none; }
   .tab-sec.active { display: block; }
 
+  /* MODALS */
   .overlay { position: fixed; inset: 0; background: rgba(80,60,80,0.38); z-index: 200; display: flex; align-items: flex-end; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.25s; }
   .overlay.open { opacity: 1; pointer-events: all; }
   .modal { background: white; border-radius: 28px 28px 0 0; padding: 28px 24px 44px; width: 100%; max-width: 500px; transform: translateY(100%); transition: transform 0.35s cubic-bezier(0.34,1.2,0.64,1); }
@@ -109,10 +137,42 @@
   .btn-blue { background: var(--blue-dark); color: white; }
   .btn-peach { background: var(--peach-dark); color: white; }
 
+  /* GACHA MODAL */
+  .gacha-modal-overlay { position: fixed; inset: 0; background: rgba(40,20,60,0.75); z-index: 300; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+  .gacha-modal-overlay.open { opacity: 1; pointer-events: all; }
+  .gacha-modal { background: white; border-radius: 28px; padding: 32px 28px; width: calc(100% - 40px); max-width: 360px; text-align: center; transform: scale(0.8); transition: transform 0.4s cubic-bezier(0.34,1.3,0.64,1); }
+  .gacha-modal-overlay.open .gacha-modal { transform: scale(1); }
+
+  /* GACHA MACHINE ANIMATION */
+  .gacha-machine { position: relative; width: 160px; height: 160px; margin: 0 auto 20px; }
+  .gacha-ball { width: 100px; height: 100px; border-radius: 50%; margin: 0 auto; position: relative; cursor: pointer; transition: all 0.3s; }
+  .gacha-ball.idle { background: radial-gradient(circle at 35% 35%, #FFE0F0, #D4849A); box-shadow: 0 8px 24px rgba(212,132,154,0.5); animation: float 2s infinite ease-in-out; }
+  .gacha-ball.spinning { animation: spin 0.5s linear infinite; }
+  .gacha-ball.cracking { animation: crack 0.6s ease-out; }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+  @keyframes spin { 0%{transform:rotate(0deg) scale(1)} 50%{transform:rotate(180deg) scale(1.1)} 100%{transform:rotate(360deg) scale(1)} }
+  @keyframes crack { 0%{transform:scale(1)} 30%{transform:scale(1.3)} 60%{transform:scale(0.9) rotate(10deg)} 100%{transform:scale(1.1)} }
+  .gacha-ball-inner { position: absolute; inset: 0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 40px; }
+  .gacha-ball-line { position: absolute; top: 50%; left: 0; right: 0; height: 4px; background: rgba(255,255,255,0.5); transform: translateY(-50%); border-radius: 2px; }
+
+  .gacha-phase-label { font-size: 16px; font-weight: 900; color: var(--purple-deep); margin-bottom: 8px; }
+  .gacha-hint { font-size: 12px; color: var(--text-light); font-weight: 700; }
+
+  .gacha-result { display: none; }
+  .gacha-result.show { display: block; }
+  .gacha-result-icon { font-size: 60px; margin-bottom: 12px; animation: pop 0.5s cubic-bezier(0.34,1.5,0.64,1); }
+  @keyframes pop { 0%{transform:scale(0)} 100%{transform:scale(1)} }
+  .gacha-result-title { font-size: 24px; font-weight: 900; color: var(--pink-deep); margin-bottom: 6px; }
+  .gacha-result-desc { font-size: 14px; color: var(--text-light); font-weight: 700; margin-bottom: 20px; }
+  .gacha-result-pts { font-size: 40px; font-weight: 900; color: var(--gold-deep); }
+
+  .stars-rain { position: fixed; inset: 0; pointer-events: none; z-index: 400; }
+  .star-particle { position: absolute; font-size: 20px; animation: fall 1.5s ease-in forwards; }
+  @keyframes fall { 0%{transform:translateY(-20px) rotate(0deg); opacity:1} 100%{transform:translateY(100vh) rotate(720deg); opacity:0} }
+
   .empty { text-align: center; padding: 32px 20px; color: var(--text-light); font-size: 14px; font-weight: 700; }
   .empty-icon { font-size: 44px; margin-bottom: 10px; }
-
-  .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-80px); background: #3A4A3A; color: white; border-radius: 20px; padding: 12px 24px; font-size: 14px; font-weight: 700; z-index: 999; transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1); white-space: nowrap; }
+  .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-80px); background: #3A4A3A; color: white; border-radius: 20px; padding: 12px 24px; font-size: 14px; font-weight: 700; z-index: 999; transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1); white-space: nowrap; max-width: 90vw; text-align: center; }
   .toast.show { transform: translateX(-50%) translateY(0); }
 </style>
 </head>
@@ -121,7 +181,7 @@
 <div class="header">
   <div class="header-top">
     <div>
-      <div class="greeting">今天也要加油喔 ♡</div>
+      <div class="greeting" id="horoGreeting">今天也要加油喔 ♡</div>
       <div class="uname">🐰 小花</div>
     </div>
     <button class="logout-btn" onclick="window.location.href='index.html'">登出</button>
@@ -130,12 +190,42 @@
     <div class="nav-tab active" onclick="showTab('home',this)">🏠 主頁</div>
     <div class="nav-tab" onclick="showTab('tasks',this)">⚔️ 任務</div>
     <div class="nav-tab" onclick="showTab('shop',this)">🛍 商店</div>
+    <div class="nav-tab" onclick="showTab('gacha',this)">🎰 扭蛋</div>
     <div class="nav-tab" onclick="showTab('history',this)">📜 紀錄</div>
   </div>
 </div>
 
 <!-- HOME TAB -->
 <div id="tab-home" class="tab-sec active">
+  <!-- 星座運勢 -->
+  <div class="horoscope-banner" id="horoscopeBanner">
+    <div class="horo-icon">🐂</div>
+    <div class="horo-info">
+      <div class="horo-title">🌟 金牛座今日運勢</div>
+      <div class="horo-text" id="horoText">載入中...</div>
+      <div class="horo-luck" id="horoLuck"></div>
+    </div>
+  </div>
+  <!-- 簽到 -->
+  <div class="checkin-wrap">
+    <div class="checkin-header">
+      <div class="checkin-title">📅 每日簽到</div>
+      <div class="checkin-streak" id="streakLabel">連續 0 天</div>
+    </div>
+    <div class="checkin-days" id="checkinDays"></div>
+    <button class="checkin-btn" id="checkinBtn" onclick="doCheckin()">✅ 今天簽到！</button>
+    <div class="checkin-reward">連續簽到7天 → 獲得 3 顆星星 🌟</div>
+  </div>
+  <!-- 扭蛋入口 -->
+  <div class="gacha-wrap">
+    <div class="gacha-btn-card" onclick="showTab('gacha', null)">
+      <div class="gacha-btn-icon">🎰</div>
+      <div class="gacha-btn-title">扭蛋驚喜！</div>
+      <div class="gacha-btn-sub">審核員發放的神秘驚喜</div>
+      <div class="gacha-avail" id="gachaHomeAvail">載入中...</div>
+    </div>
+  </div>
+
   <div class="points-hero">
     <div class="pts-label">✦ 小花的星星寶藏 ✦</div>
     <div class="pts-big" id="ptsDisplay">0</div>
@@ -159,8 +249,6 @@
 <div id="tab-tasks" class="tab-sec">
   <div class="section-title" style="margin-top:6px">⚔️ 全部任務</div>
   <div class="task-list" id="allTaskList"></div>
-
-  <!-- 自訂任務申請 -->
   <div class="section-title">✏️ 自訂任務申請</div>
   <div class="propose-wrap">
     <div class="propose-card">
@@ -177,13 +265,11 @@
       </div>
       <div class="propose-row">
         <input class="propose-input propose-input-sm" id="proposePts" type="number" placeholder="建議星星" min="1" max="100">
-        <input class="propose-input" id="proposeReason" placeholder="為什麼這個任務值這些星星？">
+        <input class="propose-input" id="proposeReason" placeholder="為什麼值這些星星？">
       </div>
       <button class="propose-btn" onclick="submitProposal()">💌 送出自訂任務申請 ✦</button>
     </div>
   </div>
-
-  <!-- 我的申請紀錄 -->
   <div class="section-title">📬 我提出的申請</div>
   <div class="task-list" id="myProposalList"></div>
 </div>
@@ -193,6 +279,33 @@
   <div class="section-title" style="margin-top:6px">🛍 獎勵商店</div>
   <div style="padding:0 16px;margin-bottom:12px;font-size:13px;color:var(--text-light);font-weight:700;">目前有 <span id="shopPtsShow" style="color:var(--blue-deep)">0</span> 顆星星 ✦</div>
   <div class="shop-grid" id="allShopList"></div>
+</div>
+
+<!-- GACHA TAB -->
+<div id="tab-gacha" class="tab-sec">
+  <div class="section-title" style="margin-top:6px">🎰 扭蛋驚喜</div>
+  <div style="padding:0 16px 16px; font-size:13px; color:var(--text-light); font-weight:700; line-height:1.6;">
+    審核員可以發放扭蛋給你！<br>轉動扭蛋機，看看今天的驚喜是什麼 ✦
+  </div>
+  <div style="padding:0 16px; margin-bottom:16px; background:white; margin-left:16px; margin-right:16px; border-radius:18px; padding:16px; border:1.5px solid var(--pink);">
+    <div style="font-size:13px;font-weight:900;color:var(--pink-deep);margin-bottom:10px;">🎲 獎勵機率表</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:12px;font-weight:700;color:var(--text);">
+      <div style="background:var(--blue);border-radius:8px;padding:6px 10px;">⭐ 1顆星　50%</div>
+      <div style="background:var(--mint);border-radius:8px;padding:6px 10px;">⭐⭐⭐ 3顆星　30%</div>
+      <div style="background:var(--gold);border-radius:8px;padding:6px 10px;">⭐×10 十顆星　12%</div>
+      <div style="background:var(--peach);border-radius:8px;padding:6px 10px;">🎁 小驚喜　6%</div>
+      <div style="background:var(--pink);border-radius:8px;padding:6px 10px;grid-column:1/-1;">🎊 大驚喜　2%</div>
+    </div>
+  </div>
+  <div style="padding:0 16px; text-align:center;">
+    <div style="background:white;border-radius:20px;padding:24px;border:2px dashed var(--pink-dark);">
+      <div style="font-size:48px;margin-bottom:8px;">🎰</div>
+      <div style="font-size:15px;font-weight:900;color:var(--pink-deep);margin-bottom:4px;">可使用的扭蛋</div>
+      <div style="font-size:40px;font-weight:900;color:var(--purple-deep);margin:8px 0;" id="gachaCountDisplay">0</div>
+      <div style="font-size:12px;color:var(--text-light);font-weight:700;margin-bottom:16px;">顆</div>
+      <button onclick="openGachaModal()" style="width:100%;background:linear-gradient(135deg,var(--pink-dark),var(--purple-dark));color:white;border:none;border-radius:50px;padding:15px;font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;cursor:pointer;transition:all 0.2s;" id="gachaPlayBtn">🎰 開始扭蛋！</button>
+    </div>
+  </div>
 </div>
 
 <!-- HISTORY TAB -->
@@ -231,6 +344,31 @@
   </div>
 </div>
 
+<!-- GACHA MODAL -->
+<div class="gacha-modal-overlay" id="gachaOverlay">
+  <div class="gacha-modal" id="gachaModal">
+    <div id="gachaPhase1">
+      <div class="gacha-phase-label">🎰 扭蛋驚喜！</div>
+      <div class="gacha-machine">
+        <div class="gacha-ball idle" id="gachaBall" onclick="spinGacha()">
+          <div class="gacha-ball-inner">🥚</div>
+          <div class="gacha-ball-line"></div>
+        </div>
+      </div>
+      <div class="gacha-hint" id="gachaHint">點擊蛋蛋開始扭！</div>
+    </div>
+    <div class="gacha-result" id="gachaResult">
+      <div class="gacha-result-icon" id="gResultIcon">⭐</div>
+      <div class="gacha-result-title" id="gResultTitle">獲得獎勵！</div>
+      <div class="gacha-result-desc" id="gResultDesc"></div>
+    </div>
+    <div style="margin-top:20px;display:flex;gap:10px;">
+      <button onclick="closeGachaModal()" style="flex:1;background:#F0F0F0;color:var(--text);border:none;border-radius:50px;padding:13px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:900;cursor:pointer;">關閉</button>
+    </div>
+  </div>
+</div>
+
+<div class="stars-rain" id="starsRain"></div>
 <div class="toast" id="toast"></div>
 
 <script type="module">
@@ -249,6 +387,7 @@ const firebaseConfig = {
 };
 
 const ME = 'child1';
+const SIGN = '金牛座';
 const LEVELS = [
   {lv:1,name:"小冒險家",need:0,next:50},
   {lv:2,name:"見習勇者",need:50,next:120},
@@ -257,18 +396,224 @@ const LEVELS = [
   {lv:5,name:"傳說英雄",need:350,next:999999},
 ];
 
+// 星座運勢資料庫（隨日期seed隨機）
+const HOROSCOPES = [
+  { text: "今天充滿能量，做任何事都能順利完成！", luck: "幸運色：粉紅色 🌸｜幸運數字：3" },
+  { text: "踏實努力的你今天會有好事發生，繼續加油！", luck: "幸運色：藍色 💙｜幸運數字：7" },
+  { text: "今天適合學習新事物，認真的你會有驚喜收穫！", luck: "幸運色：綠色 💚｜幸運數字：5" },
+  { text: "保持穩定的步調，你的努力大家都看在眼裡！", luck: "幸運色：黃色 💛｜幸運數字：8" },
+  { text: "今天是美好的一天！跟家人多聊聊天會帶來好運。", luck: "幸運色：紫色 💜｜幸運數字：2" },
+  { text: "認真完成今天的任務，會有特別的獎勵等著你！", luck: "幸運色：橘色 🧡｜幸運數字：6" },
+  { text: "今天做事特別專注，適合把難任務一口氣完成！", luck: "幸運色：紅色 ❤️｜幸運數字：9" },
+  { text: "溫柔善良的你今天特別受歡迎，開心每一刻！", luck: "幸運色：白色 🤍｜幸運數字：1" },
+  { text: "今天適合挑戰自己，完成一個平常沒做過的事！", luck: "幸運色：金色 ✨｜幸運數字：4" },
+  { text: "充滿創意的一天！把想做的事勇敢說出來吧！", luck: "幸運色：彩虹色 🌈｜幸運數字：0" },
+];
+
+const GACHA_TABLE = [
+  { weight:50, type:'pts', pts:1,  icon:'⭐',  title:'獲得 1 顆星星！', desc:'繼續加油，下次更多！' },
+  { weight:30, type:'pts', pts:3,  icon:'⭐⭐⭐', title:'獲得 3 顆星星！', desc:'不錯喔！繼續努力！' },
+  { weight:12, type:'pts', pts:10, icon:'🌟🌟🌟', title:'獲得 10 顆星星！', desc:'太棒了！大豐收！' },
+  { weight:6,  type:'prize', pts:0, icon:'🎁', title:'小驚喜！', desc:'找媽媽或爸爸兌換你的小驚喜 ♡' },
+  { weight:2,  type:'prize', pts:0, icon:'🎊', title:'大驚喜！！', desc:'哇！找媽媽或爸爸兌換你的超級大驚喜！🎉' },
+];
+
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 let data = { points:0, totalEarned:0 };
-let tasks = {};
-let shop = {};
-let pending = {};
-let proposals = {};
+let tasks = {}, shop = {}, pending = {}, proposals = {};
 let history = [];
-let pendingTask = null;
-let pendingShop = null;
+let pendingTask = null, pendingShop = null;
+let gachaSpinning = false;
 
+// ====== HOROSCOPE ======
+function loadHoroscope() {
+  const d = new Date();
+  const seed = d.getFullYear() * 10000 + (d.getMonth()+1) * 100 + d.getDate();
+  const h = HOROSCOPES[seed % HOROSCOPES.length];
+  document.getElementById('horoText').textContent = h.text;
+  document.getElementById('horoLuck').textContent = h.luck;
+  // 根據運勢換問候語
+  document.getElementById('horoGreeting').textContent = SIGN + ' ♡ 今日運勢';
+}
+
+// ====== CHECKIN ======
+function todayStr() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function renderCheckin(checkinData) {
+  checkinData = checkinData || {};
+  const streak = checkinData.streak || 0;
+  const lastDate = checkinData.lastDate || '';
+  const history7 = checkinData.history7 || [];
+  const today = todayStr();
+  const alreadyDone = lastDate === today;
+
+  document.getElementById('streakLabel').textContent = `連續 ${streak} 天`;
+
+  // 顯示最近7天
+  const days = ['一','二','三','四','五','六','日'];
+  const daysContainer = document.getElementById('checkinDays');
+  daysContainer.innerHTML = '';
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    const ds = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    const isToday = ds === today;
+    const isDone = history7.includes(ds);
+    const dayW = days[d.getDay() === 0 ? 6 : d.getDay()-1];
+    const col = document.createElement('div');
+    col.className = 'day-col';
+    col.innerHTML = `<div class="day-dot ${isDone?'done':''} ${isToday&&!isDone?'today':''}">
+      ${isDone ? '✓' : (isToday ? '→' : '·')}
+    </div>
+    <div class="day-label">${dayW}</div>`;
+    daysContainer.appendChild(col);
+  }
+
+  const btn = document.getElementById('checkinBtn');
+  if (alreadyDone) {
+    btn.textContent = '✅ 今天已簽到！';
+    btn.disabled = true;
+  } else {
+    btn.textContent = '✅ 今天簽到！';
+    btn.disabled = false;
+  }
+}
+
+window.doCheckin = async function() {
+  const snap = await get(ref(db, `checkin/${ME}`));
+  let ci = snap.val() || { streak:0, lastDate:'', history7:[] };
+  const today = todayStr();
+  if (ci.lastDate === today) { toast('今天已經簽到過囉！'); return; }
+
+  // 計算連續天數
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  const yStr = `${yesterday.getFullYear()}-${String(yesterday.getMonth()+1).padStart(2,'0')}-${String(yesterday.getDate()).padStart(2,'0')}`;
+  const newStreak = (ci.lastDate === yStr) ? (ci.streak || 0) + 1 : 1;
+
+  // 維護最近7天記錄
+  let h7 = ci.history7 || [];
+  h7.push(today);
+  if (h7.length > 7) h7 = h7.slice(-7);
+
+  await set(ref(db, `checkin/${ME}`), { streak: newStreak, lastDate: today, history7: h7 });
+
+  // 連續7天給獎勵
+  let msg = `✅ 簽到成功！連續 ${newStreak} 天`;
+  if (newStreak > 0 && newStreak % 7 === 0) {
+    const playerRef = ref(db, `players/${ME}`);
+    const ps = await get(playerRef);
+    const pl = ps.val() || { points:0, totalEarned:0 };
+    await update(playerRef, { points: (pl.points||0) + 3, totalEarned: (pl.totalEarned||0) + 3 });
+    await push(ref(db,'history'), { user:ME, desc:`連續簽到 ${newStreak} 天獎勵！`, icon:'🎉', pts:3, time:now() });
+    msg = `🎉 連續簽到 ${newStreak} 天！獲得 3 顆星星！`;
+    rainStars();
+  }
+  toast(msg);
+};
+
+// ====== GACHA ======
+function renderGachaCount(gachaData) {
+  const count = (gachaData && gachaData[ME]) ? (gachaData[ME].count || 0) : 0;
+  document.getElementById('gachaCountDisplay').textContent = count;
+  document.getElementById('gachaHomeAvail').textContent = count > 0 ? `🎰 有 ${count} 顆扭蛋等你！` : '目前沒有扭蛋，繼續努力！';
+  const btn = document.getElementById('gachaPlayBtn');
+  if (btn) {
+    btn.disabled = count <= 0;
+    btn.style.opacity = count > 0 ? '1' : '0.5';
+    btn.textContent = count > 0 ? '🎰 開始扭蛋！' : '目前沒有扭蛋';
+  }
+}
+
+window.openGachaModal = function() {
+  const gachaData = window._allData?.gacha || {};
+  const count = gachaData[ME]?.count || 0;
+  if (count <= 0) { toast('目前沒有扭蛋！等審核員發放喔 ✦'); return; }
+  gachaSpinning = false;
+  document.getElementById('gachaPhase1').style.display = 'block';
+  document.getElementById('gachaResult').classList.remove('show');
+  document.getElementById('gachaBall').className = 'gacha-ball idle';
+  document.getElementById('gachaBall').innerHTML = '<div class="gacha-ball-inner">🥚</div><div class="gacha-ball-line"></div>';
+  document.getElementById('gachaHint').textContent = '點擊蛋蛋開始扭！';
+  document.getElementById('gachaOverlay').classList.add('open');
+};
+
+window.spinGacha = async function() {
+  if (gachaSpinning) return;
+  const gachaData = window._allData?.gacha || {};
+  const count = gachaData[ME]?.count || 0;
+  if (count <= 0) { toast('沒有扭蛋了！'); closeGachaModal(); return; }
+
+  gachaSpinning = true;
+  const ball = document.getElementById('gachaBall');
+  ball.className = 'gacha-ball spinning';
+  document.getElementById('gachaHint').textContent = '轉轉轉...！';
+
+  await new Promise(r => setTimeout(r, 1500));
+
+  // 抽獎
+  const result = drawGacha();
+
+  ball.className = 'gacha-ball cracking';
+  ball.innerHTML = `<div class="gacha-ball-inner">${result.icon}</div><div class="gacha-ball-line"></div>`;
+  await new Promise(r => setTimeout(r, 700));
+
+  // 更新扭蛋數量
+  await update(ref(db, `gacha/${ME}`), { count: Math.max(0, count - 1) });
+
+  // 給獎勵
+  if (result.type === 'pts' && result.pts > 0) {
+    const playerRef = ref(db, `players/${ME}`);
+    const ps = await get(playerRef);
+    const pl = ps.val() || { points:0, totalEarned:0 };
+    await update(playerRef, { points:(pl.points||0)+result.pts, totalEarned:(pl.totalEarned||0)+result.pts });
+    await push(ref(db,'history'), { user:ME, desc:`扭蛋獲得 ${result.pts} 顆星星！`, icon:'🎰', pts:result.pts, time:now() });
+    if (result.pts >= 10) rainStars();
+  } else if (result.type === 'prize') {
+    await push(ref(db,'history'), { user:ME, desc:`扭蛋獲得「${result.title}」！`, icon:'🎰', pts:0, time:now() });
+    rainStars();
+  }
+
+  // 顯示結果
+  document.getElementById('gachaPhase1').style.display = 'none';
+  document.getElementById('gResultIcon').textContent = result.icon;
+  document.getElementById('gResultTitle').textContent = result.title;
+  document.getElementById('gResultDesc').textContent = result.desc;
+  document.getElementById('gachaResult').classList.add('show');
+  gachaSpinning = false;
+};
+
+function drawGacha() {
+  const total = GACHA_TABLE.reduce((s,g) => s+g.weight, 0);
+  let r = Math.random() * total;
+  for (const g of GACHA_TABLE) { r -= g.weight; if (r <= 0) return g; }
+  return GACHA_TABLE[0];
+}
+
+window.closeGachaModal = function() {
+  document.getElementById('gachaOverlay').classList.remove('open');
+  gachaSpinning = false;
+};
+
+function rainStars() {
+  const container = document.getElementById('starsRain');
+  for (let i = 0; i < 20; i++) {
+    const s = document.createElement('div');
+    s.className = 'star-particle';
+    s.textContent = ['⭐','🌟','✨'][Math.floor(Math.random()*3)];
+    s.style.left = Math.random()*100 + 'vw';
+    s.style.animationDelay = Math.random()*1 + 's';
+    container.appendChild(s);
+    setTimeout(() => s.remove(), 2500);
+  }
+}
+
+// ====== FIREBASE ======
 async function initDefaults() {
   const sp = await get(ref(db,'players/child1'));
   if (!sp.exists()) await set(ref(db,'players/child1'),{points:0,totalEarned:0});
@@ -292,12 +637,15 @@ async function initDefaults() {
 function startListen() {
   onValue(ref(db,'/'), snap => {
     const d = snap.val() || {};
+    window._allData = d;
     data = d.players?.[ME] || {points:0,totalEarned:0};
     tasks = d.tasks || {};
     shop = d.shop || {};
     pending = d.pending || {};
     proposals = d.proposals || {};
     history = d.history ? Object.values(d.history).reverse() : [];
+    renderCheckin(d.checkin?.[ME]);
+    renderGachaCount(d.gacha);
     render();
   });
 }
@@ -311,9 +659,9 @@ function render() {
   let lv = LEVELS[0];
   for (const l of LEVELS) { if (total >= l.need) lv = l; }
   document.getElementById('lvDisplay').textContent = `Lv.${lv.lv} ${lv.name}`;
-  const pct = lv.next === 999999 ? 100 : Math.min(100, Math.round((total - lv.need)/(lv.next - lv.need)*100));
+  const pct = lv.next === 999999 ? 100 : Math.min(100, Math.round((total-lv.need)/(lv.next-lv.need)*100));
   document.getElementById('progBar').style.width = pct + '%';
-  document.getElementById('progLeft').textContent = lv.next === 999999 ? '🏆 已達最高等級！' : `距離升級還差 ${lv.next - total} 顆`;
+  document.getElementById('progLeft').textContent = lv.next === 999999 ? '🏆 已達最高等級！' : `距離升級還差 ${lv.next-total} 顆`;
   document.getElementById('progRight').textContent = lv.next === 999999 ? 'MAX' : `Lv.${lv.lv+1}`;
 
   const myPendingIds = Object.values(pending).filter(p=>p.user===ME).map(p=>p.taskId);
@@ -326,17 +674,13 @@ function render() {
   document.getElementById('allShopList').innerHTML = shopEntries.map(([id,s])=>shopCard(id,s,pts)).join('') || empty('🛍','商店空空的');
   document.getElementById('historyList').innerHTML = history.filter(h=>h.user===ME).slice(0,30).map(h=>historyItem(h)).join('') || empty('📜','還沒有紀錄');
 
-  // My proposals
   const myProposals = Object.entries(proposals).filter(([,p])=>p.user===ME);
   document.getElementById('myProposalList').innerHTML = myProposals.length === 0
     ? empty('💌','還沒有提出自訂任務')
     : myProposals.reverse().map(([id,p])=>`
         <div class="task-card pending">
           <div class="task-icon">${p.icon||'💡'}</div>
-          <div class="task-info">
-            <div class="task-name">${p.name}</div>
-            <div class="task-pts">建議 ${p.suggestPts} 顆星星${p.reason ? `｜${p.reason}` : ''}</div>
-          </div>
+          <div class="task-info"><div class="task-name">${p.name}</div><div class="task-pts">建議 ${p.suggestPts} 顆星星${p.reason?`｜${p.reason}`:''}</div></div>
           <div class="task-status status-pending">審核中</div>
         </div>`).join('');
 }
@@ -345,10 +689,7 @@ function taskCard(id, t, pendingIds) {
   const isPending = pendingIds.includes(id);
   return `<div class="task-card${isPending?' pending':''}" onclick="${isPending?'':` openTaskModal('${id}','${t.name}','${t.icon}',${t.pts})`}">
     <div class="task-icon">${t.icon}</div>
-    <div class="task-info">
-      <div class="task-name">${t.name}</div>
-      <div class="task-pts">+${t.pts} 顆星星</div>
-    </div>
+    <div class="task-info"><div class="task-name">${t.name}</div><div class="task-pts">+${t.pts} 顆星星</div></div>
     <div class="task-status ${isPending?'status-pending':'status-available'}">${isPending?'審核中':'可申報'}</div>
   </div>`;
 }
@@ -371,11 +712,9 @@ function historyItem(h) {
   </div>`;
 }
 
-function empty(icon, msg) {
-  return `<div class="empty"><div class="empty-icon">${icon}</div>${msg}</div>`;
-}
+function empty(icon, msg) { return `<div class="empty"><div class="empty-icon">${icon}</div>${msg}</div>`; }
 
-window.openTaskModal = function(id, name, icon, pts) {
+window.openTaskModal = (id, name, icon, pts) => {
   pendingTask = {id,name,icon,pts};
   document.getElementById('mTaskIcon').textContent = icon;
   document.getElementById('mTaskName').textContent = name;
@@ -383,7 +722,7 @@ window.openTaskModal = function(id, name, icon, pts) {
   document.getElementById('taskOverlay').classList.add('open');
 };
 
-window.submitTask = async function() {
+window.submitTask = async () => {
   if (!pendingTask) return;
   await push(ref(db,'pending'), {user:ME, taskId:pendingTask.id, taskName:pendingTask.name, pts:pendingTask.pts, time:now()});
   closeModal('taskOverlay');
@@ -391,7 +730,7 @@ window.submitTask = async function() {
   pendingTask = null;
 };
 
-window.openShopModal = function(id, name, icon, cost) {
+window.openShopModal = (id, name, icon, cost) => {
   pendingShop = {id,name,icon,cost};
   document.getElementById('mShopIcon').textContent = icon;
   document.getElementById('mShopName').textContent = name;
@@ -399,7 +738,7 @@ window.openShopModal = function(id, name, icon, cost) {
   document.getElementById('shopOverlay').classList.add('open');
 };
 
-window.redeemShop = async function() {
+window.redeemShop = async () => {
   if (!pendingShop) return;
   const pts = data.points || 0;
   if (pts < pendingShop.cost) { toast('星星不夠喔！繼續加油 ♡'); closeModal('shopOverlay'); return; }
@@ -410,21 +749,14 @@ window.redeemShop = async function() {
   pendingShop = null;
 };
 
-window.submitProposal = async function() {
+window.submitProposal = async () => {
   const icon = document.getElementById('proposeIcon').value.trim() || '💡';
   const name = document.getElementById('proposeName').value.trim();
   const pts = parseInt(document.getElementById('proposePts').value);
   const reason = document.getElementById('proposeReason').value.trim();
   if (!name) { toast('請填寫任務名稱！'); return; }
   if (!pts || pts <= 0) { toast('請填寫建議星星數！'); return; }
-  await push(ref(db,'proposals'), {
-    user: ME,
-    icon, name,
-    suggestPts: pts,
-    reason: reason || '',
-    time: now(),
-    type: 'custom'
-  });
+  await push(ref(db,'proposals'), { user:ME, icon, name, suggestPts:pts, reason:reason||'', time:now(), type:'custom' });
   document.getElementById('proposeIcon').value = '';
   document.getElementById('proposeName').value = '';
   document.getElementById('proposePts').value = '';
@@ -432,14 +764,16 @@ window.submitProposal = async function() {
   toast(`💌 自訂任務「${name}」已送出！等待審核 ✦`);
 };
 
-window.closeModal = function(id) {
-  document.getElementById(id).classList.remove('open');
-  pendingTask = null; pendingShop = null;
-};
+window.closeModal = (id) => { document.getElementById(id).classList.remove('open'); pendingTask=null; pendingShop=null; };
 
-window.showTab = function(tab, el) {
+window.showTab = (tab, el) => {
   document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
-  if(el) el.classList.add('active');
+  if (el) el.classList.add('active');
+  else {
+    const tabs = ['home','tasks','shop','gacha','history'];
+    const idx = tabs.indexOf(tab);
+    document.querySelectorAll('.nav-tab')[idx]?.classList.add('active');
+  }
   document.querySelectorAll('.tab-sec').forEach(s=>s.classList.remove('active'));
   document.getElementById('tab-'+tab).classList.add('active');
 };
@@ -453,10 +787,11 @@ function toast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'), 2800);
+  setTimeout(() => t.classList.remove('show'), 2800);
 }
 
-initDefaults().then(()=>startListen());
+loadHoroscope();
+initDefaults().then(() => startListen());
 </script>
 </body>
 </html>
