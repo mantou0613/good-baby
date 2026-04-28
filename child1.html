@@ -53,6 +53,33 @@
   .checkin-btn-sm { background: var(--mint-dark); color: white; border: none; border-radius: 20px; padding: 6px 12px; font-family: 'Nunito', sans-serif; font-size: 11px; font-weight: 900; cursor: pointer; white-space: nowrap; flex-shrink: 0; transition: all 0.15s; }
   .checkin-btn-sm:disabled { background: #CCC; color: #999; cursor: not-allowed; }
   .checkin-btn-sm:active:not(:disabled) { transform: scale(0.96); }
+  @keyframes checkin-pop {
+  0%   { transform: scale(1); }
+  30%  { transform: scale(1.18); }
+  60%  { transform: scale(0.93); }
+  80%  { transform: scale(1.07); }
+  100% { transform: scale(1); }
+}
+@keyframes streak-bounce {
+  0%,100% { transform: translateY(0); }
+  40%     { transform: translateY(-6px); }
+  70%     { transform: translateY(-2px); }
+}
+@keyframes cdot-pop {
+  0%   { transform: scale(0.5); opacity: 0; }
+  70%  { transform: scale(1.3); }
+  100% { transform: scale(1); opacity: 1; }
+}
+.checkin-btn-sm.did-checkin {
+  animation: checkin-pop 0.5s cubic-bezier(0.34,1.4,0.64,1);
+}
+.checkin-streak-sm.streak-animate {
+  animation: streak-bounce 0.6s ease;
+  color: var(--mint-deep);
+}
+.cdot.done.cdot-new {
+  animation: cdot-pop 0.4s cubic-bezier(0.34,1.5,0.64,1);
+}
 
   /* ── POINTS HERO ── */
   .points-hero { margin: 0 16px 14px; background: white; border-radius: 24px; padding: 22px; text-align: center; border: 1.5px solid var(--blue); }
@@ -531,6 +558,28 @@ await push(ref(db,'history'), { user:ME, desc:`連續簽到 ${newStreak} 天獎�
     msg = `🎉 連續簽到 ${newStreak} 天！獲得 3 顆星星！`;
     rainStars();
   }
+  // 簽到動畫
+  const btn = document.getElementById('checkinBtn');
+  btn.classList.remove('did-checkin');
+  void btn.offsetWidth; // 強制重繪
+  btn.classList.add('did-checkin');
+  setTimeout(() => btn.classList.remove('did-checkin'), 500);
+
+  const streakEl = document.getElementById('streakLabel');
+  streakEl.classList.remove('streak-animate');
+  void streakEl.offsetWidth;
+  streakEl.classList.add('streak-animate');
+  setTimeout(() => streakEl.classList.remove('streak-animate'), 600);
+
+  // 今天的點點加入動畫
+  setTimeout(() => {
+    const dots = document.querySelectorAll('.cdot.done');
+    if (dots.length > 0) {
+      const last = dots[dots.length - 1];
+      last.classList.add('cdot-new');
+      setTimeout(() => last.classList.remove('cdot-new'), 400);
+    }
+  }, 100);
   toast(msg);
 };
 
