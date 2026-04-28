@@ -459,8 +459,7 @@ window.approvePending = async function(pid) {
   const task = (allData.tasks || {})[p.taskId] || {};
   await update(playerRef, { points:(player.points||0)+p.pts, totalEarned:(player.totalEarned||0)+p.pts });
   const t2 = now();
-const t3 = now();
-await push(ref(db,'history'), { user:p.user, desc:`自訂任務「${p.name}」已加入任務列表`, icon:p.icon||'💡', pts:0, time:t3.time, date:t3.date });
+  await push(ref(db,'history'), { user:p.user, desc:`完成「${p.taskName}」`, icon:task.icon||'⭐', pts:p.pts, time:t2.time, date:t2.date });
   await remove(ref(db, `pending/${pid}`));
   toast(`✓ 已核准！給 ${USERS[p.user]?.name||p.user} +${p.pts} 顆星星`);
 };
@@ -479,7 +478,8 @@ window.approveProposalAddTask = async function(pid) {
   if (!p) return;
   const pts = parseInt(document.getElementById(`pptsInput-${pid}`)?.value) || p.suggestPts;
   await push(ref(db,'tasks'), { icon:p.icon||'💡', name:p.name, pts });
-  await push(ref(db,'history'), { user:p.user, desc:`自訂任務「${p.name}」已加入任務列表`, icon:p.icon||'💡', pts:0, time:now() });
+  const t3 = now();
+await push(ref(db,'history'), { user:p.user, desc:`自訂任務「${p.name}」已加入任務列表`, icon:p.icon||'💡', pts:0, time:t3.time, date:t3.date });
   await remove(ref(db, `proposals/${pid}`));
   toast(`✓ 「${p.name}」已加入任務列表（${pts} 顆星星）`);
 };
@@ -516,10 +516,11 @@ window.adjustPts = async function(uid, sign) {
   const player = snap.val() || { points:0, totalEarned:0 };
   const delta = sign * amt;
   const newPts = Math.max(0, (player.points||0) + delta);
+  const actualDelta = newPts - (player.points || 0); // 實際變化量
   const newTotal = sign > 0 ? (player.totalEarned||0)+amt : (player.totalEarned||0);
   await update(playerRef, { points:newPts, totalEarned:newTotal });
   const t5 = now();
-await push(ref(db,'history'), { user:uid, desc:reason, icon:sign>0?'⭐':'💸', pts:delta, time:t5.time, date:t5.date });
+await push(ref(db,'history'), { user:uid, desc:reason, icon:sign>0?'⭐':'💸', pts:actualDelta, time:t5.time, date:t5.date });
   document.getElementById(`amt-${uid}`).value = '';
   document.getElementById(`reason-${uid}`).value = '';
   toast(`${USERS[uid]?.name} ${sign>0?'+':''}${delta} 顆星星 ✦`);
