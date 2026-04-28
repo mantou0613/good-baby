@@ -169,6 +169,7 @@
     <div class="nav-tab" onclick="showTab('tasks',this)">⚔️ 任務</div>
     <div class="nav-tab" onclick="showTab('shop',this)">🛍 商店</div>
     <div class="nav-tab" onclick="showTab('shopReview',this)">🛍 兌換</div>
+    <div class="nav-tab" onclick="showTab('shopProposals',this)">🛍 獎勵申請</div>
     <div class="nav-tab" onclick="showTab('history',this)">📜 紀錄</div>
   </div>
 </div>
@@ -253,6 +254,12 @@
   <p style="padding:0 16px;margin-bottom:14px;font-size:12px;color:var(--text-light);font-weight:700;">確認後才會扣除孩子的星星。</p>
   <div class="pending-list" id="shopPendingList"></div>
 </div>
+  <!-- SHOP PROPOSALS TAB -->
+<div id="tab-shopProposals" class="tab-sec">
+  <div class="section-title" style="margin-top:6px">🛍 自訂獎勵申請 <span class="badge badge-gold" id="shopProposalBadge">0</span></div>
+  <p style="padding:0 16px;margin-bottom:14px;font-size:12px;color:var(--text-light);font-weight:700;">孩子提出的新獎勵提案，審核後加入商店。</p>
+  <div class="proposal-list" id="shopProposalList"></div>
+</div>
 <!-- HISTORY TAB -->
 <div id="tab-history" class="tab-sec">
   <div class="section-title" style="margin-top:6px">📜 所有紀錄</div>
@@ -316,6 +323,8 @@ function render() {
   const pendingArr = Object.entries(pending);
   const proposalArr = Object.entries(proposals);
   const shopPendingArr = Object.entries(allData.shopPending || {});
+  const shopProposalArr = Object.entries(allData.shopProposals || {});
+  document.getElementById('shopProposalBadge').textContent = shopProposalArr.length;
   const today = new Date();
 const todayDate = `${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}`;
 const todayApproved = history.filter(h => h.pts > 0 && h.date === todayDate && h.desc?.includes('完成')).length;
@@ -455,7 +464,32 @@ document.getElementById('shopPendingList').innerHTML = shopPendingArr.length ===
           <button class="action-btn btn-reject" onclick="rejectShop('${spid}')">取消 ✗</button>
         </div>
       </div>`;
-    }).join('');
+    }).join('');document.getElementById('shopProposalList').innerHTML = shopProposalArr.length === 0
+    ? `<div class="empty"><div class="empty-icon">🛍</div>目前沒有自訂獎勵申請</div>`
+    : shopProposalArr.map(([pid, p]) => {
+        const u = USERS[p.user] || { name: p.user, avatar: '👤' };
+        return `<div class="proposal-card">
+          <div class="proposal-top">
+            <div class="proposal-avatar">${u.avatar}</div>
+            <div class="proposal-info">
+              <div class="proposal-who">${u.name} <span class="custom-badge">🛍 獎勵申請</span></div>
+              <div class="proposal-name">${p.icon || '🎁'} ${p.name}</div>
+              ${p.reason ? `<div class="proposal-reason">「${p.reason}」</div>` : ''}
+              <div class="proposal-suggest">建議：${p.suggestPts} 顆星星</div>
+            </div>
+            <div class="proposal-time">${p.time || ''}</div>
+          </div>
+          <div class="proposal-pts-row">
+            <div class="proposal-pts-label">決定費用：</div>
+            <input class="proposal-pts-input" type="number" id="spptsInput-${pid}" value="${p.suggestPts}" min="1">
+            <div class="proposal-pts-label" style="color:var(--gold-deep)">⭐</div>
+          </div>
+          <div class="proposal-actions">
+            <button class="action-btn btn-add-task" onclick="approveShopProposal('${pid}')">➕ 加入商店</button>
+            <button class="action-btn btn-reject" onclick="rejectShopProposal('${pid}')">✗ 拒絕</button>
+          </div>
+        </div>`;
+      }).join('');
   // History
   const histArr = allData.history ? Object.values(allData.history).reverse() : [];
   document.getElementById('allHistoryList').innerHTML = histArr.slice(0,50).map(h => {
@@ -564,6 +598,25 @@ window.rejectShop = async function(spid) {
   await push(ref(db,'history'), { user:sp.user, desc:`「${sp.shopName}」兌換申請被取消`, icon:'❌', pts:0, time:t.time, date:t.date });
   await remove(ref(db, `shopPending/${spid}`));
   toast(`✗ 已取消 ${USERS[sp.user]?.name} 的兌換申請`);
+};
+  window.approveShopProposal = async function(pid) {
+  const p = (allData.shopProposals || {})[pid];
+  if (!p) return;
+  const cost = parseInt(document.getElementById(`spptsInput-${pid}`)?.value) || p.suggestPts;
+  await push(ref(db, 'shop'), { icon: p.icon || '🎁', name: p.name, cost });
+  const t = now();
+  await push(ref(db, 'history'), { user: p.user, desc: `自訂獎勵「${p.name}」已加入商店`, icon: p.icon || '🎁', pts: 0, time: t.time, date: t.date });
+  await remove(ref(db, `shopProposals/${pid}`));
+  toast(`✓ 「${p.name}」已加入商店（${cost} ⭐）`);
+};
+
+window.rejectShopProposal = async function(pid) {
+  const p = (allData.shopProposals || {})[pid];
+  if (!p) return;
+  const t = now();
+  await push(ref(db, 'history'), { user: p.user, desc: `自訂獎勵「${p.name}」申請被拒絕`, icon: '❌', pts: 0, time: t.time, date: t.date });
+  await remove(ref(db, `shopProposals/${pid}`));
+  toast(`✗ 已拒絕「${p.name}」的申請`);
 };
 
 window.adjustPts = async function(uid, sign) {
