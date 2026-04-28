@@ -493,7 +493,8 @@ window.doCheckin = async function() {
     const pr=ref(db,`players/${ME}`);
     const ps=await get(pr); const pl=ps.val()||{points:0,totalEarned:0};
     await update(pr,{points:(pl.points||0)+3,totalEarned:(pl.totalEarned||0)+3});
-    await push(ref(db,'history'),{user:ME,desc:`連續簽到 ${newStreak} 天獎勵！`,icon:'🎉',pts:3,time:now()});
+    const t1=now();
+await push(ref(db,'history'),{user:ME,desc:`連續簽到 ${newStreak} 天獎勵！`,icon:'🎉',pts:3,time:t1.time,date:t1.date});
     msg=`🎉 連續簽到 ${newStreak} 天！獲得 3 顆星星！`;
     rainStars();
   }
@@ -536,10 +537,12 @@ window.spinGacha=async function(){
   if(result.type==='pts'&&result.pts>0){
     const pr=ref(db,`players/${ME}`); const ps=await get(pr); const pl=ps.val()||{points:0,totalEarned:0};
     await update(pr,{points:(pl.points||0)+result.pts,totalEarned:(pl.totalEarned||0)+result.pts});
-    await push(ref(db,'history'),{user:ME,desc:`扭蛋獲得 ${result.pts} 顆星星！`,icon:'🎰',pts:result.pts,time:now()});
+    const t2=now();
+await push(ref(db,'history'),{user:ME,desc:`扭蛋獲得 ${result.pts} 顆星星！`,icon:'🎰',pts:result.pts,time:t2.time,date:t2.date});
     if(result.pts>=10)rainStars();
   } else if(result.type==='prize'){
-    await push(ref(db,'history'),{user:ME,desc:`扭蛋獲得「${result.title}」！`,icon:'🎰',pts:0,time:now()});
+    const t3=now();
+await push(ref(db,'history'),{user:ME,desc:`扭蛋獲得「${result.title}」！`,icon:'🎰',pts:0,time:t3.time,date:t3.date});
     rainStars();
   }
   document.getElementById('gachaPhase1').style.display='none';
@@ -599,13 +602,22 @@ function histItem(h){const pos=h.pts>0;return `<div class="history-item"><div cl
 function empty(icon,msg){return `<div class="empty"><div class="empty-icon">${icon}</div>${msg}</div>`;}
 
 window.openTaskModal=(id,name,icon,pts)=>{pendingTask={id,name,icon,pts};document.getElementById('mTaskIcon').textContent=icon;document.getElementById('mTaskName').textContent=name;document.getElementById('mTaskPts').textContent=pts;document.getElementById('taskOverlay').classList.add('open');};
-window.submitTask=async()=>{if(!pendingTask)return;await push(ref(db,'pending'),{user:ME,taskId:pendingTask.id,taskName:pendingTask.name,pts:pendingTask.pts,time:now()});closeModal('taskOverlay');toast(`「${pendingTask.name}」已申報！等待審核 ✦`);pendingTask=null;};
+window.submitTask=async()=>{if(!pendingTask)return;
+                            const t4=now();
+await push(ref(db,'pending'),{user:ME,taskId:pendingTask.id,taskName:pendingTask.name,pts:pendingTask.pts,time:t4.time,date:t4.date});
+                            closeModal('taskOverlay');toast(`「${pendingTask.name}」已申報！等待審核 ✦`);pendingTask=null;};
 window.openShopModal=(id,name,icon,cost)=>{pendingShop={id,name,icon,cost};document.getElementById('mShopIcon').textContent=icon;document.getElementById('mShopName').textContent=name;document.getElementById('mShopCost').textContent=cost;document.getElementById('shopOverlay').classList.add('open');};
-window.redeemShop=async()=>{if(!pendingShop)return;const pts=data.points||0;if(pts<pendingShop.cost){toast('星星不夠喔！繼續加油 ♡');closeModal('shopOverlay');return;}await update(ref(db,`players/${ME}`),{points:pts-pendingShop.cost});await push(ref(db,'history'),{user:ME,desc:`兌換「${pendingShop.name}」`,icon:pendingShop.icon,pts:-pendingShop.cost,time:now()});closeModal('shopOverlay');toast(`兌換成功！享受你的 ${pendingShop.name} ♡`);pendingShop=null;};
-window.submitProposal=async()=>{const icon=document.getElementById('proposeIcon').value.trim()||'💡';const name=document.getElementById('proposeName').value.trim();const pts=parseInt(document.getElementById('proposePts').value);const reason=document.getElementById('proposeReason').value.trim();if(!name){toast('請填寫任務名稱！');return;}if(!pts||pts<=0){toast('請填寫建議星星數！');return;}await push(ref(db,'proposals'),{user:ME,icon,name,suggestPts:pts,reason:reason||'',time:now(),type:'custom'});document.getElementById('proposeIcon').value='';document.getElementById('proposeName').value='';document.getElementById('proposePts').value='';document.getElementById('proposeReason').value='';toast(`💌 自訂任務「${name}」已送出！等待審核 ✦`);};
+window.redeemShop=async()=>{if(!pendingShop)return;const pts=data.points||0;if(pts<pendingShop.cost){toast('星星不夠喔！繼續加油 ♡');closeModal('shopOverlay');return;}await update(ref(db,`players/${ME}`),{points:Math.max(0,pts-pendingShop.cost)});
+                            const t5=now();
+await push(ref(db,'history'),{user:ME,desc:`兌換「${pendingShop.name}」`,icon:pendingShop.icon,pts:-pendingShop.cost,time:t5.time,date:t5.date});
+                            closeModal('shopOverlay');toast(`兌換成功！享受你的 ${pendingShop.name} ♡`);pendingShop=null;};
+window.submitProposal=async()=>{const icon=document.getElementById('proposeIcon').value.trim()||'💡';const name=document.getElementById('proposeName').value.trim();const pts=parseInt(document.getElementById('proposePts').value);const reason=document.getElementById('proposeReason').value.trim();if(!name){toast('請填寫任務名稱！');return;}if(!pts||pts<=0){toast('請填寫建議星星數！');return;}
+                                const t6=now();
+await push(ref(db,'proposals'),{user:ME,icon,name,suggestPts:pts,reason:reason||'',time:t6.time,date:t6.date,type:'custom'});
+                                document.getElementById('proposeIcon').value='';document.getElementById('proposeName').value='';document.getElementById('proposePts').value='';document.getElementById('proposeReason').value='';toast(`💌 自訂任務「${name}」已送出！等待審核 ✦`);};
 window.closeModal=(id)=>{document.getElementById(id).classList.remove('open');pendingTask=null;pendingShop=null;};
 window.showTab=(tab,el)=>{document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');else{const tabs=['home','tasks','shop','gacha','history'];document.querySelectorAll('.nav-tab')[tabs.indexOf(tab)]?.classList.add('active');}document.querySelectorAll('.tab-sec').forEach(s=>s.classList.remove('active'));document.getElementById('tab-'+tab).classList.add('active');};
-function now(){const d=new Date();return `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;}
+function now(){const d=new Date();return {time:`${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`,date:`${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`};}
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
 
 loadAIHoroscope();
