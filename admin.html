@@ -510,7 +510,7 @@ window.adjustPts = async function(uid, sign) {
   const newPts = Math.max(0, (player.points||0) + delta);
   const newTotal = sign > 0 ? (player.totalEarned||0)+amt : (player.totalEarned||0);
   await update(playerRef, { points:newPts, totalEarned:newTotal });
-  await push(ref(db,'history'), { user:uid, desc:reason, icon:sign>0?'⭐':'💸', pts:delta, time:now() });
+  await push(ref(db,'history'), { user:uid, desc:reason, icon:sign>0?'⭐':'💸', pts:actualDelta, time:now() });
   document.getElementById(`amt-${uid}`).value = '';
   document.getElementById(`reason-${uid}`).value = '';
   toast(`${USERS[uid]?.name} ${sign>0?'+':''}${delta} 顆星星 ✦`);
@@ -559,7 +559,10 @@ window.showTab = function(tab, el) {
 
 function now() {
   const d = new Date();
-  return `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+  return {
+    time: `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`,
+    date: `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`
+  };
 }
 
 function toast(msg) {
