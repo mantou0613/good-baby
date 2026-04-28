@@ -521,7 +521,8 @@ window.doCheckin = async function() {
     const ps = await get(playerRef);
     const pl = ps.val() || { points:0, totalEarned:0 };
     await update(playerRef, { points:(pl.points||0)+3, totalEarned:(pl.totalEarned||0)+3 });
-    await push(ref(db,'history'), { user:ME, desc:`連續簽到 ${newStreak} 天獎勵！`, icon:'🎉', pts:3, time:now() });
+    const t1 = now();
+    await push(ref(db,'history'), { user:ME, desc:`連續簽到 ${newStreak} 天獎勵！`, icon:'🎉', pts:3, time:t1.time, date:t1.date });
     msg = `🎉 連續簽到 ${newStreak} 天！獲得 3 顆星星！`;
     rainStars();
   }
@@ -696,7 +697,7 @@ window.redeemShop = async () => {
   if (!pendingShop) return;
   const pts = data.points || 0;
   if (pts < pendingShop.cost) { toast('星星不夠喔！繼續加油 ♡'); closeModal('shopOverlay'); return; }
-  await update(ref(db,`players/${ME}`), {points: pts - pendingShop.cost});
+await update(ref(db,`players/${ME}`), {points: Math.max(0, pts - pendingShop.cost)});
   await push(ref(db,'history'), {user:ME, desc:`兌換「${pendingShop.name}」`, icon:pendingShop.icon, pts:-pendingShop.cost, time:now()});
   closeModal('shopOverlay'); toast(`兌換成功！享受你的 ${pendingShop.name} ♡`); pendingShop = null;
 };
@@ -720,7 +721,13 @@ window.showTab = (tab, el) => {
   document.querySelectorAll('.tab-sec').forEach(s=>s.classList.remove('active'));
   document.getElementById('tab-'+tab).classList.add('active');
 };
-function now() { const d=new Date(); return `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`; }
+function now() {
+  const d = new Date();
+  return {
+    time: `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`,
+    date: `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`
+  };
+}
 function toast(msg) { const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2800); }
 
 loadAIHoroscope();
