@@ -323,7 +323,7 @@
     <div class="modal-handle"></div>
     <div class="modal-icon" id="mShopIcon">🎁</div>
     <div class="modal-title" id="mShopName">獎勵名稱</div>
-    <div class="modal-sub">確定要兌換這個獎勵嗎？</div>
+    <div class="modal-sub">送出申請後等小波確認，確認後才會扣星星 ♡</div>
     <div class="modal-pts"><div class="modal-pts-num" id="mShopCost" style="color:var(--peach-deep)">20</div><div class="modal-pts-label" style="color:var(--peach-dark)">顆星星</div></div>
     <button class="modal-btn btn-peach" onclick="redeemShop()">兌換獎勵！♡</button>
   </div>
@@ -409,6 +409,7 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 let data={points:0,totalEarned:0}, tasks={}, shop={}, pending={}, proposals={}, history=[];
 let pendingTask=null, pendingShop=null, gachaSpinning=false;
+let lastLevel = 0;
 
 async function loadAIHoroscope() {
   const cacheKey = `horo_child2_${todayStr()}`;
@@ -640,11 +641,16 @@ window.submitTask=async()=>{if(!pendingTask)return;
 await push(ref(db,'pending'),{user:ME,taskId:pendingTask.id,taskName:pendingTask.name,pts:pendingTask.pts,time:t4.time,date:t4.date});
                             closeModal('taskOverlay');toast(`「${pendingTask.name}」已申報！等待審核 ✦`);pendingTask=null;};
 window.openShopModal=(id,name,icon,cost)=>{pendingShop={id,name,icon,cost};document.getElementById('mShopIcon').textContent=icon;document.getElementById('mShopName').textContent=name;document.getElementById('mShopCost').textContent=cost;document.getElementById('shopOverlay').classList.add('open');};
-window.redeemShop=async()=>{if(!pendingShop)return;const pts=data.points||0;
-                            if(pts<pendingShop.cost){toast('星星不夠喔！繼續加油 ♡');closeModal('shopOverlay');return;}await update(ref(db,`players/${ME}`),{points:Math.max(0,pts-pendingShop.cost)});
-                            const t5=now();
-await push(ref(db,'history'),{user:ME,desc:`兌換「${pendingShop.name}」`,icon:pendingShop.icon,pts:-pendingShop.cost,time:t5.time,date:t5.date});
-                            closeModal('shopOverlay');toast(`兌換成功！享受你的 ${pendingShop.name} ♡`);pendingShop=null;};
+window.redeemShop=async()=>{
+  if(!pendingShop)return;
+  const pts=data.points||0;
+  if(pts<pendingShop.cost){toast('星星不夠喔！繼續加油 ♡');closeModal('shopOverlay');return;}
+  const t5=now();
+  await push(ref(db,'shopPending'),{user:ME,shopId:pendingShop.id,shopName:pendingShop.name,icon:pendingShop.icon,cost:pendingShop.cost,time:t5.time,date:t5.date});
+  closeModal('shopOverlay');
+  toast(`💌 已送出兌換申請！等小波確認 ♡`);
+  pendingShop=null;
+};
 window.submitProposal=async()=>{const icon=document.getElementById('proposeIcon').value.trim()||'💡';const name=document.getElementById('proposeName').value.trim();const pts=parseInt(document.getElementById('proposePts').value);const reason=document.getElementById('proposeReason').value.trim();if(!name){toast('請填寫任務名稱！');return;}if(!pts||pts<=0){toast('請填寫建議星星數！');return;}
                                 const t6=now();
 await push(ref(db,'proposals'),{user:ME,icon,name,suggestPts:pts,reason:reason||'',time:t6.time,date:t6.date,type:'custom'});
