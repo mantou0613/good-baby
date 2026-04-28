@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <link rel="apple-touch-icon" href="icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="小花冒險">
-<title>小花的冒險日記 🐰</title>
+<meta name="apple-mobile-web-app-title" content="小惠冒險">
+<title>小惠的冒險日記 🐵</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -184,7 +184,7 @@
   <div class="header-top">
     <div>
       <div class="greeting" id="horoGreeting">金牛座 ♡ 今日運勢</div>
-      <div class="uname">🐰 小花</div>
+      <div class="uname">🐵 小惠</div>
     </div>
     <button class="logout-btn" onclick="window.location.href='index.html'">登出</button>
   </div>
@@ -221,14 +221,14 @@
 
   <!-- 星星英雄卡 -->
   <div class="points-hero">
-    <div class="pts-label">✦ 小花的星星寶藏 ✦</div>
+    <div class="pts-label">✦ 小惠的星星寶藏 ✦</div>
     <div class="pts-big" id="ptsDisplay">0</div>
     <div class="pts-unit">顆星星</div>
     <div class="level-pill" id="lvDisplay">Lv.1 小冒險家</div>
     <div class="progress-wrap">
       <div class="progress-track"><div class="progress-bar" id="progBar" style="width:0%"></div></div>
       <div class="progress-text">
-        <span id="progLeft">距離升級還差 50 顆</span>
+        <span id="progLeft">距離升級還差 10 顆</span>
         <span id="progRight">Lv.2</span>
       </div>
     </div>
@@ -240,7 +240,7 @@
       <div class="gacha-mini-icon">🎰</div>
       <div class="gacha-mini-info">
         <div class="gacha-mini-title">扭蛋驚喜！</div>
-        <div class="gacha-mini-sub">審核員發放的神秘驚喜 ✦</div>
+        <div class="gacha-mini-sub">小波發放的神秘驚喜 ✦</div>
       </div>
       <div class="gacha-mini-badge" id="gachaHomeAvail">0 顆</div>
     </div>
@@ -263,7 +263,7 @@
         <div class="propose-header-icon">💡</div>
         <div>
           <div class="propose-header-title">想提出新任務？</div>
-          <div class="propose-header-sub">填寫後送給審核者確認，通過就能獲得星星！</div>
+          <div class="propose-header-sub">填寫後送給小波確認，通過就能獲得星星！</div>
         </div>
       </div>
       <div class="propose-row">
@@ -291,7 +291,7 @@
 <!-- GACHA TAB -->
 <div id="tab-gacha" class="tab-sec">
   <div class="section-title" style="margin-top:6px">🎰 扭蛋驚喜</div>
-  <div style="padding:0 16px 16px; font-size:13px; color:var(--text-light); font-weight:700; line-height:1.6;">審核員可以發放扭蛋給你！轉動扭蛋機，看看今天的驚喜 ✦</div>
+  <div style="padding:0 16px 16px; font-size:13px; color:var(--text-light); font-weight:700; line-height:1.6;">小波可以發放扭蛋給你！轉動扭蛋機，看看今天的驚喜 ✦</div>
   <div style="margin:0 16px 16px; background:white; border-radius:18px; padding:16px; border:1.5px solid var(--pink);">
     <div style="font-size:13px;font-weight:900;color:var(--pink-deep);margin-bottom:10px;">🎲 獎勵機率表</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:12px;font-weight:700;color:var(--text);">
@@ -323,7 +323,7 @@
     <div class="modal-handle"></div>
     <div class="modal-icon" id="mTaskIcon">⭐</div>
     <div class="modal-title" id="mTaskName">任務名稱</div>
-    <div class="modal-sub">完成後申報，等審核者確認！</div>
+    <div class="modal-sub">完成後申報，等小波確認！</div>
     <div class="modal-pts">
       <div class="modal-pts-num" id="mTaskPts">5</div>
       <div class="modal-pts-label">顆星星 ✦</div>
@@ -393,18 +393,23 @@ const ME = 'child1';
 const SIGN = '金牛座';
 const SIGN_ICON = '🐂';
 const LEVELS = [
-  {lv:1,name:"小冒險家",need:0,next:50},
-  {lv:2,name:"見習勇者",need:50,next:120},
-  {lv:3,name:"魔法學徒",need:120,next:220},
-  {lv:4,name:"冒險達人",need:220,next:350},
-  {lv:5,name:"傳說英雄",need:350,next:999999},
+  {lv:1,name:"青銅",need:0,next:10},
+  {lv:2,name:"白銀",need:10,next:30},
+  {lv:3,name:"黃金",need:30,next:60},
+  {lv:4,name:"鉑金",need:60,next:150},
+  {lv:5,name:"鑽石",need:150,next:350},
+  {lv:6,name:"星耀",need:350,next:600},
+  {lv:7,name:"戰場傳說",need:600,next:1000},
+  {lv:8,name:"璀璨傳說",need:1000,next:1500},
+  {lv:9,name:"絕世傳說",need:1500,next:2300},
+  {lv:10,name:"永恆傳說",need:2300,next:999999},
 ];
 const GACHA_TABLE = [
   { weight:50, type:'pts', pts:1,  icon:'⭐',  title:'獲得 1 顆星星！', desc:'繼續加油，下次更多！' },
   { weight:30, type:'pts', pts:3,  icon:'⭐⭐⭐', title:'獲得 3 顆星星！', desc:'不錯喔！繼續努力！' },
   { weight:12, type:'pts', pts:10, icon:'🌟🌟🌟', title:'獲得 10 顆星星！', desc:'太棒了！大豐收！' },
-  { weight:6,  type:'prize', pts:0, icon:'🎁', title:'小驚喜！', desc:'找媽媽或爸爸兌換你的小驚喜 ♡' },
-  { weight:2,  type:'prize', pts:0, icon:'🎊', title:'大驚喜！！', desc:'哇！找媽媽或爸爸兌換你的超級大驚喜！🎉' },
+  { weight:6,  type:'prize', pts:0, icon:'🎁', title:'小驚喜！', desc:'找小波兌換你的小驚喜 ♡' },
+  { weight:2,  type:'prize', pts:0, icon:'🎊', title:'大驚喜！！', desc:'哇！找小波兌換你的超級大驚喜！🎉' },
 ];
 
 const app = initializeApp(firebaseConfig);
@@ -534,7 +539,7 @@ function renderGachaCount(gachaData) {
 
 window.openGachaModal = function() {
   const count = (window._allData?.gacha?.[ME]?.count) || 0;
-  if (count <= 0) { toast('目前沒有扭蛋！等審核員發放喔 ✦'); return; }
+  if (count <= 0) { toast('目前沒有扭蛋！等小波發放喔 ✦'); return; }
   gachaSpinning = false;
   document.getElementById('gachaPhase1').style.display = 'block';
   document.getElementById('gachaResult').classList.remove('show');
@@ -599,13 +604,13 @@ async function initDefaults() {
   if (!sp.exists()) await set(ref(db,'players/child1'),{points:0,totalEarned:0});
   const st = await get(ref(db,'tasks'));
   if (!st.exists()) await set(ref(db,'tasks'),{
-    t1:{name:"整理房間",icon:"🧹",pts:5},t2:{name:"完成作業",icon:"📚",pts:8},
-    t3:{name:"刷牙洗臉",icon:"🪥",pts:3},t4:{name:"幫忙洗碗",icon:"🍽️",pts:5},t5:{name:"閱讀30分鐘",icon:"📖",pts:6},
+    t1:{name:"洗碗盤、氣炸鍋",icon:"🍽️",pts:3},t2:{name:"倒垃圾",icon:"🗑️",pts:5},
+    t3:{name:"吸地",icon:"🧹",pts:1},t4:{name:"拖地",icon:"🧹",pts:1},t5:{name:"倒除濕機水(全屋)",icon:"📖",pts:2},
   });
   const ss = await get(ref(db,'shop'));
   if (!ss.exists()) await set(ref(db,'shop'),{
-    s1:{name:"看電視30分鐘",icon:"📺",cost:20},s2:{name:"選一個零食",icon:"🍬",cost:15},
-    s3:{name:"玩遊戲1小時",icon:"🎮",cost:30},s4:{name:"出去玩一次",icon:"🎡",cost:50},
+    s1:{name:"LINE主題貼圖",icon:"💎",cost:10},s2:{name:"逛夜市100抵用卷",icon:"💰",cost:10},
+    s3:{name:"寶雅300塊抵用卷",icon:"💰",cost:40},s4:{name:"驚喜生活用品",icon:"🎁",cost:20},s5:{name:"神秘小禮物",icon:"🎁",cost:50},s6:{name:"驚喜大禮物",icon:"🎁",cost:100},
   });
 }
 
