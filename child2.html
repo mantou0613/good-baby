@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>小明的冒險日記 🐻</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pink: #F2BEC8; --pink-dark: #D4849A; --pink-deep: #9B5068;
+    --blue: #BFD0F5; --blue-dark: #7090C8; --blue-deep: #3A62B0;
+    --purple: #D4C5E8; --purple-dark: #9A80B8; --purple-deep: #6A4A90;
+    --peach: #F5D5C8; --peach-dark: #D08060; --peach-deep: #9A5038;
+    --mint: #C8E8D8; --mint-dark: #6AAA88; --mint-deep: #2A6A48;
+    --cream: #FAF7F2; --text: #5A4A5A; --text-light: #9A8AA0;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Nunito', sans-serif; background: linear-gradient(160deg,#F4F0FA 0%,#F0F4FD 100%); min-height: 100vh; color: var(--text); padding-bottom: 90px; }
+  .header { background: white; padding: 18px 20px 0; border-radius: 0 0 28px 28px; border-bottom: 1.5px solid rgba(0,0,0,0.05); margin-bottom: 18px; }
+  .header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .greeting { font-size: 13px; color: var(--text-light); font-weight: 700; }
+  .uname { font-size: 22px; font-weight: 900; color: var(--purple-deep); }
+  .logout-btn { background: none; border: none; font-size: 13px; color: var(--text-light); cursor: pointer; font-family: 'Nunito', sans-serif; font-weight: 700; }
+  .nav-tabs { display: flex; gap: 2px; }
+  .nav-tab { flex: 1; text-align: center; padding: 10px 0; font-size: 12px; font-weight: 700; color: var(--text-light); border-bottom: 3px solid transparent; cursor: pointer; transition: all 0.2s; }
+  .nav-tab.active { color: var(--purple-dark); border-bottom-color: var(--purple-dark); }
+  .points-hero { margin: 0 16px 18px; background: white; border-radius: 24px; padding: 22px; text-align: center; border: 1.5px solid var(--purple); }
+  .pts-label { font-size: 12px; color: var(--text-light); font-weight: 700; margin-bottom: 4px; }
+  .pts-big { font-size: 76px; font-weight: 900; color: var(--purple-deep); line-height: 1; margin: 6px 0; }
+  .pts-unit { font-size: 16px; color: var(--purple-dark); font-weight: 700; }
+  .level-pill { display: inline-block; background: var(--purple); border-radius: 20px; padding: 5px 18px; font-size: 12px; font-weight: 700; color: var(--purple-deep); margin-top: 10px; }
+  .progress-wrap { margin-top: 12px; }
+  .progress-track { background: var(--purple); border-radius: 10px; height: 10px; overflow: hidden; }
+  .progress-bar { background: var(--purple-dark); height: 100%; border-radius: 10px; transition: width 0.6s ease; }
+  .progress-text { display: flex; justify-content: space-between; font-size: 10px; color: var(--text-light); font-weight: 700; margin-top: 4px; }
+  .section-title { font-size: 16px; font-weight: 900; color: var(--text); margin: 0 16px 10px; display: flex; align-items: center; gap: 6px; }
+  .task-list { padding: 0 16px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+  .task-card { background: white; border-radius: 16px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; border: 1.5px solid var(--purple); cursor: pointer; transition: all 0.2s; }
+  .task-card:hover { border-color: var(--purple-dark); background: #FAF8FD; transform: translateY(-1px); }
+  .task-card.pending { border-color: var(--peach); background: #FFFCFA; cursor: default; }
+  .task-icon { font-size: 30px; flex-shrink: 0; }
+  .task-info { flex: 1; }
+  .task-name { font-size: 14px; font-weight: 700; color: var(--text); }
+  .task-pts { font-size: 12px; color: var(--purple-dark); font-weight: 700; margin-top: 2px; }
+  .task-status { font-size: 10px; font-weight: 700; padding: 4px 10px; border-radius: 10px; white-space: nowrap; }
+  .status-available { background: var(--purple); color: var(--purple-deep); }
+  .status-pending { background: var(--peach); color: var(--peach-deep); }
+  .shop-grid { padding: 0 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 22px; }
+  .shop-card { background: white; border-radius: 16px; padding: 16px; border: 1.5px solid var(--peach); text-align: center; cursor: pointer; transition: all 0.2s; }
+  .shop-card:hover { border-color: var(--peach-dark); transform: translateY(-1px); }
+  .shop-card.locked { opacity: 0.45; cursor: not-allowed; }
+  .shop-icon { font-size: 38px; margin-bottom: 6px; }
+  .shop-name { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+  .shop-cost { font-size: 12px; font-weight: 700; background: var(--peach); color: var(--peach-deep); border-radius: 10px; padding: 3px 10px; display: inline-block; }
+  .history-list { padding: 0 16px; display: flex; flex-direction: column; gap: 8px; margin-bottom: 22px; }
+  .history-item { background: white; border-radius: 12px; padding: 12px 14px; display: flex; align-items: center; gap: 10px; border: 1.5px solid rgba(0,0,0,0.06); }
+  .h-icon { font-size: 20px; }
+  .h-info { flex: 1; }
+  .h-desc { font-size: 13px; font-weight: 700; color: var(--text); }
+  .h-time { font-size: 10px; color: var(--text-light); font-weight: 700; margin-top: 1px; }
+  .h-pts { font-size: 15px; font-weight: 900; }
+  .pts-pos { color: var(--mint-deep); }
+  .pts-neg { color: #C04060; }
+  .tab-sec { display: none; }
+  .tab-sec.active { display: block; }
+  .overlay { position: fixed; inset: 0; background: rgba(80,60,80,0.38); z-index: 200; display: flex; align-items: flex-end; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.25s; }
+  .overlay.open { opacity: 1; pointer-events: all; }
+  .modal { background: white; border-radius: 28px 28px 0 0; padding: 28px 24px 44px; width: 100%; max-width: 500px; transform: translateY(100%); transition: transform 0.35s cubic-bezier(0.34,1.2,0.64,1); }
+  .overlay.open .modal { transform: translateY(0); }
+  .modal-handle { width: 40px; height: 4px; background: #DDD; border-radius: 2px; margin: 0 auto 20px; }
+  .modal-icon { text-align: center; font-size: 52px; margin-bottom: 12px; }
+  .modal-title { font-size: 22px; font-weight: 900; color: var(--text); margin-bottom: 6px; }
+  .modal-sub { font-size: 13px; color: var(--text-light); font-weight: 700; margin-bottom: 20px; }
+  .modal-pts { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 24px; }
+  .modal-pts-num { font-size: 40px; font-weight: 900; color: var(--purple-deep); }
+  .modal-pts-label { font-size: 15px; color: var(--purple-dark); font-weight: 700; }
+  .modal-btn { display: block; width: 100%; border: none; border-radius: 50px; padding: 15px; font-family: 'Nunito', sans-serif; font-size: 16px; font-weight: 900; cursor: pointer; transition: all 0.2s; }
+  .modal-btn:active { transform: scale(0.97); }
+  .btn-purple { background: var(--purple-dark); color: white; }
+  .btn-peach { background: var(--peach-dark); color: white; }
+  .empty { text-align: center; padding: 32px 20px; color: var(--text-light); font-size: 14px; font-weight: 700; }
+  .empty-icon { font-size: 44px; margin-bottom: 10px; }
+  .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-80px); background: #3A4A3A; color: white; border-radius: 20px; padding: 12px 24px; font-size: 14px; font-weight: 700; z-index: 999; transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1); white-space: nowrap; }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div>
+      <div class="greeting">今天也要加油喔 ♡</div>
+      <div class="uname">🐻 小明</div>
+    </div>
+    <button class="logout-btn" onclick="window.location.href='index.html'">登出</button>
+  </div>
+  <div class="nav-tabs">
+    <div class="nav-tab active" onclick="showTab('home',this)">🏠 主頁</div>
+    <div class="nav-tab" onclick="showTab('tasks',this)">⚔️ 任務</div>
+    <div class="nav-tab" onclick="showTab('shop',this)">🛍 商店</div>
+    <div class="nav-tab" onclick="showTab('history',this)">📜 紀錄</div>
+  </div>
+</div>
+
+<div id="tab-home" class="tab-sec active">
+  <div class="points-hero">
+    <div class="pts-label">✦ 小明的星星寶藏 ✦</div>
+    <div class="pts-big" id="ptsDisplay">0</div>
+    <div class="pts-unit">顆星星</div>
+    <div class="level-pill" id="lvDisplay">Lv.1 小冒險家</div>
+    <div class="progress-wrap">
+      <div class="progress-track"><div class="progress-bar" id="progBar" style="width:0%"></div></div>
+      <div class="progress-text">
+        <span id="progLeft">距離升級還差 50 顆</span>
+        <span id="progRight">Lv.2</span>
+      </div>
+    </div>
+  </div>
+  <div class="section-title">⚔️ 可申報的任務</div>
+  <div class="task-list" id="homeTaskList"></div>
+  <div class="section-title">🛍 商店精選</div>
+  <div class="shop-grid" id="homeShopList"></div>
+</div>
+
+<div id="tab-tasks" class="tab-sec">
+  <div class="section-title" style="margin-top:6px">⚔️ 全部任務</div>
+  <div class="task-list" id="allTaskList"></div>
+</div>
+
+<div id="tab-shop" class="tab-sec">
+  <div class="section-title" style="margin-top:6px">🛍 獎勵商店</div>
+  <div style="padding:0 16px;margin-bottom:12px;font-size:13px;color:var(--text-light);font-weight:700;">目前有 <span id="shopPtsShow" style="color:var(--purple-deep)">0</span> 顆星星 ✦</div>
+  <div class="shop-grid" id="allShopList"></div>
+</div>
+
+<div id="tab-history" class="tab-sec">
+  <div class="section-title" style="margin-top:6px">📜 歷史紀錄</div>
+  <div class="history-list" id="historyList"></div>
+</div>
+
+<div class="overlay" id="taskOverlay" onclick="closeModal('taskOverlay')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-icon" id="mTaskIcon">⭐</div>
+    <div class="modal-title" id="mTaskName">任務名稱</div>
+    <div class="modal-sub">完成後申報，等審核者確認！</div>
+    <div class="modal-pts">
+      <div class="modal-pts-num" id="mTaskPts">5</div>
+      <div class="modal-pts-label">顆星星 ✦</div>
+    </div>
+    <button class="modal-btn btn-purple" onclick="submitTask()">我做完了！申報任務 ✦</button>
+  </div>
+</div>
+
+<div class="overlay" id="shopOverlay" onclick="closeModal('shopOverlay')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-icon" id="mShopIcon">🎁</div>
+    <div class="modal-title" id="mShopName">獎勵名稱</div>
+    <div class="modal-sub">確定要兌換這個獎勵嗎？</div>
+    <div class="modal-pts">
+      <div class="modal-pts-num" id="mShopCost" style="color:var(--peach-deep)">20</div>
+      <div class="modal-pts-label" style="color:var(--peach-dark)">顆星星</div>
+    </div>
+    <button class="modal-btn btn-peach" onclick="redeemShop()">兌換獎勵！♡</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, get, set, push, update, onValue }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDO4WvP3hOQgA7YpZFtMClssawX5Xq-Kjw",
+  authDomain: "baby-points.firebaseapp.com",
+  databaseURL: "https://baby-points-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "baby-points",
+  storageBucket: "baby-points.firebasestorage.app",
+  messagingSenderId: "933648461033",
+  appId: "1:933648461033:web:14bbf1387a1f741c9c5478"
+};
+
+const ME = 'child2';
+const LEVELS = [
+  {lv:1,name:"小冒險家",need:0,next:50},
+  {lv:2,name:"見習勇者",need:50,next:120},
+  {lv:3,name:"魔法學徒",need:120,next:220},
+  {lv:4,name:"冒險達人",need:220,next:350},
+  {lv:5,name:"傳說英雄",need:350,next:999999},
+];
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+let data={points:0,totalEarned:0}, tasks={}, shop={}, pending={}, history=[];
+let pendingTask=null, pendingShop=null;
+
+async function initDefaults() {
+  const sp = await get(ref(db,'players/child2'));
+  if (!sp.exists()) await set(ref(db,'players/child2'),{points:0,totalEarned:0});
+}
+
+function startListen() {
+  onValue(ref(db,'/'), snap => {
+    const d = snap.val()||{};
+    data = d.players?.[ME]||{points:0,totalEarned:0};
+    tasks = d.tasks||{}; shop = d.shop||{}; pending = d.pending||{};
+    history = d.history ? Object.values(d.history).reverse() : [];
+    render();
+  });
+}
+
+function render() {
+  const pts = data.points||0, total = data.totalEarned||0;
+  document.getElementById('ptsDisplay').textContent = pts;
+  document.getElementById('shopPtsShow').textContent = pts;
+  let lv = LEVELS[0];
+  for (const l of LEVELS) { if (total >= l.need) lv = l; }
+  document.getElementById('lvDisplay').textContent = `Lv.${lv.lv} ${lv.name}`;
+  const pct = lv.next===999999 ? 100 : Math.min(100,Math.round((total-lv.need)/(lv.next-lv.need)*100));
+  document.getElementById('progBar').style.width = pct+'%';
+  document.getElementById('progLeft').textContent = lv.next===999999 ? '🏆 已達最高等級！' : `距離升級還差 ${lv.next-total} 顆`;
+  document.getElementById('progRight').textContent = lv.next===999999 ? 'MAX' : `Lv.${lv.lv+1}`;
+  const myPendingIds = Object.values(pending).filter(p=>p.user===ME).map(p=>p.taskId);
+  const te = Object.entries(tasks), se = Object.entries(shop);
+  document.getElementById('homeTaskList').innerHTML = te.slice(0,4).map(([id,t])=>taskCard(id,t,myPendingIds)).join('')||empty('📋','還沒有任務');
+  document.getElementById('allTaskList').innerHTML = te.map(([id,t])=>taskCard(id,t,myPendingIds)).join('')||empty('📋','還沒有任務');
+  document.getElementById('homeShopList').innerHTML = se.slice(0,4).map(([id,s])=>shopCard(id,s,pts)).join('')||empty('🛍','商店空空的');
+  document.getElementById('allShopList').innerHTML = se.map(([id,s])=>shopCard(id,s,pts)).join('')||empty('🛍','商店空空的');
+  document.getElementById('historyList').innerHTML = history.filter(h=>h.user===ME).slice(0,30).map(h=>histItem(h)).join('')||empty('📜','還沒有紀錄');
+}
+
+function taskCard(id,t,pids) {
+  const ip = pids.includes(id);
+  return `<div class="task-card${ip?' pending':''}" onclick="${ip?'':` openTaskModal('${id}','${t.name}','${t.icon}',${t.pts})`}">
+    <div class="task-icon">${t.icon}</div>
+    <div class="task-info"><div class="task-name">${t.name}</div><div class="task-pts">+${t.pts} 顆星星</div></div>
+    <div class="task-status ${ip?'status-pending':'status-available'}">${ip?'審核中':'可申報'}</div>
+  </div>`;
+}
+function shopCard(id,s,pts) {
+  const can=pts>=s.cost;
+  return `<div class="shop-card${can?'':' locked'}" onclick="${can?`openShopModal('${id}','${s.name}','${s.icon}',${s.cost})`:''}">
+    <div class="shop-icon">${s.icon}</div><div class="shop-name">${s.name}</div><div class="shop-cost">${s.cost} ⭐</div>
+  </div>`;
+}
+function histItem(h) {
+  const pos=h.pts>0;
+  return `<div class="history-item"><div class="h-icon">${h.icon||'⭐'}</div><div class="h-info"><div class="h-desc">${h.desc}</div><div class="h-time">${h.time||''}</div></div><div class="h-pts ${pos?'pts-pos':'pts-neg'}">${pos?'+':''}${h.pts}</div></div>`;
+}
+function empty(icon,msg){return `<div class="empty"><div class="empty-icon">${icon}</div>${msg}</div>`;}
+
+window.openTaskModal = (id,name,icon,pts)=>{
+  pendingTask={id,name,icon,pts};
+  document.getElementById('mTaskIcon').textContent=icon;
+  document.getElementById('mTaskName').textContent=name;
+  document.getElementById('mTaskPts').textContent=pts;
+  document.getElementById('taskOverlay').classList.add('open');
+};
+window.submitTask = async()=>{
+  if(!pendingTask)return;
+  await push(ref(db,'pending'),{user:ME,taskId:pendingTask.id,taskName:pendingTask.name,pts:pendingTask.pts,time:now()});
+  closeModal('taskOverlay'); toast(`「${pendingTask.name}」已申報！等待審核 ✦`); pendingTask=null;
+};
+window.openShopModal = (id,name,icon,cost)=>{
+  pendingShop={id,name,icon,cost};
+  document.getElementById('mShopIcon').textContent=icon;
+  document.getElementById('mShopName').textContent=name;
+  document.getElementById('mShopCost').textContent=cost;
+  document.getElementById('shopOverlay').classList.add('open');
+};
+window.redeemShop = async()=>{
+  if(!pendingShop)return;
+  const pts=data.points||0;
+  if(pts<pendingShop.cost){toast('星星不夠喔！繼續加油 ♡');closeModal('shopOverlay');return;}
+  await update(ref(db,`players/${ME}`),{points:pts-pendingShop.cost});
+  await push(ref(db,'history'),{user:ME,desc:`兌換「${pendingShop.name}」`,icon:pendingShop.icon,pts:-pendingShop.cost,time:now()});
+  closeModal('shopOverlay'); toast(`兌換成功！享受你的 ${pendingShop.name} ♡`); pendingShop=null;
+};
+window.closeModal=(id)=>{ document.getElementById(id).classList.remove('open'); pendingTask=null; pendingShop=null; };
+window.showTab=(tab,el)=>{
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  if(el)el.classList.add('active');
+  document.querySelectorAll('.tab-sec').forEach(s=>s.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+};
+function now(){const d=new Date();return `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
+
+initDefaults().then(()=>startListen());
+</script>
+</body>
+</html>
