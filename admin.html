@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>審核者畫面 👑</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pink: #F2BEC8; --pink-dark: #D4849A; --pink-deep: #9B5068;
+    --blue: #BFD0F5; --blue-dark: #7090C8; --blue-deep: #3A62B0;
+    --purple: #D4C5E8; --purple-dark: #9A80B8; --purple-deep: #6A4A90;
+    --peach: #F5D5C8; --peach-dark: #D08060; --peach-deep: #9A5038;
+    --mint: #C8E8D8; --mint-dark: #6AAA88; --mint-deep: #2A6A48;
+    --red: #FAD0D0; --red-dark: #C05050; --red-deep: #8A2020;
+    --cream: #FAF7F2; --text: #5A4A5A; --text-light: #9A8AA0;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Nunito', sans-serif; background: linear-gradient(160deg,#F4F0FA 0%,#F0F4FD 100%); min-height: 100vh; color: var(--text); padding-bottom: 100px; }
+
+  /* HEADER */
+  .header { background: white; padding: 18px 20px 0; border-radius: 0 0 28px 28px; border-bottom: 1.5px solid rgba(0,0,0,0.05); margin-bottom: 18px; }
+  .header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .greeting { font-size: 13px; color: var(--text-light); font-weight: 700; }
+  .uname { font-size: 22px; font-weight: 900; color: var(--purple-deep); }
+  .logout-btn { background: none; border: none; font-size: 13px; color: var(--text-light); cursor: pointer; font-family: 'Nunito', sans-serif; font-weight: 700; }
+  .nav-tabs { display: flex; gap: 2px; }
+  .nav-tab { flex: 1; text-align: center; padding: 10px 0; font-size: 12px; font-weight: 700; color: var(--text-light); border-bottom: 3px solid transparent; cursor: pointer; transition: all 0.2s; }
+  .nav-tab.active { color: var(--purple-dark); border-bottom-color: var(--purple-dark); }
+
+  /* SECTION */
+  .section-title { font-size: 16px; font-weight: 900; color: var(--text); margin: 0 16px 10px; display: flex; align-items: center; gap: 6px; }
+
+  /* TAB SECTIONS */
+  .tab-sec { display: none; }
+  .tab-sec.active { display: block; }
+
+  /* STATS HERO */
+  .stats-hero { margin: 0 16px 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .stat-card { background: white; border-radius: 20px; padding: 18px 14px; text-align: center; border: 1.5px solid var(--purple); }
+  .stat-icon { font-size: 28px; margin-bottom: 6px; }
+  .stat-val { font-size: 38px; font-weight: 900; color: var(--purple-deep); line-height: 1; }
+  .stat-label { font-size: 11px; color: var(--text-light); font-weight: 700; margin-top: 4px; }
+
+  /* PENDING LIST */
+  .pending-list { padding: 0 16px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+  .pending-card { background: white; border-radius: 16px; padding: 14px 16px; border: 1.5px solid var(--peach); }
+  .pending-top { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .pending-avatar { font-size: 28px; flex-shrink: 0; }
+  .pending-info { flex: 1; }
+  .pending-who { font-size: 13px; font-weight: 700; color: var(--text-light); }
+  .pending-task { font-size: 15px; font-weight: 900; color: var(--text); }
+  .pending-pts { font-size: 12px; color: var(--blue-dark); font-weight: 700; margin-top: 2px; }
+  .pending-time { font-size: 10px; color: var(--text-light); font-weight: 700; }
+  .pending-actions { display: flex; gap: 8px; }
+  .action-btn { flex: 1; border: none; border-radius: 12px; padding: 10px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 900; cursor: pointer; transition: all 0.15s; }
+  .action-btn:active { transform: scale(0.96); }
+  .btn-approve { background: var(--mint); color: var(--mint-deep); }
+  .btn-approve:hover { background: var(--mint-dark); color: white; }
+  .btn-reject { background: var(--red); color: var(--red-deep); }
+  .btn-reject:hover { background: var(--red-dark); color: white; }
+
+  /* PLAYER CARDS */
+  .player-list { padding: 0 16px; display: flex; flex-direction: column; gap: 14px; margin-bottom: 22px; }
+  .player-card { background: white; border-radius: 20px; padding: 18px 16px; border: 1.5px solid var(--blue); }
+  .player-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .player-avatar { font-size: 34px; }
+  .player-name { font-size: 18px; font-weight: 900; color: var(--text); }
+  .player-pts-badge { margin-left: auto; background: var(--blue); border-radius: 14px; padding: 5px 14px; font-size: 13px; font-weight: 900; color: var(--blue-deep); }
+  .pts-adjust { display: flex; gap: 8px; align-items: center; }
+  .pts-input { flex: 1; background: #F8F7FC; border: 1.5px solid var(--purple); border-radius: 12px; padding: 10px 14px; font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 700; color: var(--text); outline: none; transition: border-color 0.2s; }
+  .pts-input:focus { border-color: var(--purple-dark); }
+  .pts-btn { border: none; border-radius: 12px; padding: 10px 16px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 900; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+  .pts-btn:active { transform: scale(0.96); }
+  .btn-add { background: var(--mint); color: var(--mint-deep); }
+  .btn-add:hover { background: var(--mint-dark); color: white; }
+  .btn-sub { background: var(--red); color: var(--red-deep); }
+  .btn-sub:hover { background: var(--red-dark); color: white; }
+  .pts-reason { width: 100%; background: #F8F7FC; border: 1.5px solid var(--purple); border-radius: 12px; padding: 10px 14px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700; color: var(--text); outline: none; margin-top: 8px; transition: border-color 0.2s; }
+  .pts-reason:focus { border-color: var(--purple-dark); }
+  .player-level { font-size: 11px; color: var(--text-light); font-weight: 700; margin-top: 8px; }
+
+  /* SHOP MANAGE */
+  .shop-manage { padding: 0 16px; margin-bottom: 22px; }
+  .shop-item { background: white; border-radius: 14px; padding: 12px 14px; border: 1.5px solid var(--peach); display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .shop-item-icon { font-size: 26px; }
+  .shop-item-info { flex: 1; }
+  .shop-item-name { font-size: 14px; font-weight: 700; color: var(--text); }
+  .shop-item-cost { font-size: 12px; color: var(--peach-deep); font-weight: 700; }
+  .shop-del-btn { background: var(--red); color: var(--red-deep); border: none; border-radius: 10px; padding: 6px 12px; font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.15s; }
+  .shop-del-btn:hover { background: var(--red-dark); color: white; }
+  .add-form { background: white; border-radius: 16px; padding: 16px; border: 1.5px solid var(--mint); }
+  .form-title { font-size: 14px; font-weight: 900; color: var(--mint-deep); margin-bottom: 12px; }
+  .form-row { display: flex; gap: 8px; margin-bottom: 8px; }
+  .form-input { flex: 1; background: #F8FCF9; border: 1.5px solid var(--mint); border-radius: 10px; padding: 10px 12px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700; color: var(--text); outline: none; min-width: 0; }
+  .form-input:focus { border-color: var(--mint-dark); }
+  .form-input-sm { width: 80px; flex: none; }
+  .form-submit { background: var(--mint-dark); color: white; border: none; border-radius: 10px; padding: 10px 16px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 900; cursor: pointer; transition: all 0.15s; }
+  .form-submit:hover { opacity: 0.85; }
+
+  /* TASK MANAGE */
+  .task-manage { padding: 0 16px; margin-bottom: 22px; }
+  .task-manage-item { background: white; border-radius: 14px; padding: 12px 14px; border: 1.5px solid var(--purple); display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .task-manage-icon { font-size: 26px; }
+  .task-manage-info { flex: 1; }
+  .task-manage-name { font-size: 14px; font-weight: 700; color: var(--text); }
+  .task-manage-pts { font-size: 12px; color: var(--purple-deep); font-weight: 700; }
+  .task-del-btn { background: var(--red); color: var(--red-deep); border: none; border-radius: 10px; padding: 6px 12px; font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.15s; }
+  .task-del-btn:hover { background: var(--red-dark); color: white; }
+  .add-task-form { background: white; border-radius: 16px; padding: 16px; border: 1.5px solid var(--blue); }
+  .form-title-blue { font-size: 14px; font-weight: 900; color: var(--blue-deep); margin-bottom: 12px; }
+
+  /* EMPTY */
+  .empty { text-align: center; padding: 32px 20px; color: var(--text-light); font-size: 14px; font-weight: 700; }
+  .empty-icon { font-size: 44px; margin-bottom: 10px; }
+
+  /* BADGE */
+  .badge { display: inline-block; background: var(--peach); color: var(--peach-deep); border-radius: 12px; padding: 2px 10px; font-size: 11px; font-weight: 900; margin-left: 6px; }
+
+  /* TOAST */
+  .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-80px); background: #3A4A3A; color: white; border-radius: 20px; padding: 12px 24px; font-size: 14px; font-weight: 700; z-index: 999; transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1); white-space: nowrap; }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* HISTORY */
+  .hist-list { padding: 0 16px; display: flex; flex-direction: column; gap: 8px; margin-bottom: 22px; }
+  .hist-item { background: white; border-radius: 12px; padding: 12px 14px; display: flex; align-items: center; gap: 10px; border: 1.5px solid rgba(0,0,0,0.06); }
+  .h-icon { font-size: 20px; }
+  .h-info { flex: 1; }
+  .h-desc { font-size: 13px; font-weight: 700; color: var(--text); }
+  .h-time { font-size: 10px; color: var(--text-light); font-weight: 700; margin-top: 1px; }
+  .h-pts { font-size: 15px; font-weight: 900; }
+  .pts-pos { color: var(--mint-deep); }
+  .pts-neg { color: #C04060; }
+  .pts-neutral { color: var(--purple-deep); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div>
+      <div class="greeting">管理後台 ♡</div>
+      <div class="uname">👑 審核者畫面</div>
+    </div>
+    <button class="logout-btn" onclick="window.location.href='index.html'">登出</button>
+  </div>
+  <div class="nav-tabs">
+    <div class="nav-tab active" onclick="showTab('review',this)">✅ 審核</div>
+    <div class="nav-tab" onclick="showTab('points',this)">⭐ 點數</div>
+    <div class="nav-tab" onclick="showTab('tasks',this)">⚔️ 任務</div>
+    <div class="nav-tab" onclick="showTab('shop',this)">🛍 商店</div>
+    <div class="nav-tab" onclick="showTab('history',this)">📜 紀錄</div>
+  </div>
+</div>
+
+<!-- REVIEW TAB -->
+<div id="tab-review" class="tab-sec active">
+  <div class="stats-hero">
+    <div class="stat-card">
+      <div class="stat-icon">⏳</div>
+      <div class="stat-val" id="pendingCount">0</div>
+      <div class="stat-label">待審核任務</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">✅</div>
+      <div class="stat-val" id="approvedCount">0</div>
+      <div class="stat-label">今日已通過</div>
+    </div>
+  </div>
+  <div class="section-title">⏳ 任務審核中心 <span class="badge" id="pendingBadge">0</span></div>
+  <div class="pending-list" id="pendingList"></div>
+</div>
+
+<!-- POINTS TAB -->
+<div id="tab-points" class="tab-sec">
+  <div class="section-title" style="margin-top:6px">⭐ 點數管理</div>
+  <div class="player-list" id="playerList"></div>
+</div>
+
+<!-- TASKS TAB -->
+<div id="tab-tasks" class="tab-sec">
+  <div class="section-title" style="margin-top:6px">⚔️ 任務管理</div>
+  <div class="task-manage" id="taskManageList"></div>
+  <div style="padding:0 16px;margin-bottom:22px">
+    <div class="add-task-form">
+      <div class="form-title-blue">➕ 新增任務</div>
+      <div class="form-row">
+        <input class="form-input form-input-sm" id="newTaskIcon" placeholder="🌟" maxlength="4">
+        <input class="form-input" id="newTaskName" placeholder="任務名稱">
+        <input class="form-input form-input-sm" id="newTaskPts" type="number" placeholder="點數" min="1">
+      </div>
+      <button class="form-submit" style="width:100%;padding:12px" onclick="addTask()">新增任務 ✦</button>
+    </div>
+  </div>
+</div>
+
+<!-- SHOP TAB -->
+<div id="tab-shop" class="tab-sec">
+  <div class="section-title" style="margin-top:6px">🛍 商店管理</div>
+  <div class="shop-manage" id="shopManageList"></div>
+  <div style="padding:0 16px;margin-bottom:22px">
+    <div class="add-form">
+      <div class="form-title">➕ 新增獎勵</div>
+      <div class="form-row">
+        <input class="form-input form-input-sm" id="newShopIcon" placeholder="🎁" maxlength="4">
+        <input class="form-input" id="newShopName" placeholder="獎勵名稱">
+        <input class="form-input form-input-sm" id="newShopCost" type="number" placeholder="費用" min="1">
+      </div>
+      <button class="form-submit" style="width:100%;padding:12px" onclick="addShopItem()">新增獎勵 ♡</button>
+    </div>
+  </div>
+</div>
+
+<!-- HISTORY TAB -->
+<div id="tab-history" class="tab-sec">
+  <div class="section-title" style="margin-top:6px">📜 所有紀錄</div>
+  <div class="hist-list" id="allHistoryList"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, get, set, push, update, remove, onValue }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDO4WvP3hOQgA7YpZFtMClssawX5Xq-Kjw",
+  authDomain: "baby-points.firebaseapp.com",
+  databaseURL: "https://baby-points-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "baby-points",
+  storageBucket: "baby-points.firebasestorage.app",
+  messagingSenderId: "933648461033",
+  appId: "1:933648461033:web:14bbf1387a1f741c9c5478"
+};
+
+const USERS = {
+  child1: { name: '小花', avatar: '🐰' },
+  child2: { name: '小明', avatar: '🐻' },
+};
+const LEVELS = [
+  {lv:1,name:"小冒險家",need:0,next:50},
+  {lv:2,name:"見習勇者",need:50,next:120},
+  {lv:3,name:"魔法學徒",need:120,next:220},
+  {lv:4,name:"冒險達人",need:220,next:350},
+  {lv:5,name:"傳說英雄",need:350,next:999999},
+];
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+let allData = {};
+let todayApproved = 0;
+
+function startListen() {
+  onValue(ref(db, '/'), snap => {
+    allData = snap.val() || {};
+    render();
+  });
+}
+
+function render() {
+  const players = allData.players || {};
+  const tasks = allData.tasks || {};
+  const shop = allData.shop || {};
+  const pending = allData.pending || {};
+  const history = allData.history ? Object.values(allData.history) : [];
+
+  const pendingArr = Object.entries(pending);
+  const today = new Date();
+  const todayStr = `${today.getMonth()+1}/${today.getDate()}`;
+  todayApproved = history.filter(h => h.pts > 0 && h.time && h.time.startsWith(todayStr)).length;
+
+  // Stats
+  document.getElementById('pendingCount').textContent = pendingArr.length;
+  document.getElementById('approvedCount').textContent = todayApproved;
+  document.getElementById('pendingBadge').textContent = pendingArr.length;
+
+  // Pending list
+  document.getElementById('pendingList').innerHTML = pendingArr.length === 0
+    ? `<div class="empty"><div class="empty-icon">🎉</div>沒有待審核的任務！</div>`
+    : pendingArr.map(([pid, p]) => {
+        const u = USERS[p.user] || { name: p.user, avatar: '👤' };
+        const task = tasks[p.taskId] || {};
+        const icon = task.icon || p.icon || '⭐';
+        return `<div class="pending-card">
+          <div class="pending-top">
+            <div class="pending-avatar">${u.avatar}</div>
+            <div class="pending-info">
+              <div class="pending-who">${u.name}</div>
+              <div class="pending-task">${icon} ${p.taskName || task.name || '任務'}</div>
+              <div class="pending-pts">+${p.pts} 顆星星</div>
+            </div>
+            <div class="pending-time">${p.time || ''}</div>
+          </div>
+          <div class="pending-actions">
+            <button class="action-btn btn-approve" onclick="approvePending('${pid}')">核准 ✓</button>
+            <button class="action-btn btn-reject" onclick="rejectPending('${pid}')">退回 ✗</button>
+          </div>
+        </div>`;
+      }).join('');
+
+  // Player list
+  document.getElementById('playerList').innerHTML = Object.entries(USERS).map(([uid, u]) => {
+    const p = players[uid] || { points: 0, totalEarned: 0 };
+    const pts = p.points || 0;
+    const total = p.totalEarned || 0;
+    let lv = LEVELS[0];
+    for (const l of LEVELS) { if (total >= l.need) lv = l; }
+    return `<div class="player-card">
+      <div class="player-header">
+        <div class="player-avatar">${u.avatar}</div>
+        <div>
+          <div class="player-name">${u.name}</div>
+          <div class="player-level">Lv.${lv.lv} ${lv.name} ｜ 累計 ${total} 顆</div>
+        </div>
+        <div class="player-pts-badge">${pts} ⭐</div>
+      </div>
+      <input class="pts-input" type="number" id="amt-${uid}" placeholder="輸入點數數量" min="1">
+      <input class="pts-reason" id="reason-${uid}" placeholder="原因（選填）">
+      <div class="pts-adjust" style="margin-top:8px">
+        <button class="pts-btn btn-add" onclick="adjustPts('${uid}',1)">➕ 給點數</button>
+        <button class="pts-btn btn-sub" onclick="adjustPts('${uid}',-1)">➖ 扣點數</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Task manage
+  const taskEntries = Object.entries(tasks);
+  document.getElementById('taskManageList').innerHTML = taskEntries.length === 0
+    ? `<div class="empty"><div class="empty-icon">📋</div>還沒有任務</div>`
+    : taskEntries.map(([tid, t]) =>
+        `<div class="task-manage-item">
+          <div class="task-manage-icon">${t.icon}</div>
+          <div class="task-manage-info">
+            <div class="task-manage-name">${t.name}</div>
+            <div class="task-manage-pts">+${t.pts} 顆星星</div>
+          </div>
+          <button class="task-del-btn" onclick="deleteTask('${tid}')">刪除</button>
+        </div>`
+      ).join('');
+
+  // Shop manage
+  const shopEntries = Object.entries(shop);
+  document.getElementById('shopManageList').innerHTML = shopEntries.length === 0
+    ? `<div class="empty"><div class="empty-icon">🛍</div>商店是空的</div>`
+    : shopEntries.map(([sid, s]) =>
+        `<div class="shop-item">
+          <div class="shop-item-icon">${s.icon}</div>
+          <div class="shop-item-info">
+            <div class="shop-item-name">${s.name}</div>
+            <div class="shop-item-cost">-${s.cost} 顆星星</div>
+          </div>
+          <button class="shop-del-btn" onclick="deleteShopItem('${sid}')">刪除</button>
+        </div>`
+      ).join('');
+
+  // All history
+  const histArr = allData.history ? Object.values(allData.history).reverse() : [];
+  document.getElementById('allHistoryList').innerHTML = histArr.slice(0, 50).map(h => {
+    const u = USERS[h.user] || { name: h.user, avatar: '👤' };
+    const pos = h.pts > 0;
+    const neutral = h.pts === 0;
+    return `<div class="hist-item">
+      <div class="h-icon">${h.icon || '⭐'}</div>
+      <div class="h-info">
+        <div class="h-desc">${u.avatar} ${u.name}｜${h.desc}</div>
+        <div class="h-time">${h.time || ''}</div>
+      </div>
+      <div class="h-pts ${neutral ? 'pts-neutral' : pos ? 'pts-pos' : 'pts-neg'}">${pos ? '+' : ''}${h.pts}</div>
+    </div>`;
+  }).join('') || `<div class="empty"><div class="empty-icon">📜</div>還沒有紀錄</div>`;
+}
+
+// Approve task
+window.approvePending = async function(pid) {
+  const p = (allData.pending || {})[pid];
+  if (!p) return;
+  const playerRef = ref(db, `players/${p.user}`);
+  const playerSnap = await get(playerRef);
+  const player = playerSnap.val() || { points: 0, totalEarned: 0 };
+  const tasks = allData.tasks || {};
+  const task = tasks[p.taskId] || {};
+  const icon = task.icon || '⭐';
+
+  await update(playerRef, {
+    points: (player.points || 0) + p.pts,
+    totalEarned: (player.totalEarned || 0) + p.pts
+  });
+  await push(ref(db, 'history'), {
+    user: p.user,
+    desc: `完成「${p.taskName}」`,
+    icon: icon,
+    pts: p.pts,
+    time: now()
+  });
+  await remove(ref(db, `pending/${pid}`));
+  toast(`✓ 已核准！給 ${USERS[p.user]?.name || p.user} +${p.pts} 顆星星`);
+};
+
+// Reject task
+window.rejectPending = async function(pid) {
+  const p = (allData.pending || {})[pid];
+  if (!p) return;
+  await remove(ref(db, `pending/${pid}`));
+  toast(`✗ 已退回 ${USERS[p.user]?.name || p.user} 的申報`);
+};
+
+// Adjust points
+window.adjustPts = async function(uid, sign) {
+  const amtStr = document.getElementById(`amt-${uid}`).value;
+  const amt = parseInt(amtStr);
+  if (!amt || amt <= 0) { toast('請輸入有效的點數數量！'); return; }
+  const reason = document.getElementById(`reason-${uid}`).value || (sign > 0 ? '手動加點' : '手動扣點');
+  const playerRef = ref(db, `players/${uid}`);
+  const snap = await get(playerRef);
+  const player = snap.val() || { points: 0, totalEarned: 0 };
+  const delta = sign * amt;
+  const newPts = Math.max(0, (player.points || 0) + delta);
+  const newTotal = sign > 0 ? (player.totalEarned || 0) + amt : (player.totalEarned || 0);
+
+  await update(playerRef, { points: newPts, totalEarned: newTotal });
+  await push(ref(db, 'history'), {
+    user: uid,
+    desc: reason,
+    icon: sign > 0 ? '⭐' : '💸',
+    pts: delta,
+    time: now()
+  });
+  document.getElementById(`amt-${uid}`).value = '';
+  document.getElementById(`reason-${uid}`).value = '';
+  toast(`${USERS[uid]?.name} ${sign > 0 ? '+' : ''}${delta} 顆星星 ✦`);
+};
+
+// Add task
+window.addTask = async function() {
+  const icon = document.getElementById('newTaskIcon').value.trim() || '⭐';
+  const name = document.getElementById('newTaskName').value.trim();
+  const pts = parseInt(document.getElementById('newTaskPts').value);
+  if (!name || !pts || pts <= 0) { toast('請填寫任務名稱和點數！'); return; }
+  await push(ref(db, 'tasks'), { icon, name, pts });
+  document.getElementById('newTaskIcon').value = '';
+  document.getElementById('newTaskName').value = '';
+  document.getElementById('newTaskPts').value = '';
+  toast(`任務「${name}」已新增 ✦`);
+};
+
+// Delete task
+window.deleteTask = async function(tid) {
+  await remove(ref(db, `tasks/${tid}`));
+  toast('任務已刪除');
+};
+
+// Add shop item
+window.addShopItem = async function() {
+  const icon = document.getElementById('newShopIcon').value.trim() || '🎁';
+  const name = document.getElementById('newShopName').value.trim();
+  const cost = parseInt(document.getElementById('newShopCost').value);
+  if (!name || !cost || cost <= 0) { toast('請填寫獎勵名稱和費用！'); return; }
+  await push(ref(db, 'shop'), { icon, name, cost });
+  document.getElementById('newShopIcon').value = '';
+  document.getElementById('newShopName').value = '';
+  document.getElementById('newShopCost').value = '';
+  toast(`獎勵「${name}」已新增 ♡`);
+};
+
+// Delete shop item
+window.deleteShopItem = async function(sid) {
+  await remove(ref(db, `shop/${sid}`));
+  toast('商店項目已刪除');
+};
+
+window.showTab = function(tab, el) {
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  if (el) el.classList.add('active');
+  document.querySelectorAll('.tab-sec').forEach(s => s.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+};
+
+function now() {
+  const d = new Date();
+  return `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+}
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+startListen();
+</script>
+</body>
+</html>
