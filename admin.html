@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
   <link rel="apple-touch-icon" href="icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="小花冒險">
+<meta name="apple-mobile-web-app-title" content="小惠冒險">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>審核者畫面 👑</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
@@ -266,15 +266,20 @@ const firebaseConfig = {
 };
 
 const USERS = {
-  child1: { name: '小花', avatar: '🐰' },
-  child2: { name: '小明', avatar: '🐻' },
+  child1: { name: '小惠', avatar: '🐵' },
+  child2: { name: '小胖', avatar: '🐷' },
 };
 const LEVELS = [
-  {lv:1,name:"小冒險家",need:0,next:50},
-  {lv:2,name:"見習勇者",need:50,next:120},
-  {lv:3,name:"魔法學徒",need:120,next:220},
-  {lv:4,name:"冒險達人",need:220,next:350},
-  {lv:5,name:"傳說英雄",need:350,next:999999},
+  {lv:1,name:"青銅",need:0,next:10},
+  {lv:2,name:"白銀",need:10,next:30},
+  {lv:3,name:"黃金",need:30,next:60},
+  {lv:4,name:"鉑金",need:60,next:150},
+  {lv:5,name:"鑽石",need:150,next:350},
+  {lv:6,name:"星耀",need:350,next:600},
+  {lv:7,name:"戰場傳說",need:600,next:1000},
+  {lv:8,name:"璀璨傳說",need:1000,next:1500},
+  {lv:9,name:"絕世傳說",need:1500,next:2300},
+  {lv:10,name:"永恆傳說",need:2300,next:999999},
 ];
 
 const app = initializeApp(firebaseConfig);
@@ -344,7 +349,7 @@ function render() {
               <div class="proposal-who">${u.name} <span class="custom-badge">✏️ 自訂</span></div>
               <div class="proposal-name">${p.icon||'💡'} ${p.name}</div>
               ${p.reason ? `<div class="proposal-reason">「${p.reason}」</div>` : ''}
-              <div class="proposal-suggest">孩子建議：${p.suggestPts} 顆星星</div>
+              <div class="proposal-suggest">建議：${p.suggestPts} 顆星星</div>
             </div>
             <div class="proposal-time">${p.time||''}</div>
           </div>
