@@ -35,7 +35,7 @@
   .tab-sec { display: none; }
   .tab-sec.active { display: block; }
 
-  .stats-hero { margin: 0 16px 18px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  .stats-hero { margin: 0 16px 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .stat-card { background: white; border-radius: 20px; padding: 14px 10px; text-align: center; border: 1.5px solid var(--purple); }
   .stat-icon { font-size: 22px; margin-bottom: 4px; }
   .stat-val { font-size: 30px; font-weight: 900; color: var(--purple-deep); line-height: 1; }
@@ -168,6 +168,7 @@
     <div class="nav-tab" onclick="showTab('points',this)">⭐ 點數</div>
     <div class="nav-tab" onclick="showTab('tasks',this)">⚔️ 任務</div>
     <div class="nav-tab" onclick="showTab('shop',this)">🛍 商店</div>
+    <div class="nav-tab" onclick="showTab('shopReview',this)">🛍 兌換</div>
     <div class="nav-tab" onclick="showTab('history',this)">📜 紀錄</div>
   </div>
 </div>
@@ -190,6 +191,11 @@
       <div class="stat-val" id="approvedCount">0</div>
       <div class="stat-label">今日通過</div>
     </div>
+    <div class="stat-card">
+  <div class="stat-icon">🛍</div>
+  <div class="stat-val" id="shopPendingCount">0</div>
+  <div class="stat-label">待兌換審核</div>
+</div>
   </div>
   <div class="section-title">⏳ 任務審核中心 <span class="badge" id="pendingBadge">0</span></div>
   <div class="pending-list" id="pendingList"></div>
@@ -241,7 +247,12 @@
     </div>
   </div>
 </div>
-
+<!-- SHOP REVIEW TAB -->
+<div id="tab-shopReview" class="tab-sec">
+  <div class="section-title" style="margin-top:6px">🛍 商店兌換審核 <span class="badge" id="shopPendingBadge">0</span></div>
+  <p style="padding:0 16px;margin-bottom:14px;font-size:12px;color:var(--text-light);font-weight:700;">確認後才會扣除孩子的星星。</p>
+  <div class="pending-list" id="shopPendingList"></div>
+</div>
 <!-- HISTORY TAB -->
 <div id="tab-history" class="tab-sec">
   <div class="section-title" style="margin-top:6px">📜 所有紀錄</div>
@@ -304,12 +315,15 @@ function render() {
 
   const pendingArr = Object.entries(pending);
   const proposalArr = Object.entries(proposals);
+  const shopPendingArr = Object.entries(allData.shopPending || {});
   const today = new Date();
 const todayDate = `${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}`;
 const todayApproved = history.filter(h => h.pts > 0 && h.date === todayDate && h.desc?.includes('完成')).length;
 
   document.getElementById('pendingCount').textContent = pendingArr.length;
   document.getElementById('proposalCount').textContent = proposalArr.length;
+  document.getElementById('shopPendingCount').textContent = shopPendingArr.length;
+document.getElementById('shopPendingBadge').textContent = shopPendingArr.length;
   document.getElementById('approvedCount').textContent = todayApproved;
   document.getElementById('pendingBadge').textContent = pendingArr.length;
   document.getElementById('proposalBadge').textContent = proposalArr.length;
@@ -421,7 +435,27 @@ const todayApproved = history.filter(h => h.pts > 0 && h.date === todayDate && h
           <div class="shop-item-info"><div class="shop-item-name">${s.name}</div><div class="shop-item-cost">-${s.cost} 顆星星</div></div>
           <button class="shop-del-btn" onclick="deleteShopItem('${sid}')">刪除</button>
         </div>`).join('');
-
+// Shop Pending
+document.getElementById('shopPendingList').innerHTML = shopPendingArr.length === 0
+  ? `<div class="empty"><div class="empty-icon">🎉</div>沒有待審核的兌換！</div>`
+  : shopPendingArr.map(([spid, sp]) => {
+      const u = USERS[sp.user] || { name: sp.user, avatar: '👤' };
+      return `<div class="pending-card">
+        <div class="pending-top">
+          <div class="pending-avatar">${u.avatar}</div>
+          <div class="pending-info">
+            <div class="pending-who">${u.name}</div>
+            <div class="pending-task">${sp.icon||'🎁'} ${sp.shopName}</div>
+            <div class="pending-pts">-${sp.cost} 顆星星</div>
+          </div>
+          <div class="pending-time">${sp.time||''}</div>
+        </div>
+        <div class="pending-actions">
+          <button class="action-btn btn-approve" onclick="approveShop('${spid}')">確認兌換 ✓</button>
+          <button class="action-btn btn-reject" onclick="rejectShop('${spid}')">取消 ✗</button>
+        </div>
+      </div>`;
+    }).join('');
   // History
   const histArr = allData.history ? Object.values(allData.history).reverse() : [];
   document.getElementById('allHistoryList').innerHTML = histArr.slice(0,50).map(h => {
@@ -505,6 +539,31 @@ window.rejectProposal = async function(pid) {
   await push(ref(db,'history'), { user:p.user, desc:`自訂任務「${p.name}」申請被拒絕`, icon:'❌', pts:0, time:t7.time, date:t7.date });
   await remove(ref(db, `proposals/${pid}`));
   toast(`✗ 已拒絕 ${USERS[p.user]?.name||p.user} 的申請`);
+};
+  window.approveShop = async function(spid) {
+  const sp = (allData.shopPending || {})[spid];
+  if (!sp) return;
+  const playerRef = ref(db, `players/${sp.user}`);
+  const playerSnap = await get(playerRef);
+  const player = playerSnap.val() || { points:0, totalEarned:0 };
+  if ((player.points || 0) < sp.cost) {
+    toast(`❌ ${USERS[sp.user]?.name} 星星不足，無法兌換！`); return;
+  }
+  const newPts = Math.max(0, (player.points||0) - sp.cost);
+  await update(playerRef, { points: newPts });
+  const t = now();
+  await push(ref(db,'history'), { user:sp.user, desc:`兌換「${sp.shopName}」`, icon:sp.icon||'🎁', pts:-sp.cost, time:t.time, date:t.date });
+  await remove(ref(db, `shopPending/${spid}`));
+  toast(`✓ 已確認！${USERS[sp.user]?.name} 扣除 ${sp.cost} 顆星星`);
+};
+
+window.rejectShop = async function(spid) {
+  const sp = (allData.shopPending || {})[spid];
+  if (!sp) return;
+  const t = now();
+  await push(ref(db,'history'), { user:sp.user, desc:`「${sp.shopName}」兌換申請被取消`, icon:'❌', pts:0, time:t.time, date:t.date });
+  await remove(ref(db, `shopPending/${spid}`));
+  toast(`✗ 已取消 ${USERS[sp.user]?.name} 的兌換申請`);
 };
 
 window.adjustPts = async function(uid, sign) {
