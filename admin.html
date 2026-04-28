@@ -13,36 +13,33 @@
     --peach: #F5D5C8; --peach-dark: #D08060; --peach-deep: #9A5038;
     --mint: #C8E8D8; --mint-dark: #6AAA88; --mint-deep: #2A6A48;
     --red: #FAD0D0; --red-dark: #C05050; --red-deep: #8A2020;
+    --gold: #FFF0C0; --gold-dark: #C8902A; --gold-deep: #8A6010;
     --cream: #FAF7F2; --text: #5A4A5A; --text-light: #9A8AA0;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: 'Nunito', sans-serif; background: linear-gradient(160deg,#F4F0FA 0%,#F0F4FD 100%); min-height: 100vh; color: var(--text); padding-bottom: 100px; }
 
-  /* HEADER */
   .header { background: white; padding: 18px 20px 0; border-radius: 0 0 28px 28px; border-bottom: 1.5px solid rgba(0,0,0,0.05); margin-bottom: 18px; }
   .header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
   .greeting { font-size: 13px; color: var(--text-light); font-weight: 700; }
   .uname { font-size: 22px; font-weight: 900; color: var(--purple-deep); }
   .logout-btn { background: none; border: none; font-size: 13px; color: var(--text-light); cursor: pointer; font-family: 'Nunito', sans-serif; font-weight: 700; }
   .nav-tabs { display: flex; gap: 2px; }
-  .nav-tab { flex: 1; text-align: center; padding: 10px 0; font-size: 12px; font-weight: 700; color: var(--text-light); border-bottom: 3px solid transparent; cursor: pointer; transition: all 0.2s; }
+  .nav-tab { flex: 1; text-align: center; padding: 10px 0; font-size: 11px; font-weight: 700; color: var(--text-light); border-bottom: 3px solid transparent; cursor: pointer; transition: all 0.2s; }
   .nav-tab.active { color: var(--purple-dark); border-bottom-color: var(--purple-dark); }
 
-  /* SECTION */
   .section-title { font-size: 16px; font-weight: 900; color: var(--text); margin: 0 16px 10px; display: flex; align-items: center; gap: 6px; }
 
-  /* TAB SECTIONS */
   .tab-sec { display: none; }
   .tab-sec.active { display: block; }
 
-  /* STATS HERO */
-  .stats-hero { margin: 0 16px 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .stat-card { background: white; border-radius: 20px; padding: 18px 14px; text-align: center; border: 1.5px solid var(--purple); }
-  .stat-icon { font-size: 28px; margin-bottom: 6px; }
-  .stat-val { font-size: 38px; font-weight: 900; color: var(--purple-deep); line-height: 1; }
-  .stat-label { font-size: 11px; color: var(--text-light); font-weight: 700; margin-top: 4px; }
+  .stats-hero { margin: 0 16px 18px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  .stat-card { background: white; border-radius: 20px; padding: 14px 10px; text-align: center; border: 1.5px solid var(--purple); }
+  .stat-icon { font-size: 22px; margin-bottom: 4px; }
+  .stat-val { font-size: 30px; font-weight: 900; color: var(--purple-deep); line-height: 1; }
+  .stat-label { font-size: 10px; color: var(--text-light); font-weight: 700; margin-top: 4px; }
 
-  /* PENDING LIST */
+  /* PENDING */
   .pending-list { padding: 0 16px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
   .pending-card { background: white; border-radius: 16px; padding: 14px 16px; border: 1.5px solid var(--peach); }
   .pending-top { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
@@ -60,6 +57,27 @@
   .btn-reject { background: var(--red); color: var(--red-deep); }
   .btn-reject:hover { background: var(--red-dark); color: white; }
 
+  /* PROPOSAL CARDS */
+  .proposal-list { padding: 0 16px; display: flex; flex-direction: column; gap: 12px; margin-bottom: 22px; }
+  .proposal-card { background: white; border-radius: 16px; padding: 16px; border: 2px dashed var(--gold-dark); }
+  .proposal-top { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; }
+  .proposal-avatar { font-size: 28px; flex-shrink: 0; }
+  .proposal-info { flex: 1; }
+  .proposal-who { font-size: 12px; font-weight: 700; color: var(--text-light); display: flex; align-items: center; gap: 6px; }
+  .custom-badge { background: var(--gold); color: var(--gold-deep); border-radius: 8px; padding: 2px 8px; font-size: 10px; font-weight: 900; }
+  .proposal-name { font-size: 16px; font-weight: 900; color: var(--text); margin: 4px 0; }
+  .proposal-reason { font-size: 12px; color: var(--text-light); font-weight: 700; font-style: italic; }
+  .proposal-suggest { font-size: 12px; color: var(--gold-deep); font-weight: 700; margin-top: 4px; }
+  .proposal-time { font-size: 10px; color: var(--text-light); font-weight: 700; }
+  .proposal-pts-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .proposal-pts-label { font-size: 13px; font-weight: 700; color: var(--text); white-space: nowrap; }
+  .proposal-pts-input { flex: 1; background: #FFFDF0; border: 1.5px solid var(--gold-dark); border-radius: 10px; padding: 8px 12px; font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 900; color: var(--gold-deep); outline: none; }
+  .proposal-actions { display: flex; gap: 8px; }
+  .btn-add-task { background: var(--mint); color: var(--mint-deep); }
+  .btn-add-task:hover { background: var(--mint-dark); color: white; }
+  .btn-one-time { background: var(--blue); color: var(--blue-deep); }
+  .btn-one-time:hover { background: var(--blue-dark); color: white; }
+
   /* PLAYER CARDS */
   .player-list { padding: 0 16px; display: flex; flex-direction: column; gap: 14px; margin-bottom: 22px; }
   .player-card { background: white; border-radius: 20px; padding: 18px 16px; border: 1.5px solid var(--blue); }
@@ -67,7 +85,6 @@
   .player-avatar { font-size: 34px; }
   .player-name { font-size: 18px; font-weight: 900; color: var(--text); }
   .player-pts-badge { margin-left: auto; background: var(--blue); border-radius: 14px; padding: 5px 14px; font-size: 13px; font-weight: 900; color: var(--blue-deep); }
-  .pts-adjust { display: flex; gap: 8px; align-items: center; }
   .pts-input { flex: 1; background: #F8F7FC; border: 1.5px solid var(--purple); border-radius: 12px; padding: 10px 14px; font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 700; color: var(--text); outline: none; transition: border-color 0.2s; }
   .pts-input:focus { border-color: var(--purple-dark); }
   .pts-btn { border: none; border-radius: 12px; padding: 10px 16px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 900; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
@@ -78,6 +95,7 @@
   .btn-sub:hover { background: var(--red-dark); color: white; }
   .pts-reason { width: 100%; background: #F8F7FC; border: 1.5px solid var(--purple); border-radius: 12px; padding: 10px 14px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700; color: var(--text); outline: none; margin-top: 8px; transition: border-color 0.2s; }
   .pts-reason:focus { border-color: var(--purple-dark); }
+  .pts-adjust { display: flex; gap: 8px; align-items: center; }
   .player-level { font-size: 11px; color: var(--text-light); font-weight: 700; margin-top: 8px; }
 
   /* SHOP MANAGE */
@@ -110,17 +128,6 @@
   .add-task-form { background: white; border-radius: 16px; padding: 16px; border: 1.5px solid var(--blue); }
   .form-title-blue { font-size: 14px; font-weight: 900; color: var(--blue-deep); margin-bottom: 12px; }
 
-  /* EMPTY */
-  .empty { text-align: center; padding: 32px 20px; color: var(--text-light); font-size: 14px; font-weight: 700; }
-  .empty-icon { font-size: 44px; margin-bottom: 10px; }
-
-  /* BADGE */
-  .badge { display: inline-block; background: var(--peach); color: var(--peach-deep); border-radius: 12px; padding: 2px 10px; font-size: 11px; font-weight: 900; margin-left: 6px; }
-
-  /* TOAST */
-  .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-80px); background: #3A4A3A; color: white; border-radius: 20px; padding: 12px 24px; font-size: 14px; font-weight: 700; z-index: 999; transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1); white-space: nowrap; }
-  .toast.show { transform: translateX(-50%) translateY(0); }
-
   /* HISTORY */
   .hist-list { padding: 0 16px; display: flex; flex-direction: column; gap: 8px; margin-bottom: 22px; }
   .hist-item { background: white; border-radius: 12px; padding: 12px 14px; display: flex; align-items: center; gap: 10px; border: 1.5px solid rgba(0,0,0,0.06); }
@@ -132,6 +139,14 @@
   .pts-pos { color: var(--mint-deep); }
   .pts-neg { color: #C04060; }
   .pts-neutral { color: var(--purple-deep); }
+
+  .empty { text-align: center; padding: 32px 20px; color: var(--text-light); font-size: 14px; font-weight: 700; }
+  .empty-icon { font-size: 44px; margin-bottom: 10px; }
+  .badge { display: inline-block; background: var(--peach); color: var(--peach-deep); border-radius: 12px; padding: 2px 10px; font-size: 11px; font-weight: 900; margin-left: 6px; }
+  .badge-gold { background: var(--gold); color: var(--gold-deep); }
+
+  .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-80px); background: #3A4A3A; color: white; border-radius: 20px; padding: 12px 24px; font-size: 14px; font-weight: 700; z-index: 999; transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1); white-space: nowrap; }
+  .toast.show { transform: translateX(-50%) translateY(0); }
 </style>
 </head>
 <body>
@@ -146,6 +161,7 @@
   </div>
   <div class="nav-tabs">
     <div class="nav-tab active" onclick="showTab('review',this)">✅ 審核</div>
+    <div class="nav-tab" onclick="showTab('proposals',this)">💡 申請</div>
     <div class="nav-tab" onclick="showTab('points',this)">⭐ 點數</div>
     <div class="nav-tab" onclick="showTab('tasks',this)">⚔️ 任務</div>
     <div class="nav-tab" onclick="showTab('shop',this)">🛍 商店</div>
@@ -159,16 +175,30 @@
     <div class="stat-card">
       <div class="stat-icon">⏳</div>
       <div class="stat-val" id="pendingCount">0</div>
-      <div class="stat-label">待審核任務</div>
+      <div class="stat-label">待審核</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">💡</div>
+      <div class="stat-val" id="proposalCount">0</div>
+      <div class="stat-label">自訂申請</div>
     </div>
     <div class="stat-card">
       <div class="stat-icon">✅</div>
       <div class="stat-val" id="approvedCount">0</div>
-      <div class="stat-label">今日已通過</div>
+      <div class="stat-label">今日通過</div>
     </div>
   </div>
   <div class="section-title">⏳ 任務審核中心 <span class="badge" id="pendingBadge">0</span></div>
   <div class="pending-list" id="pendingList"></div>
+</div>
+
+<!-- PROPOSALS TAB -->
+<div id="tab-proposals" class="tab-sec">
+  <div class="section-title" style="margin-top:6px">💡 自訂任務申請 <span class="badge badge-gold" id="proposalBadge">0</span></div>
+  <p style="padding:0 16px;margin-bottom:14px;font-size:12px;color:var(--text-light);font-weight:700;">
+    孩子提出的新任務提案，可以調整星星數後「加入任務列表」，或者「一次性給點數」後駁回。
+  </p>
+  <div class="proposal-list" id="proposalList"></div>
 </div>
 
 <!-- POINTS TAB -->
@@ -248,9 +278,7 @@ const LEVELS = [
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-
 let allData = {};
-let todayApproved = 0;
 
 function startListen() {
   onValue(ref(db, '/'), snap => {
@@ -264,17 +292,21 @@ function render() {
   const tasks = allData.tasks || {};
   const shop = allData.shop || {};
   const pending = allData.pending || {};
+  const proposals = allData.proposals || {};
   const history = allData.history ? Object.values(allData.history) : [];
 
   const pendingArr = Object.entries(pending);
+  const proposalArr = Object.entries(proposals);
   const today = new Date();
   const todayStr = `${today.getMonth()+1}/${today.getDate()}`;
-  todayApproved = history.filter(h => h.pts > 0 && h.time && h.time.startsWith(todayStr)).length;
+  const todayApproved = history.filter(h => h.pts > 0 && h.time && h.time.startsWith(todayStr)).length;
 
   // Stats
   document.getElementById('pendingCount').textContent = pendingArr.length;
+  document.getElementById('proposalCount').textContent = proposalArr.length;
   document.getElementById('approvedCount').textContent = todayApproved;
   document.getElementById('pendingBadge').textContent = pendingArr.length;
+  document.getElementById('proposalBadge').textContent = proposalArr.length;
 
   // Pending list
   document.getElementById('pendingList').innerHTML = pendingArr.length === 0
@@ -296,6 +328,38 @@ function render() {
           <div class="pending-actions">
             <button class="action-btn btn-approve" onclick="approvePending('${pid}')">核准 ✓</button>
             <button class="action-btn btn-reject" onclick="rejectPending('${pid}')">退回 ✗</button>
+          </div>
+        </div>`;
+      }).join('');
+
+  // Proposals list
+  document.getElementById('proposalList').innerHTML = proposalArr.length === 0
+    ? `<div class="empty"><div class="empty-icon">💡</div>目前沒有自訂任務申請</div>`
+    : proposalArr.map(([pid, p]) => {
+        const u = USERS[p.user] || { name: p.user, avatar: '👤' };
+        return `<div class="proposal-card">
+          <div class="proposal-top">
+            <div class="proposal-avatar">${u.avatar}</div>
+            <div class="proposal-info">
+              <div class="proposal-who">
+                ${u.name}
+                <span class="custom-badge">✏️ 自訂</span>
+              </div>
+              <div class="proposal-name">${p.icon||'💡'} ${p.name}</div>
+              ${p.reason ? `<div class="proposal-reason">「${p.reason}」</div>` : ''}
+              <div class="proposal-suggest">孩子建議：${p.suggestPts} 顆星星</div>
+            </div>
+            <div class="proposal-time">${p.time||''}</div>
+          </div>
+          <div class="proposal-pts-row">
+            <div class="proposal-pts-label">決定給：</div>
+            <input class="proposal-pts-input" type="number" id="pptsInput-${pid}" value="${p.suggestPts}" min="1">
+            <div class="proposal-pts-label" style="color:var(--gold-deep)">⭐</div>
+          </div>
+          <div class="proposal-actions">
+            <button class="action-btn btn-add-task" onclick="approveProposalAddTask('${pid}')">➕ 加入任務列表</button>
+            <button class="action-btn btn-one-time" onclick="approveProposalOneTime('${pid}')">⭐ 一次性給點</button>
+            <button class="action-btn btn-reject" onclick="rejectProposal('${pid}')">✗ 拒絕</button>
           </div>
         </div>`;
       }).join('');
@@ -359,8 +423,7 @@ function render() {
   const histArr = allData.history ? Object.values(allData.history).reverse() : [];
   document.getElementById('allHistoryList').innerHTML = histArr.slice(0, 50).map(h => {
     const u = USERS[h.user] || { name: h.user, avatar: '👤' };
-    const pos = h.pts > 0;
-    const neutral = h.pts === 0;
+    const pos = h.pts > 0, neutral = h.pts === 0;
     return `<div class="hist-item">
       <div class="h-icon">${h.icon || '⭐'}</div>
       <div class="h-info">
@@ -372,33 +435,24 @@ function render() {
   }).join('') || `<div class="empty"><div class="empty-icon">📜</div>還沒有紀錄</div>`;
 }
 
-// Approve task
+// Approve task completion
 window.approvePending = async function(pid) {
   const p = (allData.pending || {})[pid];
   if (!p) return;
   const playerRef = ref(db, `players/${p.user}`);
   const playerSnap = await get(playerRef);
   const player = playerSnap.val() || { points: 0, totalEarned: 0 };
-  const tasks = allData.tasks || {};
-  const task = tasks[p.taskId] || {};
+  const task = (allData.tasks || {})[p.taskId] || {};
   const icon = task.icon || '⭐';
-
   await update(playerRef, {
     points: (player.points || 0) + p.pts,
     totalEarned: (player.totalEarned || 0) + p.pts
   });
-  await push(ref(db, 'history'), {
-    user: p.user,
-    desc: `完成「${p.taskName}」`,
-    icon: icon,
-    pts: p.pts,
-    time: now()
-  });
+  await push(ref(db, 'history'), { user: p.user, desc: `完成「${p.taskName}」`, icon, pts: p.pts, time: now() });
   await remove(ref(db, `pending/${pid}`));
   toast(`✓ 已核准！給 ${USERS[p.user]?.name || p.user} +${p.pts} 顆星星`);
 };
 
-// Reject task
 window.rejectPending = async function(pid) {
   const p = (allData.pending || {})[pid];
   if (!p) return;
@@ -406,7 +460,44 @@ window.rejectPending = async function(pid) {
   toast(`✗ 已退回 ${USERS[p.user]?.name || p.user} 的申報`);
 };
 
-// Adjust points
+// Approve proposal: add as permanent task
+window.approveProposalAddTask = async function(pid) {
+  const p = (allData.proposals || {})[pid];
+  if (!p) return;
+  const pts = parseInt(document.getElementById(`pptsInput-${pid}`)?.value) || p.suggestPts;
+  await push(ref(db, 'tasks'), { icon: p.icon || '💡', name: p.name, pts });
+  await push(ref(db, 'history'), {
+    user: p.user, desc: `自訂任務「${p.name}」已加入任務列表`, icon: p.icon || '💡', pts: 0, time: now()
+  });
+  await remove(ref(db, `proposals/${pid}`));
+  toast(`✓ 「${p.name}」已加入任務列表（${pts} 顆星星）`);
+};
+
+// Approve proposal: one-time points grant
+window.approveProposalOneTime = async function(pid) {
+  const p = (allData.proposals || {})[pid];
+  if (!p) return;
+  const pts = parseInt(document.getElementById(`pptsInput-${pid}`)?.value) || p.suggestPts;
+  const playerRef = ref(db, `players/${p.user}`);
+  const snap = await get(playerRef);
+  const player = snap.val() || { points: 0, totalEarned: 0 };
+  await update(playerRef, { points: (player.points || 0) + pts, totalEarned: (player.totalEarned || 0) + pts });
+  await push(ref(db, 'history'), {
+    user: p.user, desc: `自訂任務「${p.name}」一次性獎勵`, icon: p.icon || '💡', pts, time: now()
+  });
+  await remove(ref(db, `proposals/${pid}`));
+  toast(`✓ 已給 ${USERS[p.user]?.name || p.user} +${pts} 顆星星（一次性）`);
+};
+
+// Reject proposal
+window.rejectProposal = async function(pid) {
+  const p = (allData.proposals || {})[pid];
+  if (!p) return;
+  await remove(ref(db, `proposals/${pid}`));
+  toast(`✗ 已拒絕 ${USERS[p.user]?.name || p.user} 的申請`);
+};
+
+// Adjust points manually
 window.adjustPts = async function(uid, sign) {
   const amtStr = document.getElementById(`amt-${uid}`).value;
   const amt = parseInt(amtStr);
@@ -418,21 +509,13 @@ window.adjustPts = async function(uid, sign) {
   const delta = sign * amt;
   const newPts = Math.max(0, (player.points || 0) + delta);
   const newTotal = sign > 0 ? (player.totalEarned || 0) + amt : (player.totalEarned || 0);
-
   await update(playerRef, { points: newPts, totalEarned: newTotal });
-  await push(ref(db, 'history'), {
-    user: uid,
-    desc: reason,
-    icon: sign > 0 ? '⭐' : '💸',
-    pts: delta,
-    time: now()
-  });
+  await push(ref(db, 'history'), { user: uid, desc: reason, icon: sign > 0 ? '⭐' : '💸', pts: delta, time: now() });
   document.getElementById(`amt-${uid}`).value = '';
   document.getElementById(`reason-${uid}`).value = '';
   toast(`${USERS[uid]?.name} ${sign > 0 ? '+' : ''}${delta} 顆星星 ✦`);
 };
 
-// Add task
 window.addTask = async function() {
   const icon = document.getElementById('newTaskIcon').value.trim() || '⭐';
   const name = document.getElementById('newTaskName').value.trim();
@@ -445,13 +528,11 @@ window.addTask = async function() {
   toast(`任務「${name}」已新增 ✦`);
 };
 
-// Delete task
 window.deleteTask = async function(tid) {
   await remove(ref(db, `tasks/${tid}`));
   toast('任務已刪除');
 };
 
-// Add shop item
 window.addShopItem = async function() {
   const icon = document.getElementById('newShopIcon').value.trim() || '🎁';
   const name = document.getElementById('newShopName').value.trim();
@@ -464,7 +545,6 @@ window.addShopItem = async function() {
   toast(`獎勵「${name}」已新增 ♡`);
 };
 
-// Delete shop item
 window.deleteShopItem = async function(sid) {
   await remove(ref(db, `shop/${sid}`));
   toast('商店項目已刪除');
