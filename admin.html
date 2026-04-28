@@ -305,8 +305,8 @@ function render() {
   const pendingArr = Object.entries(pending);
   const proposalArr = Object.entries(proposals);
   const today = new Date();
-  const todayStr = `${today.getMonth()+1}/${today.getDate()}`;
-  const todayApproved = history.filter(h => h.pts > 0 && h.time && h.time.startsWith(todayStr)).length;
+const todayDate = `${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}`;
+const todayApproved = history.filter(h => h.pts > 0 && h.date === todayDate && h.desc?.includes('完成')).length;
 
   document.getElementById('pendingCount').textContent = pendingArr.length;
   document.getElementById('proposalCount').textContent = proposalArr.length;
@@ -444,7 +444,8 @@ window.sendGacha = async function(uid) {
   const snap = await get(gachaRef);
   const current = snap.val()?.count || 0;
   await set(gachaRef, { count: current + amt });
-  await push(ref(db, 'history'), { user: uid, desc: `收到 ${amt} 顆扭蛋！`, icon: '🎰', pts: 0, time: now() });
+  const t1 = now();
+await push(ref(db, 'history'), { user: uid, desc: `收到 ${amt} 顆扭蛋！`, icon: '🎰', pts: 0, time: t1.time, date: t1.date });
   document.getElementById(`gacha-amt-${uid}`).value = '';
   toast(`🎰 已給 ${USERS[uid]?.name} ${amt} 顆扭蛋！`);
 };
@@ -457,7 +458,9 @@ window.approvePending = async function(pid) {
   const player = playerSnap.val() || { points: 0, totalEarned: 0 };
   const task = (allData.tasks || {})[p.taskId] || {};
   await update(playerRef, { points:(player.points||0)+p.pts, totalEarned:(player.totalEarned||0)+p.pts });
-  await push(ref(db,'history'), { user:p.user, desc:`完成「${p.taskName}」`, icon:task.icon||'⭐', pts:p.pts, time:now() });
+  const t2 = now();
+const t3 = now();
+await push(ref(db,'history'), { user:p.user, desc:`自訂任務「${p.name}」已加入任務列表`, icon:p.icon||'💡', pts:0, time:t3.time, date:t3.date });
   await remove(ref(db, `pending/${pid}`));
   toast(`✓ 已核准！給 ${USERS[p.user]?.name||p.user} +${p.pts} 顆星星`);
 };
@@ -465,6 +468,8 @@ window.approvePending = async function(pid) {
 window.rejectPending = async function(pid) {
   const p = (allData.pending||{})[pid];
   if (!p) return;
+  const t6 = now();
+  await push(ref(db,'history'), { user:p.user, desc:`「${p.taskName}」申報被退回`, icon:'❌', pts:0, time:t6.time, date:t6.date });
   await remove(ref(db, `pending/${pid}`));
   toast(`✗ 已退回 ${USERS[p.user]?.name||p.user} 的申報`);
 };
@@ -487,7 +492,8 @@ window.approveProposalOneTime = async function(pid) {
   const snap = await get(playerRef);
   const player = snap.val() || { points:0, totalEarned:0 };
   await update(playerRef, { points:(player.points||0)+pts, totalEarned:(player.totalEarned||0)+pts });
-  await push(ref(db,'history'), { user:p.user, desc:`自訂任務「${p.name}」一次性獎勵`, icon:p.icon||'💡', pts, time:now() });
+  const t4 = now();
+await push(ref(db,'history'), { user:p.user, desc:`自訂任務「${p.name}」一次性獎勵`, icon:p.icon||'💡', pts, time:t4.time, date:t4.date });
   await remove(ref(db, `proposals/${pid}`));
   toast(`✓ 已給 ${USERS[p.user]?.name||p.user} +${pts} 顆星星（一次性）`);
 };
@@ -495,6 +501,8 @@ window.approveProposalOneTime = async function(pid) {
 window.rejectProposal = async function(pid) {
   const p = (allData.proposals||{})[pid];
   if (!p) return;
+  const t7 = now();
+  await push(ref(db,'history'), { user:p.user, desc:`自訂任務「${p.name}」申請被拒絕`, icon:'❌', pts:0, time:t7.time, date:t7.date });
   await remove(ref(db, `proposals/${pid}`));
   toast(`✗ 已拒絕 ${USERS[p.user]?.name||p.user} 的申請`);
 };
@@ -510,7 +518,8 @@ window.adjustPts = async function(uid, sign) {
   const newPts = Math.max(0, (player.points||0) + delta);
   const newTotal = sign > 0 ? (player.totalEarned||0)+amt : (player.totalEarned||0);
   await update(playerRef, { points:newPts, totalEarned:newTotal });
-  await push(ref(db,'history'), { user:uid, desc:reason, icon:sign>0?'⭐':'💸', pts:actualDelta, time:now() });
+  const t5 = now();
+await push(ref(db,'history'), { user:uid, desc:reason, icon:sign>0?'⭐':'💸', pts:delta, time:t5.time, date:t5.date });
   document.getElementById(`amt-${uid}`).value = '';
   document.getElementById(`reason-${uid}`).value = '';
   toast(`${USERS[uid]?.name} ${sign>0?'+':''}${delta} 顆星星 ✦`);
@@ -563,6 +572,9 @@ function now() {
     time: `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`,
     date: `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`
   };
+}
+function nowStr() {
+  return now().time;
 }
 
 function toast(msg) {
