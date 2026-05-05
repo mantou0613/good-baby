@@ -659,10 +659,17 @@ window.showStarTab=(tab,el)=>{
 };
 window.showLoveTab=(tab,el)=>{
   document.querySelectorAll('#navTabsLove .nav-tab').forEach(t=>t.classList.remove('active'));
-  if(el)el.classList.add('active');
-  document.querySelectorAll('#modeLove .tab-sec').forEach(s=>s.classList.remove('active'));
-  document.getElementById(tab).classList.add('active');
-};
+  if(el){
+    el.classList.add('active');
+  } else {
+    // 根據 tab id 找到對應的 nav-tab 並設為 active
+    const tabMap={'love-home':0,'love-allowance-shop':1,'love-hot-shop':2,'love-history':3};
+    const idx=tabMap[tab];
+    if(idx!==undefined){
+      const tabs=document.querySelectorAll('#navTabsLove .nav-tab');
+      if(tabs[idx])tabs[idx].classList.add('active');
+    }
+  }
 
 function renderLove(){
   const ld=window._allData?.love?.[ME]||{};
