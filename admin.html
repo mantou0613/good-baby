@@ -195,6 +195,7 @@
   <div class="header-top">
     <div>
       <div class="greeting">管理後台 ♡</div>
+      
       <div class="uname">👑 審核者畫面</div>
     </div>
     <button class="logout-btn" onclick="window.location.href='index.html'">登出</button>
@@ -207,6 +208,9 @@
     <div class="nav-tab" onclick="showTab('shop',this)">🛍 商店</div>
     <div class="nav-tab" onclick="showTab('shopReview',this)">🛍 兌換</div>
     <div class="nav-tab" onclick="showTab('shopProposals',this)">🛍 獎勵申請</div>
+    <div class="nav-tab" onclick="showTab('loveShop',this)">💰 零用錢商店</div>
+<div class="nav-tab" onclick="showTab('hotShop',this)">🔥 18+ 商店</div>
+<div class="nav-tab" onclick="showTab('loveReview',this)">💕 寶寶審核</div>
     <div class="nav-tab" onclick="showTab('history',this)">📜 紀錄</div>
   </div>
 </div>
@@ -328,6 +332,55 @@
   <div class="section-title" style="margin-top:6px">🛍 商店兌換審核 <span class="badge" id="shopPendingBadge">0</span></div>
   <p style="padding:0 16px;margin-bottom:14px;font-size:12px;color:var(--text-light);font-weight:700;">確認後才會扣除孩子的星星。</p>
   <div class="pending-list" id="shopPendingList"></div>
+</div>
+  <!-- LOVE SHOP TAB -->
+<div id="tab-loveShop" class="tab-sec">
+  <div class="section-title" style="margin-top:6px">💰 零用錢商店管理</div>
+  <div class="shop-manage" id="loveShopManageList"></div>
+  <div style="padding:0 16px;margin-bottom:22px">
+    <div class="add-form">
+      <div class="form-title" style="color:var(--gold-deep)">➕ 新增零用錢商品</div>
+      <div class="form-row">
+        <input class="form-input form-input-sm" id="newLoveShopIcon" placeholder="🛍" maxlength="4">
+        <input class="form-input" id="newLoveShopName" placeholder="商品名稱">
+        <input class="form-input form-input-sm" id="newLoveShopCost" type="number" placeholder="NT$" min="1">
+      </div>
+      <button class="form-submit" style="width:100%;padding:12px;background:var(--gold-dark)" onclick="addLoveShopItem()">新增商品 ♡</button>
+    </div>
+  </div>
+  <div class="section-title">💰 零用錢餘額管理</div>
+  <div class="player-list" id="allowancePlayerList"></div>
+</div>
+
+<!-- HOT SHOP TAB -->
+<div id="tab-hotShop" class="tab-sec">
+  <div class="section-title" style="margin-top:6px">🔥 18+ 商店管理</div>
+  <div class="shop-manage" id="hotShopManageList"></div>
+  <div style="padding:0 16px;margin-bottom:22px">
+    <div class="add-form">
+      <div class="form-title" style="color:#8A2040">➕ 新增 18+ 項目</div>
+      <div class="form-row">
+        <input class="form-input form-input-sm" id="newHotShopIcon" placeholder="🔥" maxlength="4">
+        <input class="form-input" id="newHotShopName" placeholder="項目名稱">
+        <input class="form-input form-input-sm" id="newHotShopCost" type="number" placeholder="愛心" min="1">
+      </div>
+      <button class="form-submit" style="width:100%;padding:12px;background:#E0607A" onclick="addHotShopItem()">新增項目 🌙</button>
+    </div>
+  </div>
+  <div class="section-title">💕 愛心積分管理</div>
+  <div class="player-list" id="lovePtsPlayerList"></div>
+</div>
+
+<!-- LOVE REVIEW TAB -->
+<div id="tab-loveReview" class="tab-sec">
+  <div class="section-title" style="margin-top:6px">💰 零用錢兌換審核</div>
+  <div class="pending-list" id="allowancePendingList"></div>
+  <div class="section-title">🔥 18+ 兌換審核</div>
+  <div class="pending-list" id="hotShopPendingList"></div>
+  <div class="section-title">🛍 零用錢商店申請</div>
+  <div class="proposal-list" id="allowanceShopProposalList"></div>
+  <div class="section-title">🔥 18+ 願望申請</div>
+  <div class="proposal-list" id="hotProposalList"></div>
 </div>
 
 <!-- SHOP PROPOSALS TAB -->
@@ -892,6 +945,149 @@ window.addShopItem = async function() {
 window.deleteShopItem = async function(sid) {
   await remove(ref(db, `shop/${sid}`));
   toast('商店項目已刪除');
+};
+  // ── 零用錢商店 CRUD ──
+window.addLoveShopItem = async function() {
+  const icon = document.getElementById('newLoveShopIcon').value.trim() || '🛍';
+  const name = document.getElementById('newLoveShopName').value.trim();
+  const cost = parseInt(document.getElementById('newLoveShopCost').value);
+  if (!name || !cost || cost <= 0) { toast('請填寫名稱和金額！'); return; }
+  await push(ref(db,'allowanceShop'), { icon, name, cost });
+  document.getElementById('newLoveShopIcon').value='';
+  document.getElementById('newLoveShopName').value='';
+  document.getElementById('newLoveShopCost').value='';
+  toast(`💰 「${name}」已加入零用錢商店 ♡`);
+};
+window.deleteLoveShopItem = async function(sid) {
+  await remove(ref(db, `allowanceShop/${sid}`));
+  toast('商品已刪除');
+};
+
+// ── 18+ 商店 CRUD ──
+window.addHotShopItem = async function() {
+  const icon = document.getElementById('newHotShopIcon').value.trim() || '🔥';
+  const name = document.getElementById('newHotShopName').value.trim();
+  const cost = parseInt(document.getElementById('newHotShopCost').value);
+  if (!name || !cost || cost <= 0) { toast('請填寫名稱和愛心數！'); return; }
+  await push(ref(db,'hotShop'), { icon, name, cost });
+  document.getElementById('newHotShopIcon').value='';
+  document.getElementById('newHotShopName').value='';
+  document.getElementById('newHotShopCost').value='';
+  toast(`🔥 「${name}」已加入 18+ 商店 🌙`);
+};
+window.deleteHotShopItem = async function(sid) {
+  await remove(ref(db, `hotShop/${sid}`));
+  toast('項目已刪除');
+};
+
+// ── 零用錢調整 ──
+window.adjustAllowance = async function(uid, sign) {
+  const amt = parseInt(document.getElementById(`allowance-amt-${uid}`).value);
+  if (!amt || amt <= 0) { toast('請輸入金額！'); return; }
+  const reason = document.getElementById(`allowance-reason-${uid}`).value || (sign>0?'小波給零用錢':'扣除零用錢');
+  const loveRef = ref(db, `love/${uid}`);
+  const snap = await get(loveRef);
+  const love = snap.val() || {};
+  const current = love.allowance || 0;
+  const newVal = Math.max(0, current + sign * amt);
+  await update(loveRef, { allowance: newVal });
+  const t = now();
+  await push(ref(db,'loveHistory'), { user:uid, desc:reason, icon:'💰', amount:sign*amt, pts:0, time:t.time, date:t.date });
+  document.getElementById(`allowance-amt-${uid}`).value='';
+  document.getElementById(`allowance-reason-${uid}`).value='';
+  toast(`💰 ${USERS[uid]?.name} 零用錢 ${sign>0?'+':'-'}NT$${amt}（現有 NT$${newVal}）`);
+};
+
+// ── 愛心積分調整 ──
+window.adjustLovePts = async function(uid, sign) {
+  const amt = parseInt(document.getElementById(`lovepts-amt-${uid}`).value);
+  if (!amt || amt <= 0) { toast('請輸入愛心數！'); return; }
+  const loveRef = ref(db, `love/${uid}`);
+  const snap = await get(loveRef);
+  const love = snap.val() || {};
+  const current = love.lovePts || 0;
+  const newVal = Math.max(0, current + sign * amt);
+  await update(loveRef, { lovePts: newVal });
+  const t = now();
+  await push(ref(db,'loveHistory'), { user:uid, desc:sign>0?`收到 ${amt} 顆愛心！`:`扣除 ${amt} 顆愛心`, icon:'♡', pts:sign*amt, time:t.time, date:t.date });
+  document.getElementById(`lovepts-amt-${uid}`).value='';
+  toast(`♡ ${USERS[uid]?.name} 愛心 ${sign>0?'+':'-'}${amt}（現有 ${newVal}）`);
+};
+
+// ── 零用錢兌換審核 ──
+window.approveAllowancePending = async function(pid) {
+  const p = (allData.allowancePending||{})[pid]; if(!p) return;
+  const loveRef = ref(db, `love/${p.user}`);
+  const snap = await get(loveRef);
+  const love = snap.val() || {};
+  const current = love.allowance || 0;
+  if (current < p.cost) { toast(`❌ ${USERS[p.user]?.name} 零用錢不足！`); return; }
+  await update(loveRef, { allowance: current - p.cost });
+  const t = now();
+  await push(ref(db,'loveHistory'), { user:p.user, desc:`購買「${p.shopName}」`, icon:p.icon||'🛍', amount:-p.cost, pts:0, time:t.time, date:t.date });
+  await remove(ref(db, `allowancePending/${pid}`));
+  toast(`✓ 已確認！${USERS[p.user]?.name} 扣除 NT$${p.cost}`);
+};
+window.rejectAllowancePending = async function(pid) {
+  const p = (allData.allowancePending||{})[pid]; if(!p) return;
+  const t = now();
+  await push(ref(db,'loveHistory'), { user:p.user, desc:`「${p.shopName}」購買申請被取消`, icon:'❌', pts:0, time:t.time, date:t.date });
+  await remove(ref(db, `allowancePending/${pid}`));
+  toast('✗ 已取消');
+};
+
+// ── 18+ 兌換審核 ──
+window.approveHotShopPending = async function(pid) {
+  const p = (allData.hotShopPending||{})[pid]; if(!p) return;
+  const loveRef = ref(db, `love/${p.user}`);
+  const snap = await get(loveRef);
+  const love = snap.val() || {};
+  const current = love.lovePts || 0;
+  if (current < p.cost) { toast(`❌ ${USERS[p.user]?.name} 愛心不足！`); return; }
+  await update(loveRef, { lovePts: current - p.cost });
+  const t = now();
+  await push(ref(db,'loveHistory'), { user:p.user, desc:`兌換「${p.shopName}」`, icon:p.icon||'🔥', pts:-p.cost, time:t.time, date:t.date });
+  await remove(ref(db, `hotShopPending/${pid}`));
+  toast(`✓ 已確認！${USERS[p.user]?.name} 扣除 ♡${p.cost}`);
+};
+window.rejectHotShopPending = async function(pid) {
+  const p = (allData.hotShopPending||{})[pid]; if(!p) return;
+  const t = now();
+  await push(ref(db,'loveHistory'), { user:p.user, desc:`「${p.shopName}」兌換申請被取消`, icon:'❌', pts:0, time:t.time, date:t.date });
+  await remove(ref(db, `hotShopPending/${pid}`));
+  toast('✗ 已取消');
+};
+
+// ── 零用錢商店申請審核 ──
+window.approveAllowanceShopProposal = async function(pid) {
+  const p = (allData.allowanceShopProposals||{})[pid]; if(!p) return;
+  const cost = parseInt(document.getElementById(`aShopPropInput-${pid}`)?.value) || p.suggestCost;
+  await push(ref(db,'allowanceShop'), { icon:p.icon||'🎁', name:p.name, cost });
+  const t = now();
+  await push(ref(db,'loveHistory'), { user:p.user, desc:`零用錢商品「${p.name}」已加入商店`, icon:p.icon||'🎁', pts:0, time:t.time, date:t.date });
+  await remove(ref(db, `allowanceShopProposals/${pid}`));
+  toast(`✓ 「${p.name}」已加入零用錢商店（NT$${cost}）`);
+};
+window.rejectAllowanceShopProposal = async function(pid) {
+  const p = (allData.allowanceShopProposals||{})[pid]; if(!p) return;
+  await remove(ref(db, `allowanceShopProposals/${pid}`));
+  toast('✗ 已拒絕申請');
+};
+
+// ── 18+ 願望申請審核 ──
+window.approveHotProposal = async function(pid) {
+  const p = (allData.hotProposals||{})[pid]; if(!p) return;
+  const cost = parseInt(document.getElementById(`hotPropInput-${pid}`)?.value) || p.suggestPts;
+  await push(ref(db,'hotShop'), { icon:p.icon||'🔥', name:p.name, cost });
+  const t = now();
+  await push(ref(db,'loveHistory'), { user:p.user, desc:`18+ 項目「${p.name}」已加入商店`, icon:p.icon||'🔥', pts:0, time:t.time, date:t.date });
+  await remove(ref(db, `hotProposals/${pid}`));
+  toast(`✓ 「${p.name}」已加入 18+ 商店（♡${cost}）`);
+};
+window.rejectHotProposal = async function(pid) {
+  const p = (allData.hotProposals||{})[pid]; if(!p) return;
+  await remove(ref(db, `hotProposals/${pid}`));
+  toast('✗ 已拒絕願望申請');
 };
 
 window.showTab = function(tab, el) {
