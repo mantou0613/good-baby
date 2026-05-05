@@ -632,8 +632,25 @@ window.setMode=function(mode){
   document.getElementById('navTabsStar').style.display=mode==='star'?'flex':'none';
   document.getElementById('navTabsLove').style.display=mode==='love'?'flex':'none';
   localStorage.setItem('child2_mode',mode);
-  if(mode==='love'){document.getElementById('headerGreeting').textContent='小波的寶寶 ♡';document.getElementById('headerUname').className='uname love-mode';renderLove();}
-  else{document.getElementById('headerGreeting').textContent='射手座 ♡ 今日運勢';document.getElementById('headerUname').className='uname';}
+
+  // ✅ 新增：切換到 love 時重置 tab 到主頁
+  if(mode==='love'){
+    document.querySelectorAll('#modeLove .tab-sec').forEach(s=>s.classList.remove('active'));
+    document.getElementById('love-home').classList.add('active');
+    document.querySelectorAll('#navTabsLove .nav-tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('#navTabsLove .nav-tab')[0].classList.add('active');
+    document.getElementById('headerGreeting').textContent='小波的寶寶 ♡';
+    document.getElementById('headerUname').className='uname love-mode';
+    renderLove();
+  } else {
+    // ✅ 新增：切換回 star 時也重置 tab 到主頁
+    document.querySelectorAll('#modeStar .tab-sec').forEach(s=>s.classList.remove('active'));
+    document.getElementById('tab-home').classList.add('active');
+    document.querySelectorAll('#navTabsStar .nav-tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('#navTabsStar .nav-tab')[0].classList.add('active');
+    document.getElementById('headerGreeting').textContent='射手座 ♡ 今日運勢';
+    document.getElementById('headerUname').className='uname';
+  }
 };
 window.showStarTab=(tab,el)=>{
   document.querySelectorAll('#navTabsStar .nav-tab').forEach(t=>t.classList.remove('active'));
