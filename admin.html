@@ -17,6 +17,7 @@
     --mint: #C8E8D8; --mint-dark: #6AAA88; --mint-deep: #2A6A48;
     --red: #FAD0D0; --red-dark: #C05050; --red-deep: #8A2020;
     --gold: #FFF0C0; --gold-dark: #C8902A; --gold-deep: #8A6010;
+    --orange: #FFE4C0; --orange-dark: #E07820; --orange-deep: #A04800;
     --cream: #FAF7F2; --text: #5A4A5A; --text-light: #9A8AA0;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -98,14 +99,12 @@
   .pts-adjust { display: flex; gap: 8px; align-items: center; margin-top: 8px; }
   .player-level { font-size: 11px; color: var(--text-light); font-weight: 700; margin-top: 8px; }
 
-  /* GACHA SECTION IN PLAYER CARD */
   .gacha-section { margin-top: 12px; padding-top: 12px; border-top: 1.5px solid #F0EEF8; }
   .gacha-section-title { font-size: 12px; font-weight: 900; color: var(--purple-deep); margin-bottom: 8px; }
   .gacha-send-row { display: flex; gap: 8px; align-items: center; }
   .gacha-count-badge { background: var(--pink); color: var(--pink-deep); border-radius: 10px; padding: 4px 10px; font-size: 12px; font-weight: 900; white-space: nowrap; }
   .btn-gacha { background: linear-gradient(135deg, var(--pink), var(--purple)); color: white; }
 
-  /* GAME CREDITS SECTION IN PLAYER CARD */
   .game-section { margin-top: 12px; padding-top: 12px; border-top: 1.5px solid #EEF4FF; }
   .game-section-title { font-size: 12px; font-weight: 900; color: var(--blue-deep); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
   .game-send-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
@@ -125,21 +124,50 @@
   .shop-del-btn:hover { background: var(--red-dark); color: white; }
   .add-form { background: white; border-radius: 16px; padding: 16px; border: 1.5px solid var(--mint); }
   .form-title { font-size: 14px; font-weight: 900; color: var(--mint-deep); margin-bottom: 12px; }
-  .form-row { display: flex; gap: 8px; margin-bottom: 8px; }
+  .form-row { display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
   .form-input { flex: 1; background: #F8FCF9; border: 1.5px solid var(--mint); border-radius: 10px; padding: 10px 12px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700; color: var(--text); outline: none; min-width: 0; }
   .form-input-sm { width: 80px; flex: none; }
   .form-submit { background: var(--mint-dark); color: white; border: none; border-radius: 10px; padding: 10px 16px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 900; cursor: pointer; }
 
   .task-manage { padding: 0 16px; margin-bottom: 22px; }
-  .task-manage-item { background: white; border-radius: 14px; padding: 12px 14px; border: 1.5px solid var(--purple); display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .task-manage-item { background: white; border-radius: 14px; padding: 12px 14px; border: 1.5px solid var(--purple); display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
   .task-manage-icon { font-size: 26px; }
-  .task-manage-info { flex: 1; }
+  .task-manage-info { flex: 1; min-width: 120px; }
   .task-manage-name { font-size: 14px; font-weight: 700; color: var(--text); }
   .task-manage-pts { font-size: 12px; color: var(--purple-deep); font-weight: 700; }
+  .task-manage-actions { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
   .task-del-btn { background: var(--red); color: var(--red-deep); border: none; border-radius: 10px; padding: 6px 12px; font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 700; cursor: pointer; }
   .task-del-btn:hover { background: var(--red-dark); color: white; }
+  .task-type-select { background: #F8F7FC; border: 1.5px solid var(--purple); border-radius: 10px; padding: 6px 10px; font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 700; color: var(--text); outline: none; cursor: pointer; }
   .add-task-form { background: white; border-radius: 16px; padding: 16px; border: 1.5px solid var(--blue); }
   .form-title-blue { font-size: 14px; font-weight: 900; color: var(--blue-deep); margin-bottom: 12px; }
+  .form-select { flex: 1; background: #F8F7FF; border: 1.5px solid var(--blue); border-radius: 10px; padding: 10px 12px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700; color: var(--text); outline: none; cursor: pointer; min-width: 0; }
+
+  /* 臨時任務 */
+  .urgent-task-form { background: linear-gradient(135deg, #FFF8E8, #FFEDE8); border-radius: 16px; padding: 16px; border: 2px solid var(--orange-dark); margin: 0 16px 22px; }
+  .urgent-title { font-size: 14px; font-weight: 900; color: var(--orange-deep); margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+  .urgent-sub { font-size: 11px; color: var(--text-light); font-weight: 700; margin-bottom: 12px; }
+  .urgent-form-row { display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+  .urgent-input { flex: 1; background: white; border: 1.5px solid var(--orange-dark); border-radius: 10px; padding: 10px 12px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700; color: var(--text); outline: none; min-width: 0; }
+  .urgent-input-sm { width: 80px; flex: none; }
+  .urgent-target { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+  .target-btn { flex: 1; background: white; border: 2px solid var(--orange-dark); border-radius: 10px; padding: 8px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 900; color: var(--orange-deep); cursor: pointer; transition: all 0.15s; }
+  .target-btn.selected { background: var(--orange-dark); color: white; }
+  .urgent-submit-btn { width: 100%; background: linear-gradient(135deg, var(--orange-dark), #C05020); color: white; border: none; border-radius: 50px; padding: 13px; font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 900; cursor: pointer; transition: all 0.2s; }
+  .urgent-submit-btn:active { transform: scale(0.97); }
+
+  /* 任務類型標籤 */
+  .type-pill { font-size: 10px; font-weight: 900; border-radius: 8px; padding: 2px 8px; margin-left: 4px; }
+  .pill-daily { background: #E0F8E8; color: #2A7A48; }
+  .pill-weekly { background: #E0E8FF; color: #3A62B0; }
+  .pill-urgent { background: #FFE4C0; color: #A04800; }
+  .pill-normal { background: #F0EEF8; color: #6A4A90; }
+
+  /* 推播狀態 */
+  .notif-status { margin: 0 16px 12px; background: white; border-radius: 12px; padding: 12px 14px; border: 1.5px solid var(--blue); font-size: 12px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 8px; }
+  .notif-dot { width: 8px; height: 8px; border-radius: 50%; background: #CCC; flex-shrink: 0; }
+  .notif-dot.granted { background: var(--mint-dark); }
+  .notif-dot.denied { background: var(--red-dark); }
 
   /* HISTORY */
   .hist-list { padding: 0 16px; display: flex; flex-direction: column; gap: 8px; margin-bottom: 22px; }
@@ -226,7 +254,34 @@
 
 <!-- TASKS TAB -->
 <div id="tab-tasks" class="tab-sec">
-  <div class="section-title" style="margin-top:6px">⚔️ 任務管理</div>
+
+  <!-- 臨時任務快速發布 -->
+  <div class="section-title" style="margin-top:6px">🚨 臨時任務（推播通知）</div>
+  <div id="notifStatus" class="notif-status">
+    <div class="notif-dot" id="notifDot"></div>
+    <span id="notifStatusText">正在確認推播權限...</span>
+    <button id="notifRequestBtn" style="display:none;margin-left:auto;background:var(--blue-dark);color:white;border:none;border-radius:8px;padding:5px 12px;font-family:'Nunito',sans-serif;font-size:11px;font-weight:900;cursor:pointer;" onclick="requestNotifPermission()">開啟通知</button>
+  </div>
+  <div class="urgent-task-form">
+    <div class="urgent-title">🚨 發布臨時任務</div>
+    <div class="urgent-sub">發布後立即推送手機通知給指定孩子，同時加入任務列表</div>
+    <div class="urgent-form-row">
+      <input class="urgent-input urgent-input-sm" id="urgentIcon" placeholder="🌟" maxlength="4">
+      <input class="urgent-input" id="urgentName" placeholder="臨時任務名稱">
+      <input class="urgent-input urgent-input-sm" id="urgentPts" type="number" placeholder="點數" min="1">
+    </div>
+    <div class="urgent-form-row">
+      <input class="urgent-input" id="urgentDesc" placeholder="任務說明（孩子通知內會看到）">
+    </div>
+    <div style="font-size:12px;font-weight:700;color:var(--orange-deep);margin-bottom:6px;">📲 推播給誰：</div>
+    <div class="urgent-target" id="urgentTargetBtns">
+      <button class="target-btn selected" data-uid="child1" onclick="toggleTarget(this)">🐵 小惠</button>
+      <button class="target-btn selected" data-uid="child2" onclick="toggleTarget(this)">🐷 小胖</button>
+    </div>
+    <button class="urgent-submit-btn" onclick="publishUrgentTask()">🚨 立即發布並推播！</button>
+  </div>
+
+  <div class="section-title">⚔️ 任務管理</div>
   <div class="task-manage" id="taskManageList"></div>
   <div style="padding:0 16px;margin-bottom:22px">
     <div class="add-task-form">
@@ -236,7 +291,17 @@
         <input class="form-input" id="newTaskName" placeholder="任務名稱">
         <input class="form-input form-input-sm" id="newTaskPts" type="number" placeholder="點數" min="1">
       </div>
-      <button class="form-submit" style="width:100%;padding:12px" onclick="addTask()">新增任務 ✦</button>
+      <div class="form-row">
+        <select class="form-select" id="newTaskType">
+          <option value="normal">⚔️ 一般任務</option>
+          <option value="daily">📅 每日任務</option>
+          <option value="weekly">🗓 每週任務</option>
+        </select>
+        <label style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--text);white-space:nowrap;flex-shrink:0;">
+          <input type="checkbox" id="newTaskExclusive" style="width:16px;height:16px;"> 互斥（只能一人完成）
+        </label>
+      </div>
+      <button class="form-submit" style="width:100%;padding:12px;background:var(--blue-dark)" onclick="addTask()">新增任務 ✦</button>
     </div>
   </div>
 </div>
@@ -300,21 +365,110 @@ const USERS = {
   child2: { name: '小胖', avatar: '🐷' },
 };
 const LEVELS = [
-  {lv:1,name:"青銅",need:0,next:10},
-  {lv:2,name:"白銀",need:10,next:30},
-  {lv:3,name:"黃金",need:30,next:60},
-  {lv:4,name:"鉑金",need:60,next:150},
-  {lv:5,name:"鑽石",need:150,next:350},
-  {lv:6,name:"星耀",need:350,next:600},
-  {lv:7,name:"戰場傳說",need:600,next:1000},
-  {lv:8,name:"璀璨傳說",need:1000,next:1500},
-  {lv:9,name:"絕世傳說",need:1500,next:2300},
-  {lv:10,name:"永恆傳說",need:2300,next:999999},
+  {lv:1,name:"青銅",need:0,next:10},{lv:2,name:"白銀",need:10,next:30},
+  {lv:3,name:"黃金",need:30,next:60},{lv:4,name:"鉑金",need:60,next:150},
+  {lv:5,name:"鑽石",need:150,next:350},{lv:6,name:"星耀",need:350,next:600},
+  {lv:7,name:"戰場傳說",need:600,next:1000},{lv:8,name:"璀璨傳說",need:1000,next:1500},
+  {lv:9,name:"絕世傳說",need:1500,next:2300},{lv:10,name:"永恆傳說",need:2300,next:999999},
 ];
+const TASK_TYPE_LABELS = {
+  normal: { label: '一般', cls: 'pill-normal' },
+  daily:  { label: '每日', cls: 'pill-daily' },
+  weekly: { label: '每週', cls: 'pill-weekly' },
+  urgent: { label: '臨時', cls: 'pill-urgent' },
+};
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 let allData = {};
+
+// ── 推播通知 ──
+let notifPermission = Notification?.permission || 'default';
+
+function updateNotifUI() {
+  const dot = document.getElementById('notifDot');
+  const txt = document.getElementById('notifStatusText');
+  const btn = document.getElementById('notifRequestBtn');
+  if (notifPermission === 'granted') {
+    dot.className = 'notif-dot granted';
+    txt.textContent = '✅ 推播通知已開啟，可以發送臨時任務通知';
+    btn.style.display = 'none';
+  } else if (notifPermission === 'denied') {
+    dot.className = 'notif-dot denied';
+    txt.textContent = '❌ 推播通知已被封鎖，請在瀏覽器設定中手動開啟';
+    btn.style.display = 'none';
+  } else {
+    dot.className = 'notif-dot';
+    txt.textContent = '⚠️ 尚未開啟推播通知，點右側按鈕開啟';
+    btn.style.display = 'block';
+  }
+}
+
+window.requestNotifPermission = async function() {
+  if (!('Notification' in window)) { toast('此裝置不支援推播通知'); return; }
+  const result = await Notification.requestPermission();
+  notifPermission = result;
+  updateNotifUI();
+  if (result === 'granted') toast('✅ 推播通知已開啟！');
+  else toast('未開啟通知，臨時任務將不會推播');
+};
+
+function sendLocalNotif(title, body, icon = '🚨') {
+  if (notifPermission !== 'granted') return;
+  try {
+    new Notification(title, { body, icon: 'icon.png', badge: 'icon.png', tag: 'urgent-task-' + Date.now() });
+  } catch(e) { console.warn('Notification failed:', e); }
+}
+
+// ── 臨時任務目標切換 ──
+window.toggleTarget = function(btn) {
+  btn.classList.toggle('selected');
+};
+
+// ── 發布臨時任務 ──
+window.publishUrgentTask = async function() {
+  const icon = document.getElementById('urgentIcon').value.trim() || '🚨';
+  const name = document.getElementById('urgentName').value.trim();
+  const pts  = parseInt(document.getElementById('urgentPts').value);
+  const desc = document.getElementById('urgentDesc').value.trim();
+  if (!name) { toast('請填寫任務名稱！'); return; }
+  if (!pts || pts <= 0) { toast('請填寫點數！'); return; }
+  const selectedBtns = document.querySelectorAll('#urgentTargetBtns .target-btn.selected');
+  if (selectedBtns.length === 0) { toast('請至少選擇一位孩子！'); return; }
+
+  // 加入 Firebase 任務
+  const taskRef = await push(ref(db, 'tasks'), {
+    icon, name, pts, taskType: 'urgent', exclusive: false,
+    urgentFor: Array.from(selectedBtns).map(b => b.dataset.uid),
+    createdAt: now().time,
+  });
+
+  // 寫通知紀錄
+  const t = now();
+  for (const btn of selectedBtns) {
+    const uid = btn.dataset.uid;
+    const uname = USERS[uid]?.name || uid;
+    await push(ref(db, 'history'), {
+      user: uid,
+      desc: `🚨 新臨時任務「${name}」已發布！`,
+      icon: '🚨', pts: 0, time: t.time, date: t.date
+    });
+    // 寫通知佇列（孩子端可輪詢或用 onValue 觸發）
+    await push(ref(db, `notifications/${uid}`), {
+      title: `🚨 新任務：${name}`,
+      body: desc || `完成「${name}」可獲得 ${pts} 顆星星！`,
+      icon, pts, time: t.time, read: false,
+    });
+    // 本機通知（如果是同一裝置）
+    sendLocalNotif(`🚨 新任務給 ${uname}！`, `${name}${desc ? ' — ' + desc : ''}｜+${pts} ⭐`);
+  }
+
+  document.getElementById('urgentIcon').value = '';
+  document.getElementById('urgentName').value = '';
+  document.getElementById('urgentPts').value = '';
+  document.getElementById('urgentDesc').value = '';
+  toast(`🚨 臨時任務「${name}」已發布並推播！`);
+};
 
 function startListen() {
   onValue(ref(db, '/'), snap => {
@@ -322,6 +476,12 @@ function startListen() {
     render();
   });
 }
+
+// ── 修改任務類型 ──
+window.updateTaskType = async function(tid, newType) {
+  await update(ref(db, `tasks/${tid}`), { taskType: newType });
+  toast(`任務類型已更新為「${TASK_TYPE_LABELS[newType]?.label || newType}」`);
+};
 
 function render() {
   const players = allData.players || {};
@@ -403,7 +563,7 @@ function render() {
         </div>`;
       }).join('');
 
-  // Players + Gacha + Game Credits management
+  // Players + Gacha + Game Credits
   document.getElementById('playerList').innerHTML = Object.entries(USERS).map(([uid, u]) => {
     const p = players[uid] || { points: 0, totalEarned: 0 };
     const pts = p.points || 0;
@@ -412,7 +572,6 @@ function render() {
     for (const l of LEVELS) { if (total >= l.need) lv = l; }
     const gachaCount = gacha[uid]?.count || 0;
     const gameCreditsCount = gameCredits[uid]?.count || 0;
-
     return `<div class="player-card">
       <div class="player-header">
         <div class="player-avatar">${u.avatar}</div>
@@ -428,8 +587,6 @@ function render() {
         <button class="pts-btn btn-add" onclick="adjustPts('${uid}',1)">➕ 給點數</button>
         <button class="pts-btn btn-sub" onclick="adjustPts('${uid}',-1)">➖ 扣點數</button>
       </div>
-
-      <!-- 扭蛋管理 -->
       <div class="gacha-section">
         <div class="gacha-section-title">🎰 扭蛋管理</div>
         <div class="gacha-send-row">
@@ -438,8 +595,6 @@ function render() {
           <button class="pts-btn btn-gacha" onclick="sendGacha('${uid}')">🎰 發放</button>
         </div>
       </div>
-
-      <!-- 遊戲次數管理 -->
       <div class="game-section">
         <div class="game-section-title">🎮 遊戲次數管理</div>
         <div class="game-send-row">
@@ -452,16 +607,33 @@ function render() {
     </div>`;
   }).join('');
 
-  // Tasks
+  // Tasks — 顯示類型 + 修改下拉
   const taskEntries = Object.entries(tasks);
   document.getElementById('taskManageList').innerHTML = taskEntries.length === 0
     ? `<div class="empty"><div class="empty-icon">📋</div>還沒有任務</div>`
-    : taskEntries.map(([tid, t]) =>
-        `<div class="task-manage-item">
+    : taskEntries.map(([tid, t]) => {
+        const typeInfo = TASK_TYPE_LABELS[t.taskType || 'normal'] || TASK_TYPE_LABELS.normal;
+        const exclusiveTxt = t.exclusive ? ' 🔒互斥' : '';
+        return `<div class="task-manage-item">
           <div class="task-manage-icon">${t.icon}</div>
-          <div class="task-manage-info"><div class="task-manage-name">${t.name}</div><div class="task-manage-pts">+${t.pts} 顆星星</div></div>
-          <button class="task-del-btn" onclick="deleteTask('${tid}')">刪除</button>
-        </div>`).join('');
+          <div class="task-manage-info">
+            <div class="task-manage-name">${t.name} <span class="type-pill ${typeInfo.cls}">${typeInfo.label}</span>${exclusiveTxt ? `<span class="type-pill pill-normal">${exclusiveTxt}</span>` : ''}</div>
+            <div class="task-manage-pts">+${t.pts} 顆星星</div>
+          </div>
+          <div class="task-manage-actions">
+            <select class="task-type-select" onchange="updateTaskType('${tid}', this.value)">
+              <option value="normal"  ${(t.taskType||'normal')==='normal'  ?'selected':''}>⚔️ 一般</option>
+              <option value="daily"   ${t.taskType==='daily'  ?'selected':''}>📅 每日</option>
+              <option value="weekly"  ${t.taskType==='weekly' ?'selected':''}>🗓 每週</option>
+              <option value="urgent"  ${t.taskType==='urgent' ?'selected':''}>🚨 臨時</option>
+            </select>
+            <label style="display:flex;align-items:center;gap:4px;font-size:11px;font-weight:700;color:var(--text);cursor:pointer;">
+              <input type="checkbox" ${t.exclusive?'checked':''} onchange="updateTaskExclusive('${tid}', this.checked)" style="width:14px;height:14px;"> 互斥
+            </label>
+            <button class="task-del-btn" onclick="deleteTask('${tid}')">刪除</button>
+          </div>
+        </div>`;
+      }).join('');
 
   // Shop
   const shopEntries = Object.entries(shop);
@@ -537,7 +709,13 @@ function render() {
   }).join('') || `<div class="empty"><div class="empty-icon">📜</div>還沒有紀錄</div>`;
 }
 
-// === GACHA SEND ===
+// ── 更新任務互斥 ──
+window.updateTaskExclusive = async function(tid, val) {
+  await update(ref(db, `tasks/${tid}`), { exclusive: val });
+  toast(`互斥設定已${val ? '開啟' : '關閉'}`);
+};
+
+// ── GACHA SEND ──
 window.sendGacha = async function(uid) {
   const amt = parseInt(document.getElementById(`gacha-amt-${uid}`).value);
   if (!amt || amt <= 0) { toast('請輸入有效的扭蛋數量！'); return; }
@@ -551,7 +729,7 @@ window.sendGacha = async function(uid) {
   toast(`🎰 已給 ${USERS[uid]?.name} ${amt} 顆扭蛋！`);
 };
 
-// === GAME CREDITS SEND / DEDUCT ===
+// ── GAME CREDITS ──
 window.sendGameCredits = async function(uid, sign) {
   const amt = parseInt(document.getElementById(`game-amt-${uid}`).value);
   if (!amt || amt <= 0) { toast('請輸入有效的次數！'); return; }
@@ -568,8 +746,7 @@ window.sendGameCredits = async function(uid, sign) {
 };
 
 window.approvePending = async function(pid) {
-  const p = (allData.pending || {})[pid];
-  if (!p) return;
+  const p = (allData.pending || {})[pid]; if (!p) return;
   const playerRef = ref(db, `players/${p.user}`);
   const playerSnap = await get(playerRef);
   const player = playerSnap.val() || { points: 0, totalEarned: 0 };
@@ -582,8 +759,7 @@ window.approvePending = async function(pid) {
 };
 
 window.rejectPending = async function(pid) {
-  const p = (allData.pending||{})[pid];
-  if (!p) return;
+  const p = (allData.pending||{})[pid]; if (!p) return;
   const t = now();
   await push(ref(db,'history'), { user:p.user, desc:`「${p.taskName}」申報被退回`, icon:'❌', pts:0, time:t.time, date:t.date });
   await remove(ref(db, `pending/${pid}`));
@@ -591,10 +767,9 @@ window.rejectPending = async function(pid) {
 };
 
 window.approveProposalAddTask = async function(pid) {
-  const p = (allData.proposals||{})[pid];
-  if (!p) return;
+  const p = (allData.proposals||{})[pid]; if (!p) return;
   const pts = parseInt(document.getElementById(`pptsInput-${pid}`)?.value) || p.suggestPts;
-  await push(ref(db,'tasks'), { icon:p.icon||'💡', name:p.name, pts });
+  await push(ref(db,'tasks'), { icon:p.icon||'💡', name:p.name, pts, taskType:'normal' });
   const t = now();
   await push(ref(db,'history'), { user:p.user, desc:`自訂任務「${p.name}」已加入任務列表`, icon:p.icon||'💡', pts:0, time:t.time, date:t.date });
   await remove(ref(db, `proposals/${pid}`));
@@ -602,8 +777,7 @@ window.approveProposalAddTask = async function(pid) {
 };
 
 window.approveProposalOneTime = async function(pid) {
-  const p = (allData.proposals||{})[pid];
-  if (!p) return;
+  const p = (allData.proposals||{})[pid]; if (!p) return;
   const pts = parseInt(document.getElementById(`pptsInput-${pid}`)?.value) || p.suggestPts;
   const playerRef = ref(db, `players/${p.user}`);
   const snap = await get(playerRef);
@@ -616,8 +790,7 @@ window.approveProposalOneTime = async function(pid) {
 };
 
 window.rejectProposal = async function(pid) {
-  const p = (allData.proposals||{})[pid];
-  if (!p) return;
+  const p = (allData.proposals||{})[pid]; if (!p) return;
   const t = now();
   await push(ref(db,'history'), { user:p.user, desc:`自訂任務「${p.name}」申請被拒絕`, icon:'❌', pts:0, time:t.time, date:t.date });
   await remove(ref(db, `proposals/${pid}`));
@@ -625,14 +798,11 @@ window.rejectProposal = async function(pid) {
 };
 
 window.approveShop = async function(spid) {
-  const sp = (allData.shopPending || {})[spid];
-  if (!sp) return;
+  const sp = (allData.shopPending || {})[spid]; if (!sp) return;
   const playerRef = ref(db, `players/${sp.user}`);
   const playerSnap = await get(playerRef);
   const player = playerSnap.val() || { points:0, totalEarned:0 };
-  if ((player.points || 0) < sp.cost) {
-    toast(`❌ ${USERS[sp.user]?.name} 星星不足，無法兌換！`); return;
-  }
+  if ((player.points || 0) < sp.cost) { toast(`❌ ${USERS[sp.user]?.name} 星星不足！`); return; }
   const newPts = Math.max(0, (player.points||0) - sp.cost);
   await update(playerRef, { points: newPts });
   const t = now();
@@ -642,8 +812,7 @@ window.approveShop = async function(spid) {
 };
 
 window.rejectShop = async function(spid) {
-  const sp = (allData.shopPending || {})[spid];
-  if (!sp) return;
+  const sp = (allData.shopPending || {})[spid]; if (!sp) return;
   const t = now();
   await push(ref(db,'history'), { user:sp.user, desc:`「${sp.shopName}」兌換申請被取消`, icon:'❌', pts:0, time:t.time, date:t.date });
   await remove(ref(db, `shopPending/${spid}`));
@@ -651,8 +820,7 @@ window.rejectShop = async function(spid) {
 };
 
 window.approveShopProposal = async function(pid) {
-  const p = (allData.shopProposals || {})[pid];
-  if (!p) return;
+  const p = (allData.shopProposals || {})[pid]; if (!p) return;
   const cost = parseInt(document.getElementById(`spptsInput-${pid}`)?.value) || p.suggestPts;
   await push(ref(db, 'shop'), { icon: p.icon || '🎁', name: p.name, cost });
   const t = now();
@@ -662,8 +830,7 @@ window.approveShopProposal = async function(pid) {
 };
 
 window.rejectShopProposal = async function(pid) {
-  const p = (allData.shopProposals || {})[pid];
-  if (!p) return;
+  const p = (allData.shopProposals || {})[pid]; if (!p) return;
   const t = now();
   await push(ref(db, 'history'), { user: p.user, desc: `自訂獎勵「${p.name}」申請被拒絕`, icon: '❌', pts: 0, time: t.time, date: t.date });
   await remove(ref(db, `shopProposals/${pid}`));
@@ -692,13 +859,17 @@ window.adjustPts = async function(uid, sign) {
 window.addTask = async function() {
   const icon = document.getElementById('newTaskIcon').value.trim() || '⭐';
   const name = document.getElementById('newTaskName').value.trim();
-  const pts = parseInt(document.getElementById('newTaskPts').value);
+  const pts  = parseInt(document.getElementById('newTaskPts').value);
+  const taskType = document.getElementById('newTaskType').value;
+  const exclusive = document.getElementById('newTaskExclusive').checked;
   if (!name || !pts || pts <= 0) { toast('請填寫任務名稱和點數！'); return; }
-  await push(ref(db,'tasks'), { icon, name, pts });
+  await push(ref(db,'tasks'), { icon, name, pts, taskType, exclusive });
   document.getElementById('newTaskIcon').value='';
   document.getElementById('newTaskName').value='';
   document.getElementById('newTaskPts').value='';
-  toast(`任務「${name}」已新增 ✦`);
+  document.getElementById('newTaskType').value='normal';
+  document.getElementById('newTaskExclusive').checked=false;
+  toast(`任務「${name}」已新增（${TASK_TYPE_LABELS[taskType]?.label}）✦`);
 };
 
 window.deleteTask = async function(tid) {
@@ -737,7 +908,6 @@ function now() {
     date: `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`
   };
 }
-
 function toast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
@@ -745,6 +915,11 @@ function toast(msg) {
   setTimeout(() => t.classList.remove('show'), 2800);
 }
 
+// 孩子端通知監聽（如果管理者和孩子在同一裝置可直接觸發）
+// 孩子端需在自己的頁面監聽 notifications/{uid} 節點
+// 這裡只負責寫入通知佇列，孩子端讀取並顯示
+
+updateNotifUI();
 startListen();
 </script>
 </body>
