@@ -632,9 +632,8 @@ window.setMode=function(mode){
   document.getElementById('navTabsStar').style.display=mode==='star'?'flex':'none';
   document.getElementById('navTabsLove').style.display=mode==='love'?'flex':'none';
   localStorage.setItem('child2_mode',mode);
-
-  // ✅ 新增：切換到 love 時重置 tab 到主頁
   if(mode==='love'){
+    // ✅ 重置 love tab 到主頁
     document.querySelectorAll('#modeLove .tab-sec').forEach(s=>s.classList.remove('active'));
     document.getElementById('love-home').classList.add('active');
     document.querySelectorAll('#navTabsLove .nav-tab').forEach(t=>t.classList.remove('active'));
@@ -643,7 +642,7 @@ window.setMode=function(mode){
     document.getElementById('headerUname').className='uname love-mode';
     renderLove();
   } else {
-    // ✅ 新增：切換回 star 時也重置 tab 到主頁
+    // ✅ 重置 star tab 到主頁
     document.querySelectorAll('#modeStar .tab-sec').forEach(s=>s.classList.remove('active'));
     document.getElementById('tab-home').classList.add('active');
     document.querySelectorAll('#navTabsStar .nav-tab').forEach(t=>t.classList.remove('active'));
