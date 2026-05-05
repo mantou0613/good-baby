@@ -748,7 +748,167 @@ function render() {
           </div>
         </div>`;
       }).join('');
+// ── Love Shop 管理 ──
+  const allowanceShop = allData.allowanceShop || {};
+  document.getElementById('loveShopManageList').innerHTML = Object.entries(allowanceShop).length === 0
+    ? `<div class="empty"><div class="empty-icon">💰</div>還沒有商品</div>`
+    : Object.entries(allowanceShop).map(([sid,s]) =>
+        `<div class="shop-item">
+          <div class="shop-item-icon">${s.icon}</div>
+          <div class="shop-item-info"><div class="shop-item-name">${s.name}</div><div class="shop-item-cost" style="color:var(--gold-deep)">NT$${s.cost}</div></div>
+          <button class="shop-del-btn" onclick="deleteLoveShopItem('${sid}')">刪除</button>
+        </div>`).join('');
 
+  // ── Hot Shop 管理 ──
+  const hotShop = allData.hotShop || {};
+  document.getElementById('hotShopManageList').innerHTML = Object.entries(hotShop).length === 0
+    ? `<div class="empty"><div class="empty-icon">🔥</div>還沒有項目</div>`
+    : Object.entries(hotShop).map(([sid,s]) =>
+        `<div class="shop-item" style="border-color:#FFE0EA">
+          <div class="shop-item-icon">${s.icon}</div>
+          <div class="shop-item-info"><div class="shop-item-name">${s.name}</div><div class="shop-item-cost" style="color:#8A2040">♡ ${s.cost} 愛心</div></div>
+          <button class="shop-del-btn" onclick="deleteHotShopItem('${sid}')">刪除</button>
+        </div>`).join('');
+
+  // ── 零用錢餘額管理 ──
+  document.getElementById('allowancePlayerList').innerHTML = Object.entries(USERS).map(([uid,u]) => {
+    const allowance = allData.love?.[uid]?.allowance || 0;
+    return `<div class="player-card" style="border-color:var(--gold)">
+      <div class="player-header">
+        <div class="player-avatar">${u.avatar}</div>
+        <div><div class="player-name">${u.name}</div><div class="player-level">零用錢餘額</div></div>
+        <div class="player-pts-badge" style="background:var(--gold);color:var(--gold-deep)">NT$${allowance}</div>
+      </div>
+      <input class="pts-input" type="number" id="allowance-amt-${uid}" placeholder="輸入金額" min="1">
+      <input class="pts-reason" id="allowance-reason-${uid}" placeholder="原因（選填）">
+      <div class="pts-adjust">
+        <button class="pts-btn btn-add" onclick="adjustAllowance('${uid}',1)">➕ 給零用錢</button>
+        <button class="pts-btn btn-sub" onclick="adjustAllowance('${uid}',-1)">➖ 扣零用錢</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  // ── 愛心積分管理 ──
+  document.getElementById('lovePtsPlayerList').innerHTML = Object.entries(USERS).map(([uid,u]) => {
+    const lovePts = allData.love?.[uid]?.lovePts || 0;
+    return `<div class="player-card" style="border-color:#FFE0EA">
+      <div class="player-header">
+        <div class="player-avatar">${u.avatar}</div>
+        <div><div class="player-name">${u.name}</div><div class="player-level">愛心積分</div></div>
+        <div class="player-pts-badge" style="background:#FFE0EA;color:#8A2040">♡ ${lovePts}</div>
+      </div>
+      <input class="pts-input" type="number" id="lovepts-amt-${uid}" placeholder="輸入愛心數" min="1">
+      <div class="pts-adjust">
+        <button class="pts-btn btn-add" onclick="adjustLovePts('${uid}',1)">➕ 給愛心</button>
+        <button class="pts-btn btn-sub" onclick="adjustLovePts('${uid}',-1)">➖ 扣愛心</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  // ── 零用錢兌換審核 ──
+  const allowancePendingArr = Object.entries(allData.allowancePending || {});
+  document.getElementById('allowancePendingList').innerHTML = allowancePendingArr.length === 0
+    ? `<div class="empty"><div class="empty-icon">💰</div>沒有待審核的零用錢兌換</div>`
+    : allowancePendingArr.map(([pid,p]) => {
+        const u = USERS[p.user] || {name:p.user,avatar:'👤'};
+        return `<div class="pending-card" style="border-color:var(--gold)">
+          <div class="pending-top">
+            <div class="pending-avatar">${u.avatar}</div>
+            <div class="pending-info">
+              <div class="pending-who">${u.name}</div>
+              <div class="pending-task">${p.icon||'🛍'} ${p.shopName}</div>
+              <div class="pending-pts" style="color:var(--gold-deep)">NT$${p.cost}</div>
+            </div>
+            <div class="pending-time">${p.time||''}</div>
+          </div>
+          <div class="pending-actions">
+            <button class="action-btn btn-approve" onclick="approveAllowancePending('${pid}')">確認 ✓</button>
+            <button class="action-btn btn-reject" onclick="rejectAllowancePending('${pid}')">取消 ✗</button>
+          </div>
+        </div>`;
+      }).join('');
+
+  // ── 18+ 兌換審核 ──
+  const hotShopPendingArr = Object.entries(allData.hotShopPending || {});
+  document.getElementById('hotShopPendingList').innerHTML = hotShopPendingArr.length === 0
+    ? `<div class="empty"><div class="empty-icon">🔥</div>沒有待審核的 18+ 兌換</div>`
+    : hotShopPendingArr.map(([pid,p]) => {
+        const u = USERS[p.user] || {name:p.user,avatar:'👤'};
+        return `<div class="pending-card" style="border-color:#FFE0EA">
+          <div class="pending-top">
+            <div class="pending-avatar">${u.avatar}</div>
+            <div class="pending-info">
+              <div class="pending-who">${u.name}</div>
+              <div class="pending-task">${p.icon||'🔥'} ${p.shopName}</div>
+              <div class="pending-pts" style="color:#8A2040">♡ ${p.cost} 愛心</div>
+            </div>
+            <div class="pending-time">${p.time||''}</div>
+          </div>
+          <div class="pending-actions">
+            <button class="action-btn btn-approve" onclick="approveHotShopPending('${pid}')">確認 ✓</button>
+            <button class="action-btn btn-reject" onclick="rejectHotShopPending('${pid}')">取消 ✗</button>
+          </div>
+        </div>`;
+      }).join('');
+
+  // ── 零用錢商店申請 ──
+  const aShopProposalArr = Object.entries(allData.allowanceShopProposals || {});
+  document.getElementById('allowanceShopProposalList').innerHTML = aShopProposalArr.length === 0
+    ? `<div class="empty"><div class="empty-icon">💌</div>沒有零用錢商店申請</div>`
+    : aShopProposalArr.map(([pid,p]) => {
+        const u = USERS[p.user] || {name:p.user,avatar:'👤'};
+        return `<div class="proposal-card" style="border-color:var(--gold-dark)">
+          <div class="proposal-top">
+            <div class="proposal-avatar">${u.avatar}</div>
+            <div class="proposal-info">
+              <div class="proposal-who">${u.name} <span class="custom-badge">💰 零用錢申請</span></div>
+              <div class="proposal-name">${p.icon||'🎁'} ${p.name}</div>
+              ${p.reason?`<div class="proposal-reason">「${p.reason}」</div>`:''}
+              <div class="proposal-suggest">建議：NT$${p.suggestCost}</div>
+            </div>
+            <div class="proposal-time">${p.time||''}</div>
+          </div>
+          <div class="proposal-pts-row">
+            <div class="proposal-pts-label">決定金額：NT$</div>
+            <input class="proposal-pts-input" type="number" id="aShopPropInput-${pid}" value="${p.suggestCost}" min="1">
+          </div>
+          <div class="proposal-actions">
+            <button class="action-btn btn-add-task" onclick="approveAllowanceShopProposal('${pid}')">➕ 加入商店</button>
+            <button class="action-btn btn-reject" onclick="rejectAllowanceShopProposal('${pid}')">✗ 拒絕</button>
+          </div>
+        </div>`;
+      }).join('');
+
+  // ── 18+ 願望申請 ──
+  const hotProposalArr = Object.entries(allData.hotProposals || {});
+  document.getElementById('hotProposalList').innerHTML = hotProposalArr.length === 0
+    ? `<div class="empty"><div class="empty-icon">💌</div>沒有 18+ 願望申請</div>`
+    : hotProposalArr.map(([pid,p]) => {
+        const u = USERS[p.user] || {name:p.user,avatar:'👤'};
+        return `<div class="proposal-card" style="border-color:#E0607A">
+          <div class="proposal-top">
+            <div class="proposal-avatar">${u.avatar}</div>
+            <div class="proposal-info">
+              <div class="proposal-who">${u.name} <span class="custom-badge" style="background:#FFE0EA;color:#8A2040">🔥 18+ 申請</span></div>
+              <div class="proposal-name">${p.icon||'🔥'} ${p.name}</div>
+              ${p.reason?`<div class="proposal-reason">「${p.reason}」</div>`:''}
+              <div class="proposal-suggest">建議：♡ ${p.suggestPts} 愛心</div>
+            </div>
+            <div class="proposal-time">${p.time||''}</div>
+          </div>
+          <div class="proposal-pts-row">
+            <div class="proposal-pts-label">決定愛心：</div>
+            <input class="proposal-pts-input" type="number" id="hotPropInput-${pid}" value="${p.suggestPts}" min="1" style="border-color:#E0607A;color:#8A2040">
+            <div class="proposal-pts-label" style="color:#E0607A">♡</div>
+          </div>
+          <div class="proposal-actions">
+            <button class="action-btn btn-approve" onclick="approveHotProposal('${pid}')">➕ 加入商店</button>
+            <button class="action-btn btn-reject" onclick="rejectHotProposal('${pid}')">✗ 拒絕</button>
+          </div>
+        </div>`;
+      }).join('');
+
+  // History  ← 原本的 History 從這裡繼續
   // History
   const histArr = allData.history ? Object.values(allData.history).reverse() : [];
   document.getElementById('allHistoryList').innerHTML = histArr.slice(0,50).map(h => {
