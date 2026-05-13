@@ -794,7 +794,7 @@ onValue(ref(db, `notifications/${ME}`), snap => {
       try { new Notification(n.title, { body: n.body, icon: 'icon.png' }); } catch(e) {}
     }
   }
-});;
+});
 }
 
 async function handleLevelUp(newLv){
