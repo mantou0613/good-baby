@@ -855,7 +855,9 @@ function renderTasks(allData){
     if(t.type==='weekly'&&doneWeekIds.has(id))return false;
     return true;
   });
-  document.getElementById('homeTaskList').innerHTML=available.length?available.slice(0,3).map(([id,t])=>taskCard(id,t)).join(''):empty('⚔️','目前沒有可申報任務');
+  const typeOrder={'daily':0,'weekly':1,'normal':2};
+const sortedAvail=available.sort(([,a],[,b])=>(typeOrder[a.type||'normal']||2)-(typeOrder[b.type||'normal']||2));
+document.getElementById('homeTaskList').innerHTML=sortedAvail.length?sortedAvail.map(([id,t])=>taskCard(id,t)).join(''):empty('⚔️','目前沒有可申報任務');
 
   // 我提出的申請
   const myProposals=Object.entries(allData.proposals||{}).filter(([,p])=>p.user===ME);
