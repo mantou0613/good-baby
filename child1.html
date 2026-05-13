@@ -724,8 +724,8 @@ window.doCheckin=async function(){
 };
 
 // ── GACHA ──
-function renderGachaCount(gachaData){
-  const count=(gachaData&&gachaData[ME])?(gachaData[ME].count||0):0;
+function renderGachaCount(){
+  const count=(window._allData?.gachaCredits?.[ME]?.count)||0;
   document.getElementById('gachaCountDisplay').textContent=count;
   document.getElementById('gachaHomeAvail').textContent=count>0?`${count} 顆 🎰`:'還沒有';
   const btn=document.getElementById('gachaPlayBtn'); if(btn){btn.disabled=count<=0;btn.style.opacity=count>0?'1':'0.5';btn.textContent=count>0?'🎰 開始扭蛋！':'目前沒有扭蛋';}
@@ -760,7 +760,7 @@ window.spinGacha=async function(){
     if(result.pts>=10)rainStars();
   } else if(result.type==='prize'){
     const t3=now();
-    await push(ref(db,'prizePending'),{user:ME,icon:result.icon,title:result.title,desc:result.desc,time:t3.time,date:t3.date});
+    await push(ref(db,`prizePending/${ME}`),{icon:result.icon,title:result.title,desc:result.desc,time:t3.time,date:t3.date});
     await push(ref(db,'history'),{user:ME,desc:`扭蛋抽到「${result.title}」！等待兌換`,icon:'🎰',pts:0,time:t3.time,date:t3.date});
     rainStars();
   }
@@ -789,7 +789,7 @@ function startListen(){
     tasks=d.tasks||{}; shop=d.shop||{}; pending=d.pending||{}; proposals=d.proposals||{};
     history=d.history?Object.values(d.history).reverse():[];
     renderCheckin(d.checkin?.[ME]);
-    renderGachaCount(d.gacha);
+    renderGachaCount();
     updateGameCreditsUI(getGameCredits());
     render();
   })
@@ -894,7 +894,7 @@ document.getElementById('homeTaskList').innerHTML=sortedTasks.length?sortedTasks
   document.getElementById('historyList').innerHTML=history.filter(h=>h.user===ME).slice(0,30).map(h=>histItem(h)).join('')||empty('📜','還沒有紀錄');
 
   // Prize pending
-  const prizePendingArr = Object.entries(window._allData?.prizePending||{}).filter(([,p])=>p.user===ME);
+  const prizePendingArr = Object.entries(window._allData?.prizePending?.[ME]||{});
   document.getElementById('prizePendingList').innerHTML = prizePendingArr.length===0
     ? empty('🎁','暫時沒有待兌換的獎品')
     : prizePendingArr.map(([pid,p])=>`<div class="prize-pending-card">
