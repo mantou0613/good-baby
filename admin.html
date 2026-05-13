@@ -623,7 +623,7 @@ function render() {
     const total = p.totalEarned || 0;
     let lv = LEVELS[0];
     for (const l of LEVELS) { if (total >= l.need) lv = l; }
-    const gachaCount = gacha[uid]?.count || 0;
+    const gachaCount = (allData.gachaCredits?.[uid]?.count) || 0;
     const gameCreditsCount = gameCredits[uid]?.count || 0;
     return `<div class="player-card">
       <div class="player-header">
@@ -932,7 +932,7 @@ window.updateTaskExclusive = async function(tid, val) {
 window.sendGacha = async function(uid) {
   const amt = parseInt(document.getElementById(`gacha-amt-${uid}`).value);
   if (!amt || amt <= 0) { toast('請輸入有效的扭蛋數量！'); return; }
-  const gachaRef = ref(db, `gacha/${uid}`);
+  const gachaRef = ref(db, `gachaCredits/${uid}`);
   const snap = await get(gachaRef);
   const current = snap.val()?.count || 0;
   await set(gachaRef, { count: current + amt });
