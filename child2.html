@@ -831,9 +831,11 @@ function renderTasks(allData){
 
   function taskCard(id,t,extraClass=''){
     const isPending=pendingTaskIds.has(id);
-    const isDaily=t.type==='daily', isWeekly=t.type==='weekly';
-    const isUrgent=t.type==='urgent';
-    const isDoneToday=isDaily&&doneTodayIds.has(id);
+    const isDaily=(t.type||t.taskType)==='daily';
+    const isWeekly=(t.type||t.taskType)==='weekly';
+    const isUrgent=(t.type||t.taskType)==='urgent';
+    // isDoneToday 加入 urgent 也用 date 判斷（urgent 不重複申報當天）
+    const isDoneToday=(isDaily||isUrgent)&&doneTodayIds.has(id);
     const isDoneWeek=isWeekly&&doneWeekIds.has(id);
     const isDone=isDoneToday||isDoneWeek;
     const cls=isPending?'pending':isDone?'':isUrgent?'urgent':extraClass;
@@ -1473,29 +1475,42 @@ onValue(ref(db, `notifications/${ME}`), snap => {
     // 標記已讀
     update(ref(db, `notifications/${ME}/${nid}`), { read: true });
     // 如果瀏覽器有通知權限也發本機通知
-    if (Notification?.permission === 'granted') {
-      new Notification(n.title, { body: n.body, icon: 'icon.png' });
-    }
+if (window._swReg && Notification?.permission === 'granted') {
+  try {
+    window._swReg.showNotification(n.title, { body: n.body, icon: 'icon.png', tag: nid });
+  } catch(e) {}
+}
   }
 });
 
 // ── 初始化 ──
 const savedMode=localStorage.getItem('child2_mode')||'star';
 if(savedMode==='love'){window.setMode('love');}
+  // 自動註冊 Service Worker
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js').then(reg => {
+    window._swReg = reg;
+  }).catch(() => {});
+}
 loadAIHoroscope();
   onValue(ref(db, '/'), snap => { onDataUpdate(snap.val() || {}); });
   window.requestChildNotif = async function() {
-  if (!('Notification' in window)) { toast('此裝置不支援通知'); return; }
-  const result = await Notification.requestPermission();
-  if (result === 'granted') {
-    document.getElementById('notifBanner').style.display = 'none';
-    localStorage.setItem('child2_notif', 'granted');
-    toast('✅ 通知已開啟！小波發任務時你會收到通知 ✦');
-  } else {
-    toast('未開啟通知');
+  if (!('serviceWorker' in navigator)) { toast('此裝置不支援通知'); return; }
+  try {
+    const reg = await navigator.serviceWorker.register('./sw.js');
+    const permission = await Notification.requestPermission();
+    if (permission === 'granted') {
+      window._swReg = reg;
+      document.getElementById('notifBanner').style.display = 'none';
+      localStorage.setItem('child1_notif', 'granted');
+      toast('✅ 通知已開啟！小波發任務時你會收到通知 ✦');
+    } else {
+      toast('未開啟通知');
+    }
+  } catch(e) {
+    toast('通知設定失敗，請確認已加入主畫面');
   }
 };
-
 // 初始化時檢查是否已開啟
 if (Notification?.permission === 'granted') {
   document.getElementById('notifBanner').style.display = 'none';
