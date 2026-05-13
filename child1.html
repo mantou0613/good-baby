@@ -864,6 +864,10 @@ function weekOfDate(dateStr){
 }
 
 function render(){
+  const te = Object.entries(tasks).filter(([,t]) => {
+  if (t.urgentFor && !t.urgentFor.includes(ME)) return false;
+  return true;
+});
   const pts=data.points||0, total=data.totalEarned||0;
   document.getElementById('ptsDisplay').textContent=pts;
   document.getElementById('shopPtsShow').textContent=pts;
