@@ -29,7 +29,10 @@
   .nav-tabs { display: flex; gap: 2px; overflow-x: auto; }
   .nav-tab { flex-shrink: 0; text-align: center; padding: 10px 8px; font-size: 11px; font-weight: 700; color: var(--text-light); border-bottom: 3px solid transparent; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
   .nav-tab.active { color: var(--blue-dark); border-bottom-color: var(--blue-dark); }
-
+  .propose-input[type="number"],
+select.propose-input {
+  text-align: center;
+}
   .horoscope-banner { margin: 0 16px 12px; background: linear-gradient(135deg, #E8F0FF, #F0E8FF); border-radius: 18px; padding: 12px 14px; border: 1.5px solid var(--blue); display: flex; align-items: flex-start; gap: 10px; }
   .horo-icon { font-size: 24px; flex-shrink: 0; margin-top: 2px; }
   .horo-info { flex: 1; }
@@ -351,10 +354,15 @@
         <input class="propose-input propose-input-sm" id="proposeIcon" placeholder="🌟" maxlength="4">
         <input class="propose-input" id="proposeName" placeholder="任務名稱">
       </div>
-      <div class="propose-row">
-        <input class="propose-input propose-input-sm" id="proposePts" type="number" placeholder="建議星星" min="1" max="100">
-        <input class="propose-input" id="proposeReason" placeholder="為什麼值這些星星？">
-      </div>
+<div class="propose-row">
+  <select class="propose-input propose-input-sm" id="proposeRewardType" style="appearance:none;-webkit-appearance:none;cursor:pointer;">
+    <option value="pts">⭐ 星星</option>
+    <option value="gacha">🎰 扭蛋</option>
+    <option value="game">🎮 遊戲次數</option>
+  </select>
+  <input class="propose-input propose-input-sm" id="proposePts" type="number" placeholder="數量" min="1" max="100">
+  <input class="propose-input" id="proposeReason" placeholder="為什麼值這些獎勵？">
+</div>
       <button class="propose-btn" onclick="submitProposal()">💌 送出自訂任務申請 ✦</button>
     </div>
   </div>
@@ -887,10 +895,16 @@ document.getElementById('homeTaskList').innerHTML=sortedTasks.length?sortedTasks
 
   // My proposals
   const myProposals=Object.entries(proposals).filter(([,p])=>p.user===ME);
-  document.getElementById('myProposalList').innerHTML=myProposals.length===0?empty('💌','還沒有提出自訂任務'):myProposals.reverse().map(([id,p])=>`<div class="task-card pending"><div class="task-icon">${p.icon||'💡'}</div><div class="task-info"><div class="task-name">${p.name}</div><div class="task-pts">建議 ${p.suggestPts} 顆星星</div></div><div class="task-status status-pending">審核中</div></div>`).join('');
+  document.getElementById('myProposalList').innerHTML=myProposals.length===0?empty('💌','還沒有提出自訂任務'):myProposals.reverse().map(([id,p])=>`<div class="task-card pending"><div class="task-icon">${p.icon||'💡'}</div><div class="task-info"><div class="task-name">${p.name}</div>
+  <div class="task-pts">建議 ${p.suggestPts} ${
+  p.rewardType === 'gacha' ? '顆扭蛋 🎰' :
+  p.rewardType === 'game' ? '次遊戲 🎮' : '顆星星 ⭐'
+}</div> </div><div class="task-status status-pending">審核中</div></div>`).join('');
   const myShopProposals=Object.entries(window._allData?.shopProposals||{}).filter(([,p])=>p.user===ME);
   const shopPropEl=document.getElementById('myShopProposalList');
-  if(shopPropEl) shopPropEl.innerHTML=myShopProposals.length===0?empty('💌','還沒有提出獎勵申請'):myShopProposals.reverse().map(([id,p])=>`<div class="task-card pending"><div class="task-icon">${p.icon||'🎁'}</div><div class="task-info"><div class="task-name">${p.name}</div><div class="task-pts">建議 ${p.suggestPts} 顆星星</div></div><div class="task-status status-pending">審核中</div></div>`).join('');
+  if(shopPropEl) shopPropEl.innerHTML=myShopProposals.length===0?empty('💌','還沒有提出獎勵申請'):myShopProposals.reverse().map(([id,p])=>`<div class="task-card pending"><div class="task-icon">${p.icon||'🎁'}</div>
+  <div class="task-info"><div class="task-name">${p.name}</div>
+  <div class="task-pts">建議 ${p.suggestPts} 顆星星</div></div><div class="task-status status-pending">審核中</div></div>`).join('');
 
   // Game history log (all, not just today)
   const gameHistory=history.filter(h=>h.user===ME&&h.icon==='🎮').slice(0,10);
@@ -943,12 +957,33 @@ window.redeemShop=async()=>{
   await push(ref(db,'shopPending'),{user:ME,shopId:pendingShop.id,shopName:pendingShop.name,icon:pendingShop.icon,cost:pendingShop.cost,time:t5.time,date:t5.date});
   closeModal('shopOverlay'); toast(`💌 已送出兌換申請！等小波確認 ♡`); pendingShop=null;
 };
-window.submitProposal=async()=>{
-  const icon=document.getElementById('proposeIcon').value.trim()||'💡', name=document.getElementById('proposeName').value.trim(), pts=parseInt(document.getElementById('proposePts').value), reason=document.getElementById('proposeReason').value.trim();
-  if(!name){toast('請填寫任務名稱！');return;} if(!pts||pts<=0){toast('請填寫建議星星數！');return;}
-  const t6=now(); await push(ref(db,'proposals'),{user:ME,icon,name,suggestPts:pts,reason:reason||'',time:t6.time,date:t6.date,type:'custom'});
-  document.getElementById('proposeIcon').value='';document.getElementById('proposeName').value='';document.getElementById('proposePts').value='';document.getElementById('proposeReason').value='';
-  toast(`💌 自訂任務「${name}」已送出！等待審核 ✦`);
+window.submitProposal = async () => {
+  const icon = document.getElementById('proposeIcon').value.trim() || '💡';
+  const name = document.getElementById('proposeName').value.trim();
+  const pts = parseInt(document.getElementById('proposePts').value);
+  const reason = document.getElementById('proposeReason').value.trim();
+  const rewardType = document.getElementById('proposeRewardType').value; // ← 新增
+
+  if (!name) { toast('請填寫任務名稱！'); return; }
+  if (!pts || pts <= 0) { toast('請填寫建議數量！'); return; }
+
+  const rewardLabel = { pts: '顆星星', gacha: '顆扭蛋', game: '次遊戲次數' }[rewardType];
+  const t6 = now();
+  await push(ref(db, 'proposals'), {
+    user: ME, icon, name,
+    suggestPts: pts,
+    rewardType,           // ← 新增
+    reason: reason || '',
+    time: t6.time, date: t6.date, type: 'custom'
+  });
+
+  document.getElementById('proposeIcon').value = '';
+  document.getElementById('proposeName').value = '';
+  document.getElementById('proposePts').value = '';
+  document.getElementById('proposeReason').value = '';
+  document.getElementById('proposeRewardType').value = 'pts'; // ← 重設
+
+  toast(`💌 自訂任務「${name}」已送出！建議 ${pts} ${rewardLabel} ✦`);
 };
 window.submitShopProposal=async()=>{
   const icon=document.getElementById('shopProposeIcon').value.trim()||'🎁', name=document.getElementById('shopProposeName').value.trim(), pts=parseInt(document.getElementById('shopProposePts').value), reason=document.getElementById('shopProposeReason').value.trim();
