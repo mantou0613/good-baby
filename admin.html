@@ -640,13 +640,12 @@ function render() {
         <button class="pts-btn btn-add" onclick="adjustPts('${uid}',1)">➕ 給點數</button>
         <button class="pts-btn btn-sub" onclick="adjustPts('${uid}',-1)">➖ 扣點數</button>
       </div>
-      <div class="gacha-section">
-        <div class="gacha-section-title">🎰 扭蛋管理</div>
-        <div class="gacha-send-row">
-          <div class="gacha-count-badge">現有 ${gachaCount} 顆</div>
-          <input class="pts-input" type="number" id="gacha-amt-${uid}" placeholder="發放數量" min="1" style="max-width:110px">
-          <button class="pts-btn btn-gacha" onclick="sendGacha('${uid}')">🎰 發放</button>
-        </div>
+<div class="gacha-send-row">
+  <div class="gacha-count-badge">現有 ${gachaCount} 顆</div>
+  <input class="pts-input" type="number" id="gacha-amt-${uid}" placeholder="數量" min="1" style="max-width:90px">
+  <button class="pts-btn btn-gacha" onclick="sendGacha('${uid}', 1)">🎰 發放</button>
+  <button class="pts-btn btn-sub" onclick="sendGacha('${uid}', -1)">➖ 扣除</button>
+</div>
       </div>
       <div class="game-section">
         <div class="game-section-title">🎮 遊戲次數管理</div>
@@ -929,7 +928,7 @@ window.updateTaskExclusive = async function(tid, val) {
 };
 
 // ── GACHA SEND ──
-window.sendGacha = async function(uid) {
+window.sendGacha = async function(uid, sign = 1) {
   const amt = parseInt(document.getElementById(`gacha-amt-${uid}`).value);
   if (!amt || amt <= 0) { toast('請輸入有效的扭蛋數量！'); return; }
   const gachaRef = ref(db, `gachaCredits/${uid}`);
