@@ -115,6 +115,8 @@
   .task-card { background: white; border-radius: 16px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; border: 1.5px solid var(--purple); cursor: pointer; transition: all 0.2s; }
   .task-card:hover { border-color: var(--purple-dark); background: #FAF8FD; transform: translateY(-1px); }
   .task-card.pending { border-color: var(--peach); background: #FFFCFA; cursor: default; }
+  .task-card.urgent { border-color: #F5A623; background: #FFF8EC; }
+.tag-urgent { background: #FFE8CC; color: #C05000; }
   .task-card.locked-excl { border-color: #DDD; background: #F8F8F8; cursor: not-allowed; opacity: 0.6; }
   .task-icon { font-size: 30px; flex-shrink: 0; }
   .task-info { flex: 1; }
@@ -822,6 +824,7 @@ function renderTasks(allData){
   function taskCard(id,t,extraClass=''){
     const isPending=pendingTaskIds.has(id);
     const isDaily=t.type==='daily', isWeekly=t.type==='weekly';
+    const isUrgent=t.type==='urgent';
     const isDoneToday=isDaily&&doneTodayIds.has(id);
     const isDoneWeek=isWeekly&&doneWeekIds.has(id);
     const isDone=isDoneToday||isDoneWeek;
@@ -855,8 +858,8 @@ function renderTasks(allData){
     if(t.type==='weekly'&&doneWeekIds.has(id))return false;
     return true;
   });
-  const typeOrder={'daily':0,'weekly':1,'normal':2};
-const sortedAvail=available.sort(([,a],[,b])=>(typeOrder[a.type||'normal']||2)-(typeOrder[b.type||'normal']||2));
+const typeOrder={'urgent':0,'daily':1,'weekly':2,'normal':3};
+const sortedAvail=available.sort(([,a],[,b])=>(typeOrder[a.type||'normal']||3)-(typeOrder[b.type||'normal']||3));
 document.getElementById('homeTaskList').innerHTML=sortedAvail.length?sortedAvail.map(([id,t])=>taskCard(id,t)).join(''):empty('⚔️','目前沒有可申報任務');
 
   // 我提出的申請
