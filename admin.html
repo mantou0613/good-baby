@@ -458,20 +458,35 @@ function updateNotifUI() {
 }
 
 window.requestNotifPermission = async function() {
-  if (!('Notification' in window)) { toast('此裝置不支援推播通知'); return; }
-  const result = await Notification.requestPermission();
-  notifPermission = result;
-  updateNotifUI();
-  if (result === 'granted') toast('✅ 推播通知已開啟！');
-  else toast('未開啟通知，臨時任務將不會推播');
+  if (!('serviceWorker' in navigator)) { toast('此裝置不支援推播通知'); return; }
+  try {
+    const reg = await navigator.serviceWorker.register('./sw.js');
+    window._swReg = reg;
+    const result = await Notification.requestPermission();
+    notifPermission = result;
+    updateNotifUI();
+    if (result === 'granted') toast('✅ 推播通知已開啟！');
+    else toast('未開啟通知');
+  } catch(e) {
+    toast('Service Worker 註冊失敗');
+  }
 };
 
-function sendLocalNotif(title, body, icon = '🚨') {
-  if (notifPermission !== 'granted') return;
-  try {
-    new Notification(title, { body, icon: 'icon.png', badge: 'icon.png', tag: 'urgent-task-' + Date.now() });
-  } catch(e) { console.warn('Notification failed:', e); }
+function sendLocalNotif(title, body) {
+  if (Notification?.permission !== 'granted') return;
+  if (window._swReg) {
+    window._swReg.showNotification(title, { body, icon: 'icon.png', badge: 'icon.png', tag: 'urgent-' + Date.now() });
+  }
 }
+
+// 在 startListen() 前加入 SW 自動註冊：
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js').then(reg => {
+    window._swReg = reg;
+    notifPermission = Notification?.permission || 'default';
+    updateNotifUI();
+  });
+}}
 
 // ── 臨時任務目標切換 ──
 window.toggleTarget = function(btn) {
