@@ -856,6 +856,10 @@ function renderTasks(allData){
   const daily=allTaskEntries.filter(([,t])=>t.type==='daily');
   const weekly=allTaskEntries.filter(([,t])=>t.type==='weekly');
   const normal=allTaskEntries.filter(([,t])=>!t.type||t.type==='normal');
+  const te = Object.entries(tasks).filter(([,t]) => {
+  if (t.urgentFor && !t.urgentFor.includes(ME)) return false;
+  return true;
+});
 
   document.getElementById('dailyTaskList').innerHTML=daily.length?daily.map(([id,t])=>taskCard(id,t)).join(''):empty('📅','目前沒有每日任務');
   document.getElementById('weeklyTaskList').innerHTML=weekly.length?weekly.map(([id,t])=>taskCard(id,t)).join(''):empty('🗓','目前沒有每週任務');
