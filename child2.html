@@ -1473,7 +1473,7 @@ loadAIHoroscope();
 };
 
 // 初始化時檢查是否已開啟
-if (localStorage.getItem('child2_notif') === 'granted' || Notification?.permission === 'granted') {
+if (Notification?.permission === 'granted') {
   document.getElementById('notifBanner').style.display = 'none';
 }
 </script>
