@@ -279,6 +279,10 @@
       <div class="horo-luck" id="horoLuck"></div>
     </div>
   </div>
+  <div id="notifBanner" style="margin:0 16px 10px;background:#EEF4FF;border-radius:12px;padding:10px 14px;border:1.5px solid var(--blue-dark);font-size:12px;font-weight:700;color:var(--blue-deep);display:flex;align-items:center;gap:10px;">
+  <span>📲 開啟通知，小波發任務時馬上知道！</span>
+  <button onclick="requestChildNotif()" style="margin-left:auto;background:var(--blue-dark);color:white;border:none;border-radius:8px;padding:5px 12px;font-family:'Nunito',sans-serif;font-size:11px;font-weight:900;cursor:pointer;">開啟</button>
+</div>
   <div class="checkin-wrap">
     <div class="checkin-left">
       <div class="checkin-title-sm">📅 簽到</div>
@@ -778,7 +782,19 @@ function startListen(){
     renderGachaCount(d.gacha);
     updateGameCreditsUI(getGameCredits());
     render();
-  });
+  })
+    // 監聽通知佇列
+onValue(ref(db, `notifications/${ME}`), snap => {
+  const notifs = snap.val() || {};
+  const unread = Object.entries(notifs).filter(([, n]) => !n.read);
+  for (const [nid, n] of unread) {
+    toast(`🚨 ${n.title}`);
+    update(ref(db, `notifications/${ME}/${nid}`), { read: true });
+    if (Notification?.permission === 'granted') {
+      try { new Notification(n.title, { body: n.body, icon: 'icon.png' }); } catch(e) {}
+    }
+  }
+});;
 }
 
 async function handleLevelUp(newLv){
@@ -1202,7 +1218,25 @@ window.showTab=(tab,el)=>{
 };
 function now(){const d=new Date();return{time:`${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`,date:`${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`};}
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
+window.requestChildNotif = async function() {
+  if (!('Notification' in window)) { toast('此裝置不支援通知'); return; }
+  const result = await Notification.requestPermission();
+  if (result === 'granted') {
+    document.getElementById('notifBanner').style.display = 'none';
+    localStorage.setItem('child1_notif', 'granted');
+    toast('✅ 通知已開啟！小波發任務時你會收到通知 ✦');
+  } else {
+    toast('未開啟通知');
+  }
+};
 
+// 初始化時檢查
+if (localStorage.getItem('child1_notif') === 'granted' || Notification?.permission === 'granted') {
+  document.addEventListener('DOMContentLoaded', () => {
+    const banner = document.getElementById('notifBanner');
+    if (banner) banner.style.display = 'none';
+  });
+}
 loadAIHoroscope();
 initDefaults().then(()=>startListen());
 </script>
