@@ -304,6 +304,10 @@
       <div class="checkin-dots" id="checkinDots"></div>
       <button class="checkin-btn-sm" id="checkinBtn" onclick="doCheckin()">簽到！</button>
     </div>
+    <div id="notifBanner" style="margin:0 16px 12px;background:#EEF4FF;border-radius:12px;padding:12px 14px;border:1.5px solid var(--blue-dark);font-size:12px;font-weight:700;color:var(--blue-deep);display:flex;align-items:center;gap:10px;">
+  <span>📲 開啟通知，小波發任務時馬上知道！</span>
+  <button onclick="requestChildNotif()" style="margin-left:auto;background:var(--blue-dark);color:white;border:none;border-radius:8px;padding:5px 12px;font-family:'Nunito',sans-serif;font-size:11px;font-weight:900;cursor:pointer;">開啟</button>
+</div>
     <div class="points-hero">
       <div class="pts-label">✦ 小胖的星星寶藏 ✦</div>
       <div class="pts-big" id="ptsDisplay">0</div>
@@ -1436,15 +1440,41 @@ function onDataUpdate(allData){
   if(currentMode==='love')renderLove();
 }
 
-onValue(ref(db,'/'), snap=>{
-  const allData=snap.val()||{};
-  onDataUpdate(allData);
+onValue(ref(db, `notifications/${ME}`), snap => {
+  const notifs = snap.val() || {};
+  const unread = Object.entries(notifs).filter(([, n]) => !n.read);
+  for (const [nid, n] of unread) {
+    // 顯示 toast
+    toast(`🚨 ${n.title}｜${n.body}`);
+    // 標記已讀
+    update(ref(db, `notifications/${ME}/${nid}`), { read: true });
+    // 如果瀏覽器有通知權限也發本機通知
+    if (Notification?.permission === 'granted') {
+      new Notification(n.title, { body: n.body, icon: 'icon.png' });
+    }
+  }
 });
 
 // ── 初始化 ──
 const savedMode=localStorage.getItem('child2_mode')||'star';
 if(savedMode==='love'){window.setMode('love');}
 loadAIHoroscope();
+  window.requestChildNotif = async function() {
+  if (!('Notification' in window)) { toast('此裝置不支援通知'); return; }
+  const result = await Notification.requestPermission();
+  if (result === 'granted') {
+    document.getElementById('notifBanner').style.display = 'none';
+    localStorage.setItem('child2_notif', 'granted');
+    toast('✅ 通知已開啟！小波發任務時你會收到通知 ✦');
+  } else {
+    toast('未開啟通知');
+  }
+};
+
+// 初始化時檢查是否已開啟
+if (localStorage.getItem('child2_notif') === 'granted' || Notification?.permission === 'granted') {
+  document.getElementById('notifBanner').style.display = 'none';
+}
 </script>
 </body>
 </html>
