@@ -485,8 +485,8 @@ if ('serviceWorker' in navigator) {
     window._swReg = reg;
     notifPermission = Notification?.permission || 'default';
     updateNotifUI();
-  });
-}}
+  }).catch(() => {});
+}
 
 // ── 臨時任務目標切換 ──
 window.toggleTarget = function(btn) {
