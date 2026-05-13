@@ -351,7 +351,15 @@
       <div class="propose-card">
         <div class="propose-header"><div class="propose-header-icon">💡</div><div><div class="propose-header-title">想提出新任務？</div><div class="propose-header-sub">填寫後送給小波確認，通過就能獲得星星！</div></div></div>
         <div class="propose-row"><input class="propose-input propose-input-sm" id="proposeIcon" placeholder="🌟" maxlength="4"><input class="propose-input" id="proposeName" placeholder="任務名稱"></div>
-        <div class="propose-row"><input class="propose-input propose-input-sm" id="proposePts" type="number" placeholder="建議星星" min="1"><input class="propose-input" id="proposeReason" placeholder="為什麼值這些星星？"></div>
+        <div class="propose-row">
+  <select class="propose-input propose-input-sm" id="proposeRewardType" style="appearance:none;-webkit-appearance:none;cursor:pointer;">
+    <option value="pts">⭐ 星星</option>
+    <option value="gacha">🎰 扭蛋</option>
+    <option value="game">🎮 遊戲次數</option>
+  </select>
+  <input class="propose-input propose-input-sm" id="proposePts" type="number" placeholder="數量" min="1">
+  <input class="propose-input" id="proposeReason" placeholder="為什麼值這些獎勵？">
+</div>
         <button class="propose-btn" onclick="submitProposal()">💌 送出自訂任務申請 ✦</button>
       </div>
     </div>
@@ -867,7 +875,12 @@ document.getElementById('homeTaskList').innerHTML=sortedAvail.length?sortedAvail
   document.getElementById('myProposalList').innerHTML=myProposals.length?myProposals.reverse().map(([,p])=>`
     <div class="task-card pending">
       <div class="task-icon">${p.icon||'💡'}</div>
-      <div class="task-info"><div class="task-name">${p.name}</div><div class="task-pts">建議 ${p.suggestPts} ⭐</div></div>
+      <div class="task-info"><div class="task-name">${p.name}</div>
+      <div class="task-pts">建議 ${p.suggestPts} ${
+  p.rewardType==='gacha'?'顆扭蛋 🎰':
+  p.rewardType==='game'?'次遊戲 🎮':'顆星星 ⭐'
+}</div>
+      </div>
       <div class="task-status status-pending">審核中</div>
     </div>`).join(''):empty('💌','還沒有提出申請');
 }
@@ -938,12 +951,15 @@ window.submitProposal=async function(){
   const name=document.getElementById('proposeName').value.trim();
   const pts=parseInt(document.getElementById('proposePts').value);
   const reason=document.getElementById('proposeReason').value.trim();
+  const rewardType=document.getElementById('proposeRewardType').value; // 新增
   if(!name){toast('請填寫任務名稱！');return;}
-  if(!pts||pts<=0){toast('請填寫建議星星數！');return;}
+  if(!pts||pts<=0){toast('請填寫建議數量！');return;}
+  const rewardLabel={pts:'顆星星',gacha:'顆扭蛋',game:'次遊戲次數'}[rewardType];
   const t=now();
-  await push(ref(db,'proposals'),{user:ME,icon,name,suggestPts:pts,reason:reason||'',time:t.time,date:t.date});
+  await push(ref(db,'proposals'),{user:ME,icon,name,suggestPts:pts,rewardType,reason:reason||'',time:t.time,date:t.date});
   ['proposeIcon','proposeName','proposePts','proposeReason'].forEach(id=>document.getElementById(id).value='');
-  toast(`💌 已送出「${name}」的任務申請！等小波確認 ✦`);
+  document.getElementById('proposeRewardType').value='pts'; // 重設
+  toast(`💌 已送出「${name}」的任務申請！建議 ${pts} ${rewardLabel} ✦`);
 };
 
 window.submitShopProposal=async function(){
