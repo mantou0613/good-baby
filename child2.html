@@ -1459,6 +1459,7 @@ onValue(ref(db, `notifications/${ME}`), snap => {
 const savedMode=localStorage.getItem('child2_mode')||'star';
 if(savedMode==='love'){window.setMode('love');}
 loadAIHoroscope();
+  onValue(ref(db, '/'), snap => { onDataUpdate(snap.val() || {}); });
   window.requestChildNotif = async function() {
   if (!('Notification' in window)) { toast('此裝置不支援通知'); return; }
   const result = await Notification.requestPermission();
