@@ -862,7 +862,10 @@ function render(){
   const normalTasks=te.filter(([,t])=>!t.taskType||t.taskType==='normal');
 
   const renderTaskList = (arr) => arr.map(([id,t])=>taskCard(id,t)).join('') || empty('📋','還沒有任務');
-  document.getElementById('homeTaskList').innerHTML=te.slice(0,4).map(([id,t])=>taskCard(id,t)).join('')||empty('📋','還沒有任務');
+  const typeOrder={'daily':0,'weekly':1,'normal':2};
+const availTasks=te.filter(([id,t])=>{ const s=getTaskState(id,t); return s==='available'; });
+const sortedTasks=availTasks.sort(([,a],[,b])=>(typeOrder[a.taskType||'normal']||2)-(typeOrder[b.taskType||'normal']||2));
+document.getElementById('homeTaskList').innerHTML=sortedTasks.length?sortedTasks.map(([id,t])=>taskCard(id,t)).join(''):empty('📋','目前沒有可申報任務');
   document.getElementById('dailyTaskList').innerHTML=dailyTasks.length?renderTaskList(dailyTasks):empty('📅','沒有每日任務');
   document.getElementById('weeklyTaskList').innerHTML=weeklyTasks.length?renderTaskList(weeklyTasks):empty('🗓','沒有每週任務');
   document.getElementById('allTaskList').innerHTML=normalTasks.length?renderTaskList(normalTasks):empty('⚔️','沒有一般任務');
