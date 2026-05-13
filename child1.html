@@ -903,10 +903,14 @@ function taskCard(id, t) {
   if(t.taskType==='urgent') typeTag=`<span class="task-type-tag tag-urgent">🚨 緊急</span>`;
 else if(t.taskType==='daily') typeTag=`<span class="task-type-tag tag-daily">每日</span>`;
 else if(t.taskType==='weekly') typeTag=`<span class="task-type-tag tag-weekly">每週</span>`;
-  if(state==='pending'){cardClass+=' pending';statusEl=`<div class="task-status status-pending">審核中</div>`;}
-  else if(state==='done_today'){cardClass+=' pending';statusEl=`<div class="task-status status-done">已完成</div>`;}
-  else if(state==='locked_exclusive'){cardClass+=' locked-excl';statusEl=`<div class="task-status status-locked">🔒 已被完成</div>`;}
-  else{clickAttr=`onclick="openTaskModal('${id}','${t.name.replace(/'/g,"\\'")}','${t.icon}',${t.pts},'${t.taskType||'normal'}')"`;statusEl=`<div class="task-status status-available">可申報</div>`;}
+if(state==='pending'){cardClass+=' pending';statusEl=`<div class="task-status status-pending">審核中</div>`;}
+else if(state==='done_today'){cardClass+=' pending';statusEl=`<div class="task-status status-done">已完成</div>`;}
+else if(state==='locked_exclusive'){cardClass+=' locked-excl';statusEl=`<div class="task-status status-locked">🔒 已被完成</div>`;}
+else{
+  if(t.taskType==='urgent') cardClass+=' urgent';
+  clickAttr=`onclick="openTaskModal('${id}','${t.name.replace(/'/g,"\\'")}','${t.icon}',${t.pts},'${t.taskType||'normal'}')"`;
+  statusEl=`<div class="task-status status-available">可申報</div>`;
+}
   return `<div class="${cardClass}" ${clickAttr}><div class="task-icon">${t.icon}</div><div class="task-info"><div class="task-name">${t.name}${typeTag}</div><div class="task-pts">+${t.pts} 顆星星</div></div>${statusEl}</div>`;
 }
 function shopCard(id,s,pts){const can=pts>=s.cost;return `<div class="shop-card${can?'':' locked'}" onclick="${can?`openShopModal('${id}','${s.name.replace(/'/g,"\\'")}','${s.icon}',${s.cost})`:''}"><div class="shop-icon">${s.icon}</div><div class="shop-name">${s.name}</div><div class="shop-cost">${s.cost} ⭐</div></div>`;}
