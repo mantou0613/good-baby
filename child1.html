@@ -800,9 +800,11 @@ onValue(ref(db, `notifications/${ME}`), snap => {
   for (const [nid, n] of unread) {
     toast(`🚨 ${n.title}`);
     update(ref(db, `notifications/${ME}/${nid}`), { read: true });
-    if (Notification?.permission === 'granted') {
-      try { new Notification(n.title, { body: n.body, icon: 'icon.png' }); } catch(e) {}
-    }
+if (window._swReg && Notification?.permission === 'granted') {
+  try {
+    window._swReg.showNotification(n.title, { body: n.body, icon: 'icon.png', tag: nid });
+  } catch(e) {}
+}
   }
 });
 }
@@ -828,6 +830,14 @@ function getTaskState(tid, t) {
   const todayD = todayStr(), weekD = weekStr();
   const myPending = Object.values(pending).filter(p=>p.user===ME&&p.taskId===tid);
   if(myPending.length>0) return 'pending';
+  
+  // urgent 任務：當天只能申報一次
+  if(t.taskType==='urgent'){
+    const doneTodayByMe = history.some(h=>h.user===ME&&h.date===todayD&&h.desc&&h.desc.includes(t.name));
+    if(doneTodayByMe) return 'done_today';
+    return 'available';
+  }
+  
   if(t.taskType==='daily'){
     const doneTodayByMe = history.some(h=>h.user===ME&&h.date===todayD&&h.desc&&h.desc.includes(t.name));
     if(doneTodayByMe) return 'done_today';
@@ -1264,14 +1274,20 @@ window.showTab=(tab,el)=>{
 function now(){const d=new Date();return{time:`${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`,date:`${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`};}
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
 window.requestChildNotif = async function() {
-  if (!('Notification' in window)) { toast('此裝置不支援通知'); return; }
-  const result = await Notification.requestPermission();
-  if (result === 'granted') {
-    document.getElementById('notifBanner').style.display = 'none';
-    localStorage.setItem('child1_notif', 'granted');
-    toast('✅ 通知已開啟！小波發任務時你會收到通知 ✦');
-  } else {
-    toast('未開啟通知');
+  if (!('serviceWorker' in navigator)) { toast('此裝置不支援通知'); return; }
+  try {
+    const reg = await navigator.serviceWorker.register('./sw.js');
+    const permission = await Notification.requestPermission();
+    if (permission === 'granted') {
+      window._swReg = reg;
+      document.getElementById('notifBanner').style.display = 'none';
+      localStorage.setItem('child1_notif', 'granted');
+      toast('✅ 通知已開啟！小波發任務時你會收到通知 ✦');
+    } else {
+      toast('未開啟通知');
+    }
+  } catch(e) {
+    toast('通知設定失敗，請確認已加入主畫面');
   }
 };
 
@@ -1281,6 +1297,12 @@ if (localStorage.getItem('child1_notif') === 'granted' || Notification?.permissi
     const banner = document.getElementById('notifBanner');
     if (banner) banner.style.display = 'none';
   });
+}
+  // 自動註冊 Service Worker
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js').then(reg => {
+    window._swReg = reg;
+  }).catch(() => {});
 }
 loadAIHoroscope();
 initDefaults().then(()=>startListen());
