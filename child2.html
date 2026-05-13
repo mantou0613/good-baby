@@ -116,7 +116,7 @@
   .task-card:hover { border-color: var(--purple-dark); background: #FAF8FD; transform: translateY(-1px); }
   .task-card.pending { border-color: var(--peach); background: #FFFCFA; cursor: default; }
   .task-card.urgent { border-color: #F5A623; background: #FFF8EC; }
-.tag-urgent { background: #FFE8CC; color: #C05000; }
+  .tag-urgent { background: #FFE8CC; color: #C05000; }
   .task-card.locked-excl { border-color: #DDD; background: #F8F8F8; cursor: not-allowed; opacity: 0.6; }
   .task-icon { font-size: 30px; flex-shrink: 0; }
   .task-info { flex: 1; }
@@ -569,7 +569,7 @@
     <div class="mem-stats"><span>翻牌次數：<b id="memMoves">0</b></span><span>配對：<b id="memMatched">0</b>/8</span><span id="memTimer">⏱ 0s</span></div>
     <div class="mem-result" id="memResult"></div>
     <div class="memory-grid" id="memoryGrid" style="grid-template-columns:repeat(4,1fr)"></div>
-    <button class="wheel-spin-btn" onclick="initMemory()">🔄 重新開始</button>
+    <button class="wheel-spin-btn" onclick="initMemory(true)">🔄 重新開始</button>
     <button class="game-close-btn" onclick="closeGame('memoryOverlay')">關閉</button>
   </div>
 </div>
@@ -828,7 +828,7 @@ function renderTasks(allData){
     const isDoneToday=isDaily&&doneTodayIds.has(id);
     const isDoneWeek=isWeekly&&doneWeekIds.has(id);
     const isDone=isDoneToday||isDoneWeek;
-    const cls=isPending?'pending':isDone?'':extraClass;
+    const cls=isPending?'pending':isDone?'':isUrgent?'urgent':extraClass;
     const statusHtml=isPending?`<div class="task-status status-pending">審核中</div>`:
       isDone?`<div class="task-status status-done">已完成</div>`:
       `<div class="task-status status-available">可申報</div>`;
@@ -1147,14 +1147,17 @@ window.spinWheel=async function(){
 const MEM_EMOJIS=['🐷','🐰','🦊','🐻','🐼','🦁','🐸','🦋'];
 let memCards=[], memFlipped=[], memMatchedCount=0, memMoves=0, memTimer=null, memSecs=0, memLocked=false, memStarted=false;
 
-window.openMemory=async function(){
+window.openMemory=function(){
   if(getGameCredits()<=0){toast('目前沒有遊戲次數！');return;}
-  const ok=await useGameCredit();if(!ok){toast('遊戲次數不足！');return;}
   document.getElementById('memoryOverlay').classList.add('open');
-  initMemory();
+  initMemory(true);
 };
 
-window.initMemory=function(){
+window.initMemory=async function(needCredit=false){
+  if(needCredit){
+    const ok=await useGameCredit();
+    if(!ok){toast('遊戲次數不足！');closeGame('memoryOverlay');return;}
+  }
   clearInterval(memTimer);memSecs=0;memMoves=0;memMatchedCount=0;memLocked=false;memStarted=false;memFlipped=[];
   document.getElementById('memMoves').textContent='0';
   document.getElementById('memMatched').textContent='0';
