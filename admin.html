@@ -1006,14 +1006,33 @@ window.approveProposalAddTask = async function(pid) {
 window.approveProposalOneTime = async function(pid) {
   const p = (allData.proposals||{})[pid]; if (!p) return;
   const pts = parseInt(document.getElementById(`pptsInput-${pid}`)?.value) || p.suggestPts;
-  const playerRef = ref(db, `players/${p.user}`);
-  const snap = await get(playerRef);
-  const player = snap.val() || { points:0, totalEarned:0 };
-  await update(playerRef, { points:(player.points||0)+pts, totalEarned:(player.totalEarned||0)+pts });
+  const rewardType = p.rewardType || 'pts';
   const t = now();
-  await push(ref(db,'history'), { user:p.user, desc:`自訂任務「${p.name}」一次性獎勵`, icon:p.icon||'💡', pts, time:t.time, date:t.date });
+
+  if (rewardType === 'gacha') {
+    const gachaRef = ref(db, `gachaCredits/${p.user}`);
+    const snap = await get(gachaRef);
+    const current = snap.val()?.count || 0;
+    await set(gachaRef, { count: current + pts });
+    await push(ref(db,'history'), { user:p.user, desc:`自訂任務「${p.name}」獲得 ${pts} 顆扭蛋！`, icon:p.icon||'🎰', pts:0, time:t.time, date:t.date });
+    toast(`✓ 已給 ${USERS[p.user]?.name||p.user} +${pts} 顆扭蛋`);
+  } else if (rewardType === 'game') {
+    const gameRef = ref(db, `gameCredits/${p.user}`);
+    const snap = await get(gameRef);
+    const current = snap.val()?.count || 0;
+    await set(gameRef, { count: current + pts });
+    await push(ref(db,'history'), { user:p.user, desc:`自訂任務「${p.name}」獲得 ${pts} 次遊戲！`, icon:p.icon||'🎮', pts:0, time:t.time, date:t.date });
+    toast(`✓ 已給 ${USERS[p.user]?.name||p.user} +${pts} 次遊戲次數`);
+  } else {
+    const playerRef = ref(db, `players/${p.user}`);
+    const snap = await get(playerRef);
+    const player = snap.val() || { points:0, totalEarned:0 };
+    await update(playerRef, { points:(player.points||0)+pts, totalEarned:(player.totalEarned||0)+pts });
+    await push(ref(db,'history'), { user:p.user, desc:`自訂任務「${p.name}」一次性獎勵`, icon:p.icon||'💡', pts, time:t.time, date:t.date });
+    toast(`✓ 已給 ${USERS[p.user]?.name||p.user} +${pts} 顆星星（一次性）`);
+  }
+
   await remove(ref(db, `proposals/${pid}`));
-  toast(`✓ 已給 ${USERS[p.user]?.name||p.user} +${pts} 顆星星（一次性）`);
 };
 
 window.rejectProposal = async function(pid) {
