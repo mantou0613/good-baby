@@ -880,7 +880,7 @@ function render(){
   document.getElementById('progLeft').textContent=lv.next===999999?'🏆 已達最高等級！':`距離升級還差 ${lv.next-total} 顆`;
   document.getElementById('progRight').textContent=lv.next===999999?'MAX':`Lv.${lv.lv+1}`;
 
-  const te=Object.entries(tasks), se=Object.entries(shop);
+  const se=Object.entries(shop);
   const dailyTasks=te.filter(([,t])=>t.taskType==='daily');
   const weeklyTasks=te.filter(([,t])=>t.taskType==='weekly');
   const normalTasks=te.filter(([,t])=>!t.taskType||t.taskType==='normal');
