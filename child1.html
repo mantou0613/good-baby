@@ -732,7 +732,7 @@ function renderGachaCount(){
 }
 
 window.openGachaModal=function(){
-  const count=(window._allData?.gacha?.[ME]?.count)||0;
+  const count=(window._allData?.gachaCredits?.[ME]?.count)||0;
   if(count<=0){toast('目前沒有扭蛋！等小波發放喔 ✦');return;}
   gachaSpinning=false;
   document.getElementById('gachaPhase1').style.display='block';
@@ -744,7 +744,7 @@ window.openGachaModal=function(){
 
 window.spinGacha=async function(){
   if(gachaSpinning)return;
-  const count=(window._allData?.gacha?.[ME]?.count)||0;
+  const count=(window._allData?.gachaCredits?.[ME]?.count)||0;
   if(count<=0){toast('沒有扭蛋了！');closeGachaModal();return;}
   gachaSpinning=true;
   const ball=document.getElementById('gachaBall'); ball.className='gacha-ball spinning';
@@ -752,7 +752,7 @@ window.spinGacha=async function(){
   const result=drawGacha(); ball.className='gacha-ball cracking';
   ball.innerHTML=`<div class="gacha-ball-inner">${result.icon}</div><div class="gacha-ball-line"></div>`;
   await new Promise(r=>setTimeout(r,700));
-  await update(ref(db,`gacha/${ME}`),{count:Math.max(0,count-1)});
+  await update(ref(db,`gachaCredits/${ME}`),{count:Math.max(0,count-1)});
   if(result.type==='pts'&&result.pts>0){
     const pr=ref(db,`players/${ME}`); const ps=await get(pr); const pl=ps.val()||{points:0,totalEarned:0};
     await update(pr,{points:(pl.points||0)+result.pts,totalEarned:(pl.totalEarned||0)+result.pts});
@@ -818,7 +818,7 @@ async function handleLevelUp(newLv){
     await push(ref(db,'history'),{user:ME,desc:`🎉 升等到 Lv.${newLv}！獲得 ${reward.amount} 顆星星！`,icon:'🏆',pts:reward.amount,time:t.time,date:t.date});
     toast(`🏆 升等 Lv.${newLv}！+${reward.amount} 顆星星！`); rainStars();
   } else if(reward.type==='gacha'){
-    const gr=ref(db,`gacha/${ME}`); const gs=await get(gr); const gc=gs.val()?.count||0;
+    const gr=ref(db,`gachaCredits/${ME}`); const gs=await get(gr); const gc=gs.val()?.count||0;
     await update(gr,{count:gc+reward.amount});
     await push(ref(db,'history'),{user:ME,desc:`🎉 升等到 Lv.${newLv}！獲得 ${reward.amount} 顆扭蛋！`,icon:'🏆',pts:0,time:t.time,date:t.date});
     toast(`🏆 升等 Lv.${newLv}！+${reward.amount} 顆扭蛋！`); rainStars();
