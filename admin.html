@@ -81,37 +81,95 @@
   .btn-one-time { background: var(--blue); color: var(--blue-deep); }
   .btn-one-time:hover { background: var(--blue-dark); color: white; }
 
-  /* PLAYER */
+  /* ── PLAYER CARD ── */
   .player-list { padding: 0 16px; display: flex; flex-direction: column; gap: 14px; margin-bottom: 22px; }
-  .player-card { background: white; border-radius: 20px; padding: 18px 16px; border: 1.5px solid var(--blue); }
-  .player-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
-  .player-avatar { font-size: 34px; }
+  .player-card { background: white; border-radius: 20px; padding: 16px; border: 1.5px solid var(--blue); }
+
+  .player-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .player-avatar { font-size: 32px; }
   .player-name { font-size: 18px; font-weight: 900; color: var(--text); }
-  .player-pts-badge { margin-left: auto; background: var(--blue); border-radius: 14px; padding: 5px 14px; font-size: 13px; font-weight: 900; color: var(--blue-deep); }
-  .pts-input { flex: 1; background: #F8F7FC; border: 1.5px solid var(--purple); border-radius: 12px; padding: 10px 14px; font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 700; color: var(--text); outline: none; }
-  .pts-btn { border: none; border-radius: 12px; padding: 10px 16px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 900; cursor: pointer; white-space: nowrap; }
-  .pts-btn:active { transform: scale(0.96); }
-  .btn-add { background: var(--mint); color: var(--mint-deep); }
-  .btn-add:hover { background: var(--mint-dark); color: white; }
-  .btn-sub { background: var(--red); color: var(--red-deep); }
-  .btn-sub:hover { background: var(--red-dark); color: white; }
-  .pts-reason { width: 100%; background: #F8F7FC; border: 1.5px solid var(--purple); border-radius: 12px; padding: 10px 14px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700; color: var(--text); outline: none; margin-top: 8px; }
-  .pts-adjust { display: flex; gap: 8px; align-items: center; margin-top: 8px; }
-  .player-level { font-size: 11px; color: var(--text-light); font-weight: 700; margin-top: 8px; }
+  .player-level { font-size: 11px; color: var(--text-light); font-weight: 700; margin-top: 2px; }
 
-  .gacha-section { margin-top: 12px; padding-top: 12px; border-top: 1.5px solid #F0EEF8; }
-  .gacha-section-title { font-size: 12px; font-weight: 900; color: var(--purple-deep); margin-bottom: 8px; }
-  .gacha-send-row { display: flex; gap: 8px; align-items: center; }
-  .gacha-count-badge { background: var(--pink); color: var(--pink-deep); border-radius: 10px; padding: 4px 10px; font-size: 12px; font-weight: 900; white-space: nowrap; }
-  .btn-gacha { background: linear-gradient(135deg, var(--pink), var(--purple)); color: white; }
+  /* 三格資源總覽 */
+  .resource-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .resource-block {
+    border-radius: 14px;
+    padding: 10px 6px;
+    text-align: center;
+    border: 1.5px solid rgba(0,0,0,0.07);
+  }
+  .resource-block.stars  { background: linear-gradient(135deg,#FFFBEA,#FFF3C0); border-color: #D4A820; }
+  .resource-block.gacha  { background: linear-gradient(135deg,#FFF4F7,#FFE4EE); border-color: #D4849A; }
+  .resource-block.game   { background: linear-gradient(135deg,#EEF3FF,#DDE8FF); border-color: #7090C8; }
+  .resource-icon  { font-size: 18px; margin-bottom: 2px; }
+  .resource-val   { font-size: 20px; font-weight: 900; line-height: 1.1; }
+  .resource-label { font-size: 9px; font-weight: 700; color: var(--text-light); margin-top: 3px; letter-spacing: 0.02em; }
+  .stars .resource-val  { color: #8A6010; }
+  .gacha .resource-val  { color: #9B5068; }
+  .game  .resource-val  { color: #3A62B0; }
 
-  .game-section { margin-top: 12px; padding-top: 12px; border-top: 1.5px solid #EEF4FF; }
-  .game-section-title { font-size: 12px; font-weight: 900; color: var(--blue-deep); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
-  .game-send-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-  .game-count-badge { background: var(--blue); color: var(--blue-deep); border-radius: 10px; padding: 4px 10px; font-size: 12px; font-weight: 900; white-space: nowrap; }
-  .btn-game { background: linear-gradient(135deg, var(--blue-dark), var(--purple-dark)); color: white; }
-  .btn-game-sub { background: var(--red); color: var(--red-deep); }
-  .btn-game-sub:hover { background: var(--red-dark); color: white; }
+  /* 管理區塊 */
+  .manage-block {
+    background: #F8F7FC;
+    border-radius: 14px;
+    padding: 12px 12px 10px;
+    margin-bottom: 8px;
+  }
+  .manage-block:last-child { margin-bottom: 0; }
+  .manage-block-title {
+    font-size: 11px;
+    font-weight: 900;
+    color: var(--text-light);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .manage-block.stars-blk  { background: linear-gradient(135deg,#FFFDF0,#FFFBE8); }
+  .manage-block.gacha-blk  { background: linear-gradient(135deg,#FFF8FA,#FFF0F4); }
+  .manage-block.game-blk   { background: linear-gradient(135deg,#F4F7FF,#EEF3FF); }
+
+  /* 輸入行 */
+  .manage-row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .manage-input {
+    flex: 1;
+    min-width: 0;
+    background: white;
+    border: 1.5px solid rgba(0,0,0,0.10);
+    border-radius: 10px;
+    padding: 9px 12px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    outline: none;
+  }
+  .manage-input.reason { margin-top: 6px; width: 100%; flex: none; }
+  .manage-btn {
+    border: none;
+    border-radius: 10px;
+    padding: 9px 14px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 12px;
+    font-weight: 900;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+  }
+  .manage-btn:active { transform: scale(0.95); }
+  .btn-give  { background: var(--mint);  color: var(--mint-deep); }
+  .btn-give:hover  { background: var(--mint-dark); color: white; }
+  .btn-take  { background: var(--red);   color: var(--red-deep); }
+  .btn-take:hover  { background: var(--red-dark);  color: white; }
+  .btn-gacha-give { background: linear-gradient(135deg,var(--pink),var(--purple)); color: white; }
+  .btn-game-give  { background: linear-gradient(135deg,var(--blue-dark),var(--purple-dark)); color: white; }
 
   /* SHOP / TASK MANAGE */
   .shop-manage { padding: 0 16px; margin-bottom: 22px; }
@@ -195,7 +253,6 @@
   <div class="header-top">
     <div>
       <div class="greeting">管理後台 ♡</div>
-      
       <div class="uname">👑 審核者畫面</div>
     </div>
     <button class="logout-btn" onclick="window.location.href='index.html'">登出</button>
@@ -209,8 +266,8 @@
     <div class="nav-tab" onclick="showTab('shopReview',this)">🛍 兌換</div>
     <div class="nav-tab" onclick="showTab('shopProposals',this)">🛍 獎勵申請</div>
     <div class="nav-tab" onclick="showTab('loveShop',this)">💰 零用錢商店</div>
-<div class="nav-tab" onclick="showTab('hotShop',this)">🔥 18+ 商店</div>
-<div class="nav-tab" onclick="showTab('loveReview',this)">💕 寶寶審核</div>
+    <div class="nav-tab" onclick="showTab('hotShop',this)">🔥 18+ 商店</div>
+    <div class="nav-tab" onclick="showTab('loveReview',this)">💕 寶寶審核</div>
     <div class="nav-tab" onclick="showTab('history',this)">📜 紀錄</div>
   </div>
 </div>
@@ -258,8 +315,6 @@
 
 <!-- TASKS TAB -->
 <div id="tab-tasks" class="tab-sec">
-
-  <!-- 臨時任務快速發布 -->
   <div class="section-title" style="margin-top:6px">🚨 臨時任務（推播通知）</div>
   <div id="notifStatus" class="notif-status">
     <div class="notif-dot" id="notifDot"></div>
@@ -333,7 +388,8 @@
   <p style="padding:0 16px;margin-bottom:14px;font-size:12px;color:var(--text-light);font-weight:700;">確認後才會扣除孩子的星星。</p>
   <div class="pending-list" id="shopPendingList"></div>
 </div>
-  <!-- LOVE SHOP TAB -->
+
+<!-- LOVE SHOP TAB -->
 <div id="tab-loveShop" class="tab-sec">
   <div class="section-title" style="margin-top:6px">💰 零用錢商店管理</div>
   <div class="shop-manage" id="loveShopManageList"></div>
@@ -479,7 +535,6 @@ function sendLocalNotif(title, body) {
   }
 }
 
-// 在 startListen() 前加入 SW 自動註冊：
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('./sw.js').then(reg => {
     window._swReg = reg;
@@ -488,12 +543,10 @@ if ('serviceWorker' in navigator) {
   }).catch(() => {});
 }
 
-// ── 臨時任務目標切換 ──
 window.toggleTarget = function(btn) {
   btn.classList.toggle('selected');
 };
 
-// ── 發布臨時任務 ──
 window.publishUrgentTask = async function() {
   const icon = document.getElementById('urgentIcon').value.trim() || '🚨';
   const name = document.getElementById('urgentName').value.trim();
@@ -504,30 +557,25 @@ window.publishUrgentTask = async function() {
   const selectedBtns = document.querySelectorAll('#urgentTargetBtns .target-btn.selected');
   if (selectedBtns.length === 0) { toast('請至少選擇一位孩子！'); return; }
 
-  // 加入 Firebase 任務
-  const taskRef = await push(ref(db, 'tasks'), {
+  await push(ref(db, 'tasks'), {
     icon, name, pts, taskType: 'urgent', exclusive: false,
     urgentFor: Array.from(selectedBtns).map(b => b.dataset.uid),
     createdAt: now().time,
   });
 
-  // 寫通知紀錄
   const t = now();
   for (const btn of selectedBtns) {
     const uid = btn.dataset.uid;
     const uname = USERS[uid]?.name || uid;
     await push(ref(db, 'history'), {
-      user: uid,
-      desc: `🚨 新臨時任務「${name}」已發布！`,
+      user: uid, desc: `🚨 新臨時任務「${name}」已發布！`,
       icon: '🚨', pts: 0, time: t.time, date: t.date
     });
-    // 寫通知佇列（孩子端可輪詢或用 onValue 觸發）
     await push(ref(db, `notifications/${uid}`), {
       title: `🚨 新任務：${name}`,
       body: desc || `完成「${name}」可獲得 ${pts} 顆星星！`,
       icon, pts, time: t.time, read: false,
     });
-    // 本機通知（如果是同一裝置）
     sendLocalNotif(`🚨 新任務給 ${uname}！`, `${name}${desc ? ' — ' + desc : ''}｜+${pts} ⭐`);
   }
 
@@ -545,7 +593,6 @@ function startListen() {
   });
 }
 
-// ── 修改任務類型 ──
 window.updateTaskType = async function(tid, newType) {
   await update(ref(db, `tasks/${tid}`), { taskType: newType });
   toast(`任務類型已更新為「${TASK_TYPE_LABELS[newType]?.label || newType}」`);
@@ -631,7 +678,7 @@ function render() {
         </div>`;
       }).join('');
 
-  // Players + Gacha + Game Credits
+  // ── Players — 重新設計版面 ──
   document.getElementById('playerList').innerHTML = Object.entries(USERS).map(([uid, u]) => {
     const p = players[uid] || { points: 0, totalEarned: 0 };
     const pts = p.points || 0;
@@ -639,42 +686,71 @@ function render() {
     let lv = LEVELS[0];
     for (const l of LEVELS) { if (total >= l.need) lv = l; }
     const gachaCount = (allData.gachaCredits?.[uid]?.count) || 0;
-    const gameCreditsCount = gameCredits[uid]?.count || 0;
+    const gameCreditsCount = (allData.gameCredits?.[uid]?.count) || 0;
+
     return `<div class="player-card">
+      <!-- 標題列 -->
       <div class="player-header">
         <div class="player-avatar">${u.avatar}</div>
         <div>
           <div class="player-name">${u.name}</div>
-          <div class="player-level">Lv.${lv.lv} ${lv.name} ｜ 累計 ${total} 顆</div>
+          <div class="player-level">Lv.${lv.lv} ${lv.name}｜累計 ${total} 顆</div>
         </div>
-        <div class="player-pts-badge">${pts} ⭐</div>
       </div>
-      <input class="pts-input" type="number" id="amt-${uid}" placeholder="輸入點數數量" min="1">
-      <input class="pts-reason" id="reason-${uid}" placeholder="原因（選填）">
-      <div class="pts-adjust">
-        <button class="pts-btn btn-add" onclick="adjustPts('${uid}',1)">➕ 給點數</button>
-        <button class="pts-btn btn-sub" onclick="adjustPts('${uid}',-1)">➖ 扣點數</button>
+
+      <!-- 三格資源總覽 -->
+      <div class="resource-grid">
+        <div class="resource-block stars">
+          <div class="resource-icon">⭐</div>
+          <div class="resource-val">${pts}</div>
+          <div class="resource-label">星星點數</div>
+        </div>
+        <div class="resource-block gacha">
+          <div class="resource-icon">🎰</div>
+          <div class="resource-val">${gachaCount}</div>
+          <div class="resource-label">扭蛋數量</div>
+        </div>
+        <div class="resource-block game">
+          <div class="resource-icon">🎮</div>
+          <div class="resource-val">${gameCreditsCount}</div>
+          <div class="resource-label">遊戲次數</div>
+        </div>
       </div>
-<div class="gacha-send-row">
-  <div class="gacha-count-badge">現有 ${gachaCount} 顆</div>
-  <input class="pts-input" type="number" id="gacha-amt-${uid}" placeholder="數量" min="1" style="max-width:90px">
-  <button class="pts-btn btn-gacha" onclick="sendGacha('${uid}', 1)">🎰 發放</button>
-  <button class="pts-btn btn-sub" onclick="sendGacha('${uid}', -1)">➖ 扣除</button>
-</div>
+
+      <!-- ⭐ 星星管理 -->
+      <div class="manage-block stars-blk">
+        <div class="manage-block-title">⭐ 星星管理</div>
+        <div class="manage-row">
+          <input class="manage-input" type="number" id="amt-${uid}" placeholder="點數數量" min="1">
+          <button class="manage-btn btn-give" onclick="adjustPts('${uid}',1)">➕ 給</button>
+          <button class="manage-btn btn-take" onclick="adjustPts('${uid}',-1)">➖ 扣</button>
+        </div>
+        <input class="manage-input reason" id="reason-${uid}" placeholder="原因（選填）">
       </div>
-      <div class="game-section">
-        <div class="game-section-title">🎮 遊戲次數管理</div>
-        <div class="game-send-row">
-          <div class="game-count-badge">現有 ${gameCreditsCount} 次</div>
-          <input class="pts-input" type="number" id="game-amt-${uid}" placeholder="發放次數" min="1" style="max-width:110px">
-          <button class="pts-btn btn-game" onclick="sendGameCredits('${uid}',1)">🎮 發放</button>
-          <button class="pts-btn btn-game-sub" onclick="sendGameCredits('${uid}',-1)">➖ 扣除</button>
+
+      <!-- 🎰 扭蛋管理 -->
+      <div class="manage-block gacha-blk">
+        <div class="manage-block-title">🎰 扭蛋管理</div>
+        <div class="manage-row">
+          <input class="manage-input" type="number" id="gacha-amt-${uid}" placeholder="顆數" min="1">
+          <button class="manage-btn btn-gacha-give" onclick="sendGacha('${uid}',1)">🎰 發放</button>
+          <button class="manage-btn btn-take" onclick="sendGacha('${uid}',-1)">➖ 扣除</button>
+        </div>
+      </div>
+
+      <!-- 🎮 遊戲次數管理 -->
+      <div class="manage-block game-blk">
+        <div class="manage-block-title">🎮 遊戲次數管理</div>
+        <div class="manage-row">
+          <input class="manage-input" type="number" id="game-amt-${uid}" placeholder="次數" min="1">
+          <button class="manage-btn btn-game-give" onclick="sendGameCredits('${uid}',1)">🎮 發放</button>
+          <button class="manage-btn btn-take" onclick="sendGameCredits('${uid}',-1)">➖ 扣除</button>
         </div>
       </div>
     </div>`;
   }).join('');
 
-  // Tasks — 顯示類型 + 修改下拉
+  // Tasks
   const taskEntries = Object.entries(tasks);
   document.getElementById('taskManageList').innerHTML = taskEntries.length === 0
     ? `<div class="empty"><div class="empty-icon">📋</div>還沒有任務</div>`
@@ -762,7 +838,8 @@ function render() {
           </div>
         </div>`;
       }).join('');
-// ── Love Shop 管理 ──
+
+  // Love Shop 管理
   const allowanceShop = allData.allowanceShop || {};
   document.getElementById('loveShopManageList').innerHTML = Object.entries(allowanceShop).length === 0
     ? `<div class="empty"><div class="empty-icon">💰</div>還沒有商品</div>`
@@ -773,7 +850,7 @@ function render() {
           <button class="shop-del-btn" onclick="deleteLoveShopItem('${sid}')">刪除</button>
         </div>`).join('');
 
-  // ── Hot Shop 管理 ──
+  // Hot Shop 管理
   const hotShop = allData.hotShop || {};
   document.getElementById('hotShopManageList').innerHTML = Object.entries(hotShop).length === 0
     ? `<div class="empty"><div class="empty-icon">🔥</div>還沒有項目</div>`
@@ -784,42 +861,48 @@ function render() {
           <button class="shop-del-btn" onclick="deleteHotShopItem('${sid}')">刪除</button>
         </div>`).join('');
 
-  // ── 零用錢餘額管理 ──
+  // 零用錢餘額管理
   document.getElementById('allowancePlayerList').innerHTML = Object.entries(USERS).map(([uid,u]) => {
     const allowance = allData.love?.[uid]?.allowance || 0;
     return `<div class="player-card" style="border-color:var(--gold)">
       <div class="player-header">
         <div class="player-avatar">${u.avatar}</div>
         <div><div class="player-name">${u.name}</div><div class="player-level">零用錢餘額</div></div>
-        <div class="player-pts-badge" style="background:var(--gold);color:var(--gold-deep)">NT$${allowance}</div>
+        <div style="margin-left:auto;background:var(--gold);color:var(--gold-deep);border-radius:14px;padding:5px 14px;font-size:15px;font-weight:900;">NT$${allowance}</div>
       </div>
-      <input class="pts-input" type="number" id="allowance-amt-${uid}" placeholder="輸入金額" min="1">
-      <input class="pts-reason" id="allowance-reason-${uid}" placeholder="原因（選填）">
-      <div class="pts-adjust">
-        <button class="pts-btn btn-add" onclick="adjustAllowance('${uid}',1)">➕ 給零用錢</button>
-        <button class="pts-btn btn-sub" onclick="adjustAllowance('${uid}',-1)">➖ 扣零用錢</button>
+      <div class="manage-block stars-blk">
+        <div class="manage-block-title">💰 零用錢調整</div>
+        <div class="manage-row">
+          <input class="manage-input" type="number" id="allowance-amt-${uid}" placeholder="金額" min="1">
+          <button class="manage-btn btn-give" onclick="adjustAllowance('${uid}',1)">➕ 給</button>
+          <button class="manage-btn btn-take" onclick="adjustAllowance('${uid}',-1)">➖ 扣</button>
+        </div>
+        <input class="manage-input reason" id="allowance-reason-${uid}" placeholder="原因（選填）">
       </div>
     </div>`;
   }).join('');
 
-  // ── 愛心積分管理 ──
+  // 愛心積分管理
   document.getElementById('lovePtsPlayerList').innerHTML = Object.entries(USERS).map(([uid,u]) => {
     const lovePts = allData.love?.[uid]?.lovePts || 0;
     return `<div class="player-card" style="border-color:#FFE0EA">
       <div class="player-header">
         <div class="player-avatar">${u.avatar}</div>
         <div><div class="player-name">${u.name}</div><div class="player-level">愛心積分</div></div>
-        <div class="player-pts-badge" style="background:#FFE0EA;color:#8A2040">♡ ${lovePts}</div>
+        <div style="margin-left:auto;background:#FFE0EA;color:#8A2040;border-radius:14px;padding:5px 14px;font-size:15px;font-weight:900;">♡ ${lovePts}</div>
       </div>
-      <input class="pts-input" type="number" id="lovepts-amt-${uid}" placeholder="輸入愛心數" min="1">
-      <div class="pts-adjust">
-        <button class="pts-btn btn-add" onclick="adjustLovePts('${uid}',1)">➕ 給愛心</button>
-        <button class="pts-btn btn-sub" onclick="adjustLovePts('${uid}',-1)">➖ 扣愛心</button>
+      <div class="manage-block gacha-blk">
+        <div class="manage-block-title">♡ 愛心調整</div>
+        <div class="manage-row">
+          <input class="manage-input" type="number" id="lovepts-amt-${uid}" placeholder="愛心數" min="1">
+          <button class="manage-btn btn-give" onclick="adjustLovePts('${uid}',1)">➕ 給</button>
+          <button class="manage-btn btn-take" onclick="adjustLovePts('${uid}',-1)">➖ 扣</button>
+        </div>
       </div>
     </div>`;
   }).join('');
 
-  // ── 零用錢兌換審核 ──
+  // 零用錢兌換審核
   const allowancePendingArr = Object.entries(allData.allowancePending || {});
   document.getElementById('allowancePendingList').innerHTML = allowancePendingArr.length === 0
     ? `<div class="empty"><div class="empty-icon">💰</div>沒有待審核的零用錢兌換</div>`
@@ -842,7 +925,7 @@ function render() {
         </div>`;
       }).join('');
 
-  // ── 18+ 兌換審核 ──
+  // 18+ 兌換審核
   const hotShopPendingArr = Object.entries(allData.hotShopPending || {});
   document.getElementById('hotShopPendingList').innerHTML = hotShopPendingArr.length === 0
     ? `<div class="empty"><div class="empty-icon">🔥</div>沒有待審核的 18+ 兌換</div>`
@@ -865,7 +948,7 @@ function render() {
         </div>`;
       }).join('');
 
-  // ── 零用錢商店申請 ──
+  // 零用錢商店申請
   const aShopProposalArr = Object.entries(allData.allowanceShopProposals || {});
   document.getElementById('allowanceShopProposalList').innerHTML = aShopProposalArr.length === 0
     ? `<div class="empty"><div class="empty-icon">💌</div>沒有零用錢商店申請</div>`
@@ -893,7 +976,7 @@ function render() {
         </div>`;
       }).join('');
 
-  // ── 18+ 願望申請 ──
+  // 18+ 願望申請
   const hotProposalArr = Object.entries(allData.hotProposals || {});
   document.getElementById('hotProposalList').innerHTML = hotProposalArr.length === 0
     ? `<div class="empty"><div class="empty-icon">💌</div>沒有 18+ 願望申請</div>`
@@ -922,7 +1005,6 @@ function render() {
         </div>`;
       }).join('');
 
-  // History  ← 原本的 History 從這裡繼續
   // History
   const histArr = allData.history ? Object.values(allData.history).reverse() : [];
   document.getElementById('allHistoryList').innerHTML = histArr.slice(0,50).map(h => {
@@ -949,11 +1031,12 @@ window.sendGacha = async function(uid, sign = 1) {
   const gachaRef = ref(db, `gachaCredits/${uid}`);
   const snap = await get(gachaRef);
   const current = snap.val()?.count || 0;
-  await set(gachaRef, { count: current + amt });
+  const newCount = Math.max(0, current + sign * amt);
+  await set(gachaRef, { count: newCount });
   const t = now();
-  await push(ref(db, 'history'), { user: uid, desc: `收到 ${amt} 顆扭蛋！`, icon: '🎰', pts: 0, time: t.time, date: t.date });
+  await push(ref(db, 'history'), { user: uid, desc: sign > 0 ? `收到 ${amt} 顆扭蛋！` : `扣除 ${amt} 顆扭蛋`, icon: '🎰', pts: 0, time: t.time, date: t.date });
   document.getElementById(`gacha-amt-${uid}`).value = '';
-  toast(`🎰 已給 ${USERS[uid]?.name} ${amt} 顆扭蛋！`);
+  toast(`🎰 ${USERS[uid]?.name} 扭蛋 ${sign>0?'+':'-'}${amt}（現有 ${newCount} 顆）`);
 };
 
 // ── GAME CREDITS ──
@@ -1031,7 +1114,6 @@ window.approveProposalOneTime = async function(pid) {
     await push(ref(db,'history'), { user:p.user, desc:`自訂任務「${p.name}」一次性獎勵`, icon:p.icon||'💡', pts, time:t.time, date:t.date });
     toast(`✓ 已給 ${USERS[p.user]?.name||p.user} +${pts} 顆星星（一次性）`);
   }
-
   await remove(ref(db, `proposals/${pid}`));
 };
 
@@ -1139,7 +1221,7 @@ window.deleteShopItem = async function(sid) {
   await remove(ref(db, `shop/${sid}`));
   toast('商店項目已刪除');
 };
-  // ── 零用錢商店 CRUD ──
+
 window.addLoveShopItem = async function() {
   const icon = document.getElementById('newLoveShopIcon').value.trim() || '🛍';
   const name = document.getElementById('newLoveShopName').value.trim();
@@ -1156,7 +1238,6 @@ window.deleteLoveShopItem = async function(sid) {
   toast('商品已刪除');
 };
 
-// ── 18+ 商店 CRUD ──
 window.addHotShopItem = async function() {
   const icon = document.getElementById('newHotShopIcon').value.trim() || '🔥';
   const name = document.getElementById('newHotShopName').value.trim();
@@ -1173,7 +1254,6 @@ window.deleteHotShopItem = async function(sid) {
   toast('項目已刪除');
 };
 
-// ── 零用錢調整 ──
 window.adjustAllowance = async function(uid, sign) {
   const amt = parseInt(document.getElementById(`allowance-amt-${uid}`).value);
   if (!amt || amt <= 0) { toast('請輸入金額！'); return; }
@@ -1191,7 +1271,6 @@ window.adjustAllowance = async function(uid, sign) {
   toast(`💰 ${USERS[uid]?.name} 零用錢 ${sign>0?'+':'-'}NT$${amt}（現有 NT$${newVal}）`);
 };
 
-// ── 愛心積分調整 ──
 window.adjustLovePts = async function(uid, sign) {
   const amt = parseInt(document.getElementById(`lovepts-amt-${uid}`).value);
   if (!amt || amt <= 0) { toast('請輸入愛心數！'); return; }
@@ -1207,7 +1286,6 @@ window.adjustLovePts = async function(uid, sign) {
   toast(`♡ ${USERS[uid]?.name} 愛心 ${sign>0?'+':'-'}${amt}（現有 ${newVal}）`);
 };
 
-// ── 零用錢兌換審核 ──
 window.approveAllowancePending = async function(pid) {
   const p = (allData.allowancePending||{})[pid]; if(!p) return;
   const loveRef = ref(db, `love/${p.user}`);
@@ -1229,7 +1307,6 @@ window.rejectAllowancePending = async function(pid) {
   toast('✗ 已取消');
 };
 
-// ── 18+ 兌換審核 ──
 window.approveHotShopPending = async function(pid) {
   const p = (allData.hotShopPending||{})[pid]; if(!p) return;
   const loveRef = ref(db, `love/${p.user}`);
@@ -1251,7 +1328,6 @@ window.rejectHotShopPending = async function(pid) {
   toast('✗ 已取消');
 };
 
-// ── 零用錢商店申請審核 ──
 window.approveAllowanceShopProposal = async function(pid) {
   const p = (allData.allowanceShopProposals||{})[pid]; if(!p) return;
   const cost = parseInt(document.getElementById(`aShopPropInput-${pid}`)?.value) || p.suggestCost;
@@ -1267,7 +1343,6 @@ window.rejectAllowanceShopProposal = async function(pid) {
   toast('✗ 已拒絕申請');
 };
 
-// ── 18+ 願望申請審核 ──
 window.approveHotProposal = async function(pid) {
   const p = (allData.hotProposals||{})[pid]; if(!p) return;
   const cost = parseInt(document.getElementById(`hotPropInput-${pid}`)?.value) || p.suggestPts;
@@ -1303,10 +1378,6 @@ function toast(msg) {
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2800);
 }
-
-// 孩子端通知監聽（如果管理者和孩子在同一裝置可直接觸發）
-// 孩子端需在自己的頁面監聽 notifications/{uid} 節點
-// 這裡只負責寫入通知佇列，孩子端讀取並顯示
 
 updateNotifUI();
 startListen();
