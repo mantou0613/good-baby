@@ -650,10 +650,15 @@ function render() {
       }).join('');
 
   // Proposals
+// Proposals
   document.getElementById('proposalList').innerHTML = proposalArr.length === 0
     ? `<div class="empty"><div class="empty-icon">💡</div>目前沒有自訂任務申請</div>`
     : proposalArr.map(([pid, p]) => {
         const u = USERS[p.user] || { name: p.user, avatar: '👤' };
+        const rewardLabel = p.rewardType === 'gacha' ? '顆扭蛋 🎰' :
+                            p.rewardType === 'game'  ? '次遊戲次數 🎮' : '顆星星 ⭐';
+        const rewardIcon  = p.rewardType === 'gacha' ? '🎰' :
+                            p.rewardType === 'game'  ? '🎮' : '⭐';
         return `<div class="proposal-card">
           <div class="proposal-top">
             <div class="proposal-avatar">${u.avatar}</div>
@@ -661,19 +666,15 @@ function render() {
               <div class="proposal-who">${u.name} <span class="custom-badge">✏️ 自訂</span></div>
               <div class="proposal-name">${p.icon||'💡'} ${p.name}</div>
               ${p.reason ? `<div class="proposal-reason">「${p.reason}」</div>` : ''}
-              <div class="proposal-suggest">建議：${p.suggestPts} ${
-                p.rewardType === 'gacha' ? '顆扭蛋 🎰' :
-                p.rewardType === 'game'  ? '次遊戲次數 🎮' : '顆星星 ⭐'
-              }</div>
+              <div class="proposal-suggest">建議：${p.suggestPts} ${rewardLabel}</div>
+            </div>
             <div class="proposal-time">${p.time||''}</div>
           </div>
           <div class="proposal-pts-row">
             <div class="proposal-pts-label">決定給：</div>
             <input class="proposal-pts-input" type="number" id="pptsInput-${pid}" value="${p.suggestPts}" min="1">
-            <div class="proposal-pts-label" style="color:var(--gold-deep)">${
-                p.rewardType === 'gacha' ? '🎰' :
-                p.rewardType === 'game'  ? '🎮' : '⭐'
-              }</div>
+            <div class="proposal-pts-label" style="color:var(--gold-deep)">${rewardIcon}</div>
+          </div>
           <div class="proposal-actions">
             <button class="action-btn btn-add-task" onclick="approveProposalAddTask('${pid}')">➕ 加入任務</button>
             <button class="action-btn btn-one-time" onclick="approveProposalOneTime('${pid}')">⭐ 一次性給點</button>
