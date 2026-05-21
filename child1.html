@@ -65,6 +65,19 @@ select.propose-input {
   .progress-bar { background: var(--blue-dark); height: 100%; border-radius: 10px; transition: width 0.6s ease; }
   .progress-text { display: flex; justify-content: space-between; font-size: 10px; color: var(--text-light); font-weight: 700; margin-top: 4px; }
 
+  /* 禮物顯示區 */
+  .gifts-hero { margin: 0 16px 14px; background: white; border-radius: 20px; padding: 16px 18px; border: 1.5px solid var(--gold-dark); }
+  .gifts-hero-title { font-size: 13px; font-weight: 900; color: var(--gold-deep); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+  .gifts-row { display: flex; gap: 10px; }
+  .gift-badge { flex: 1; background: linear-gradient(135deg, #FFF8E8, #FFF0C8); border-radius: 14px; padding: 12px; text-align: center; border: 1.5px solid var(--gold-dark); cursor: pointer; transition: all 0.2s; }
+  .gift-badge:active { transform: scale(0.97); }
+  .gift-badge-icon { font-size: 28px; margin-bottom: 4px; }
+  .gift-badge-count { font-size: 24px; font-weight: 900; color: var(--gold-deep); }
+  .gift-badge-label { font-size: 10px; color: var(--gold-dark); font-weight: 700; margin-top: 2px; }
+  .gift-badge.big-gift { background: linear-gradient(135deg, #FFF0F8, #FFE8F8); border-color: var(--pink-dark); }
+  .gift-badge.big-gift .gift-badge-count { color: var(--pink-deep); }
+  .gift-badge.big-gift .gift-badge-label { color: var(--pink-dark); }
+
   .gacha-mini { margin: 0 16px 14px; }
   .gacha-mini-card { background: linear-gradient(135deg, #FFE8F0, #F0E8FF); border-radius: 16px; padding: 12px 16px; border: 1.5px solid var(--pink-dark); display: flex; align-items: center; gap: 12px; cursor: pointer; transition: all 0.2s; }
   .gacha-mini-card:active { transform: scale(0.98); }
@@ -75,7 +88,6 @@ select.propose-input {
   .gacha-mini-sub { font-size: 10px; color: var(--text-light); font-weight: 700; margin-top: 1px; }
   .gacha-mini-badge { background: var(--pink); color: var(--pink-deep); border-radius: 12px; padding: 4px 12px; font-size: 12px; font-weight: 900; flex-shrink: 0; }
 
-  /* 遊戲次數小橫幅 */
   .game-mini { margin: 0 16px 14px; }
   .game-mini-card { background: linear-gradient(135deg, #E8F0FF, #E8FFE8); border-radius: 16px; padding: 12px 16px; border: 1.5px solid var(--blue-dark); display: flex; align-items: center; gap: 12px; cursor: pointer; transition: all 0.2s; }
   .game-mini-card:active { transform: scale(0.98); }
@@ -216,34 +228,49 @@ select.propose-input {
   .game-modal-title { font-size: 20px; font-weight: 900; color: var(--text); text-align: center; margin-bottom: 6px; }
   .game-modal-sub { font-size: 12px; color: var(--text-light); font-weight: 700; text-align: center; margin-bottom: 16px; }
   .game-credits-left { font-size: 12px; font-weight: 900; color: var(--blue-deep); text-align: center; margin-bottom: 12px; background: var(--blue); border-radius: 10px; padding: 6px 12px; display: inline-block; width: 100%; }
-  .game-close-btn { width: 100%; background: #F0F0F0; color: var(--text); border: none; border-radius: 50px; padding: 12px; font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 900; cursor: pointer; margin-top: 14px; }
 
   /* WHEEL */
   #wheelCanvas { display: block; margin: 0 auto 12px; border-radius: 50%; }
   .wheel-spin-btn { width: 100%; background: linear-gradient(135deg, var(--pink-dark), var(--purple-dark)); color: white; border: none; border-radius: 50px; padding: 14px; font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 900; cursor: pointer; }
   .wheel-spin-btn:disabled { opacity: 0.5; cursor: not-allowed; }
   .wheel-result { text-align: center; font-size: 18px; font-weight: 900; color: var(--pink-deep); margin: 10px 0; min-height: 28px; }
+  /* 輪盤次數顯示 */
+  .wheel-spins-left { text-align: center; font-size: 16px; font-weight: 900; color: var(--purple-deep); background: var(--purple); border-radius: 12px; padding: 8px 16px; margin: 8px 0; }
 
   /* MEMORY GAME */
   .memory-grid { display: grid; gap: 8px; margin-bottom: 12px; }
-  .mem-card { border-radius: 12px; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 24px; background: var(--purple); border: none; cursor: pointer; transition: all 0.2s; font-family: 'Nunito', sans-serif; }
+  .mem-card { border-radius: 12px; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 20px; background: var(--purple); border: none; cursor: pointer; transition: all 0.2s; font-family: 'Nunito', sans-serif; }
   .mem-card.flipped { background: white; border: 2px solid var(--purple-dark); }
   .mem-card.matched { background: var(--mint); border: 2px solid var(--mint-dark); cursor: default; }
   .mem-card.hidden { font-size: 0; }
   .mem-stats { display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; color: var(--text-light); margin-bottom: 10px; }
   .mem-result { text-align: center; font-size: 16px; font-weight: 900; color: var(--mint-deep); padding: 10px; background: var(--mint); border-radius: 12px; margin-bottom: 10px; display: none; }
 
-  /* QUIZ GAME */
-  .quiz-question { font-size: 16px; font-weight: 900; color: var(--text); text-align: center; margin-bottom: 16px; padding: 12px; background: #F8F6FC; border-radius: 12px; line-height: 1.5; }
-  .quiz-options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
-  .quiz-opt-btn { width: 100%; background: white; border: 2px solid var(--purple); border-radius: 12px; padding: 12px 14px; font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 700; color: var(--text); cursor: pointer; text-align: left; transition: all 0.2s; }
-  .quiz-opt-btn:hover { border-color: var(--purple-dark); background: #FAF8FD; }
-  .quiz-opt-btn.correct { background: var(--mint); border-color: var(--mint-dark); color: var(--mint-deep); }
-  .quiz-opt-btn.wrong { background: #FAD0D0; border-color: #C05050; color: #8A2020; }
-  .quiz-opt-btn:disabled { cursor: default; }
-  .quiz-score { text-align: center; font-size: 13px; color: var(--text-light); font-weight: 700; margin-bottom: 10px; }
-  .quiz-result-box { text-align: center; padding: 14px; background: var(--gold); border-radius: 14px; margin-bottom: 10px; }
-  .quiz-result-box .big { font-size: 28px; font-weight: 900; color: var(--gold-deep); }
+  /* GUESS NUMBER GAME */
+  .guess-input-wrap { display: flex; gap: 8px; margin-bottom: 12px; }
+  .guess-input { flex: 1; background: #F8F6FC; border: 2px solid var(--purple); border-radius: 12px; padding: 12px 16px; font-family: 'Nunito', sans-serif; font-size: 20px; font-weight: 900; color: var(--text); outline: none; text-align: center; }
+  .guess-input:focus { border-color: var(--purple-dark); }
+  .guess-btn { background: var(--purple-dark); color: white; border: none; border-radius: 12px; padding: 12px 20px; font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 900; cursor: pointer; }
+  .guess-hint { text-align: center; font-size: 22px; font-weight: 900; min-height: 36px; margin-bottom: 8px; }
+  .guess-history { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+  .guess-tag { background: #F0F0F8; border-radius: 8px; padding: 4px 10px; font-size: 12px; font-weight: 700; color: var(--text-light); }
+  .guess-tag.too-big { background: #FFE0E0; color: #C04040; }
+  .guess-tag.too-small { background: #E0FFE8; color: #2A7A48; }
+  .guess-progress { background: #F0EEF8; border-radius: 10px; height: 8px; overflow: hidden; margin-bottom: 8px; }
+  .guess-progress-bar { background: var(--purple-dark); height: 100%; border-radius: 10px; transition: width 0.3s; }
+  .guess-range-hint { text-align: center; font-size: 12px; color: var(--text-light); font-weight: 700; margin-bottom: 10px; }
+  .guess-result { text-align: center; padding: 14px; background: var(--gold); border-radius: 14px; margin-bottom: 10px; display: none; }
+  .guess-result .big { font-size: 28px; font-weight: 900; color: var(--gold-deep); }
+
+  /* 禮物兌換 Modal */
+  .gift-redeem-list { display: flex; flex-direction: column; gap: 10px; margin: 12px 0; }
+  .gift-redeem-item { background: linear-gradient(135deg, #FFF8E8, #FFF0C8); border-radius: 14px; padding: 14px 16px; border: 1.5px solid var(--gold-dark); display: flex; align-items: center; gap: 12px; }
+  .gift-redeem-icon { font-size: 32px; flex-shrink: 0; }
+  .gift-redeem-info { flex: 1; }
+  .gift-redeem-name { font-size: 14px; font-weight: 900; color: var(--gold-deep); }
+  .gift-redeem-count { font-size: 12px; color: var(--gold-dark); font-weight: 700; margin-top: 2px; }
+  .gift-redeem-btn { background: var(--gold-dark); color: white; border: none; border-radius: 20px; padding: 8px 16px; font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 900; cursor: pointer; flex-shrink: 0; }
+  .gift-redeem-btn:disabled { background: #CCC; cursor: not-allowed; }
 
   .stars-rain { position: fixed; inset: 0; pointer-events: none; z-index: 500; }
   .star-particle { position: absolute; font-size: 20px; animation: fall 1.5s ease-in forwards; }
@@ -252,6 +279,7 @@ select.propose-input {
   .empty-icon { font-size: 44px; margin-bottom: 10px; }
   .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-80px); background: #3A4A3A; color: white; border-radius: 20px; padding: 12px 24px; font-size: 14px; font-weight: 700; z-index: 999; transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1); white-space: nowrap; max-width: 90vw; text-align: center; }
   .toast.show { transform: translateX(-50%) translateY(0); }
+  .game-close-btn { width: 100%; background: #F0F0F0; color: var(--text); border: none; border-radius: 50px; padding: 12px; font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 900; cursor: pointer; margin-top: 14px; }
 </style>
 </head>
 <body>
@@ -285,9 +313,9 @@ select.propose-input {
     </div>
   </div>
   <div id="notifBanner" style="margin:0 16px 10px;background:#EEF4FF;border-radius:12px;padding:10px 14px;border:1.5px solid var(--blue-dark);font-size:12px;font-weight:700;color:var(--blue-deep);display:flex;align-items:center;gap:10px;">
-  <span>📲 開啟通知，小波發任務時馬上知道！</span>
-  <button onclick="requestChildNotif()" style="margin-left:auto;background:var(--blue-dark);color:white;border:none;border-radius:8px;padding:5px 12px;font-family:'Nunito',sans-serif;font-size:11px;font-weight:900;cursor:pointer;">開啟</button>
-</div>
+    <span>📲 開啟通知，小波發任務時馬上知道！</span>
+    <button onclick="requestChildNotif()" style="margin-left:auto;background:var(--blue-dark);color:white;border:none;border-radius:8px;padding:5px 12px;font-family:'Nunito',sans-serif;font-size:11px;font-weight:900;cursor:pointer;">開啟</button>
+  </div>
   <div class="checkin-wrap">
     <div class="checkin-left">
       <div class="checkin-title-sm">📅 簽到</div>
@@ -306,6 +334,24 @@ select.propose-input {
       <div class="progress-text"><span id="progLeft">距離升級還差 10 顆</span><span id="progRight">Lv.2</span></div>
     </div>
   </div>
+
+  <!-- 禮物顯示 -->
+  <div class="gifts-hero" id="homeGiftsBanner">
+    <div class="gifts-hero-title">🎁 我的禮物寶庫</div>
+    <div class="gifts-row">
+      <div class="gift-badge big-gift" onclick="openGiftModal()">
+        <div class="gift-badge-icon">🎊</div>
+        <div class="gift-badge-count" id="bigGiftCount">0</div>
+        <div class="gift-badge-label">大禮物</div>
+      </div>
+      <div class="gift-badge" onclick="openGiftModal()">
+        <div class="gift-badge-icon">🎁</div>
+        <div class="gift-badge-count" id="smallGiftCount">0</div>
+        <div class="gift-badge-label">小禮物</div>
+      </div>
+    </div>
+  </div>
+
   <div class="gacha-mini">
     <div class="gacha-mini-card" onclick="showTab('gacha',null)">
       <div class="gacha-mini-icon">🎰</div>
@@ -354,15 +400,15 @@ select.propose-input {
         <input class="propose-input propose-input-sm" id="proposeIcon" placeholder="🌟" maxlength="4">
         <input class="propose-input" id="proposeName" placeholder="任務名稱">
       </div>
-<div class="propose-row">
-  <select class="propose-input propose-input-sm" id="proposeRewardType" style="appearance:none;-webkit-appearance:none;cursor:pointer;">
-    <option value="pts">⭐ 星星</option>
-    <option value="gacha">🎰 扭蛋</option>
-    <option value="game">🎮 遊戲次數</option>
-  </select>
-  <input class="propose-input propose-input-sm" id="proposePts" type="number" placeholder="數量" min="1" max="100">
-  <input class="propose-input" id="proposeReason" placeholder="為什麼值這些獎勵？">
-</div>
+      <div class="propose-row">
+        <select class="propose-input propose-input-sm" id="proposeRewardType" style="appearance:none;-webkit-appearance:none;cursor:pointer;">
+          <option value="pts">⭐ 星星</option>
+          <option value="gacha">🎰 扭蛋</option>
+          <option value="game">🎮 遊戲次數</option>
+        </select>
+        <input class="propose-input propose-input-sm" id="proposePts" type="number" placeholder="數量" min="1" max="100">
+        <input class="propose-input" id="proposeReason" placeholder="為什麼值這些獎勵？">
+      </div>
       <button class="propose-btn" onclick="submitProposal()">💌 送出自訂任務申請 ✦</button>
     </div>
   </div>
@@ -411,8 +457,25 @@ select.propose-input {
     <div style="font-size:12px;color:var(--text-light);font-weight:700;margin-bottom:16px;">顆</div>
     <button onclick="openGachaModal()" style="width:100%;background:linear-gradient(135deg,var(--pink-dark),var(--purple-dark));color:white;border:none;border-radius:50px;padding:15px;font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;cursor:pointer;" id="gachaPlayBtn">🎰 開始扭蛋！</button>
   </div>
-  <div class="section-title" style="margin-top:16px">🎁 待兌換的實體獎品</div>
-  <div style="padding:0 16px;margin-bottom:8px;font-size:12px;color:var(--text-light);font-weight:700;">抽到驚喜箱後在這裡兌換，小波確認後才算完成 ✦</div>
+  <!-- 禮物寶庫（扭蛋頁） -->
+  <div class="section-title" style="margin-top:16px">🎁 我的禮物寶庫</div>
+  <div style="padding:0 16px;margin-bottom:8px;font-size:12px;color:var(--text-light);font-weight:700;">從遊戲或扭蛋獲得的禮物，向小波申請兌換 ✦</div>
+  <div style="padding:0 16px;margin-bottom:16px;">
+    <div class="gifts-row">
+      <div class="gift-badge big-gift" onclick="openGiftModal()">
+        <div class="gift-badge-icon">🎊</div>
+        <div class="gift-badge-count" id="bigGiftCountGacha">0</div>
+        <div class="gift-badge-label">大禮物（點擊兌換）</div>
+      </div>
+      <div class="gift-badge" onclick="openGiftModal()">
+        <div class="gift-badge-icon">🎁</div>
+        <div class="gift-badge-count" id="smallGiftCountGacha">0</div>
+        <div class="gift-badge-label">小禮物（點擊兌換）</div>
+      </div>
+    </div>
+  </div>
+  <div class="section-title">🎁 已申請兌換的紀錄</div>
+  <div style="padding:0 16px;margin-bottom:8px;font-size:12px;color:var(--text-light);font-weight:700;">小波確認後才算完成 ✦</div>
   <div class="prize-pending-list" id="prizePendingList"></div>
 </div>
 
@@ -420,42 +483,39 @@ select.propose-input {
 <div id="tab-games" class="tab-sec">
   <div class="section-title" style="margin-top:6px">🎮 趣味小遊戲</div>
   <div style="padding:0 16px;margin-bottom:14px;font-size:13px;color:var(--text-light);font-weight:700;line-height:1.6;">小波給予遊戲次數，每次遊玩扣 1 次 ✦</div>
-
-  <!-- 遊戲次數顯示 -->
   <div class="games-credit-banner">
     <div class="gcb-label">🎮 剩餘遊戲次數（小波給予）</div>
     <div class="gcb-count" id="gameCreditsDisplay">0</div>
     <div class="gcb-unit">次</div>
     <div class="gcb-hint" id="gameCreditsHint">目前沒有遊戲次數，等小波發放喔 ✦</div>
   </div>
-
   <div class="games-grid">
     <div class="game-card" id="gameCard-wheel" onclick="openWheel()">
       <div class="game-icon">🎡</div>
       <div class="game-name">幸運輪盤</div>
-      <div class="game-desc">轉動輪盤看運氣</div>
-      <div class="game-prize">最多 +5 ⭐</div>
+      <div class="game-desc">8格輪盤，轉3次！</div>
+      <div class="game-prize">最多 +5 ⭐×3</div>
       <div class="game-cost-tag">消耗 1 次</div>
     </div>
     <div class="game-card" id="gameCard-memory" onclick="openMemory()">
       <div class="game-icon">🃏</div>
       <div class="game-name">記憶翻牌</div>
-      <div class="game-desc">配對所有卡片</div>
-      <div class="game-prize">最多 +8 ⭐</div>
+      <div class="game-desc">16對32張配對！</div>
+      <div class="game-prize">最多 +20 ⭐</div>
       <div class="game-cost-tag">消耗 1 次</div>
     </div>
-    <div class="game-card" id="gameCard-quiz" onclick="openQuiz()">
-      <div class="game-icon">🧠</div>
-      <div class="game-name">小知識問答</div>
-      <div class="game-desc">答對問題賺星星</div>
-      <div class="game-prize">每題 +1~3 ⭐</div>
+    <div class="game-card" id="gameCard-guess" onclick="openGuess()">
+      <div class="game-icon">🎯</div>
+      <div class="game-name">猜數字</div>
+      <div class="game-desc">1~100，有大小提示</div>
+      <div class="game-prize">越少猜越多分</div>
       <div class="game-cost-tag">消耗 1 次</div>
     </div>
     <div class="game-card" id="gameCard-slot" onclick="openSlot()">
       <div class="game-icon">🎰</div>
       <div class="game-name">拉霸機</div>
-      <div class="game-desc">三個相同大獎！</div>
-      <div class="game-prize">最多 +10 ⭐</div>
+      <div class="game-desc">三連大獎！送禮物！</div>
+      <div class="game-prize">三連💎=大禮物！</div>
       <div class="game-cost-tag">消耗 1 次</div>
     </div>
   </div>
@@ -495,6 +555,18 @@ select.propose-input {
   </div>
 </div>
 
+<!-- GIFT REDEEM MODAL -->
+<div class="overlay" id="giftOverlay" onclick="closeModal('giftOverlay')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div style="font-size:32px;text-align:center;margin-bottom:8px;">🎁</div>
+    <div class="modal-title" style="text-align:center">我的禮物寶庫</div>
+    <div class="modal-sub" style="text-align:center">點擊「申請兌換」，小波確認後完成 ♡</div>
+    <div class="gift-redeem-list" id="giftRedeemList"></div>
+    <button class="modal-btn btn-gray" onclick="closeModal('giftOverlay')">關閉</button>
+  </div>
+</div>
+
 <!-- GACHA MODAL -->
 <div class="gacha-modal-overlay" id="gachaOverlay">
   <div class="gacha-modal">
@@ -521,10 +593,12 @@ select.propose-input {
 <div class="game-modal-overlay" id="wheelOverlay">
   <div class="game-modal">
     <div class="game-modal-title">🎡 幸運輪盤</div>
-    <div class="game-modal-sub">轉動輪盤，看看今天的運氣！</div>
+    <div class="game-modal-sub">一次機會可轉 3 圈，看看今天的運氣！</div>
     <div class="game-credits-left" id="wheelCreditsLeft">剩餘遊戲次數：0 次</div>
+    <div class="wheel-spins-left" id="wheelSpinsLeft">本局剩餘轉數：3 次</div>
     <canvas id="wheelCanvas" width="260" height="260"></canvas>
     <div class="wheel-result" id="wheelResult"></div>
+    <div style="text-align:center;font-size:13px;font-weight:700;color:var(--blue-dark);margin-bottom:8px;" id="wheelTotalPts">本局累計：0 ⭐</div>
     <button class="wheel-spin-btn" id="wheelSpinBtn" onclick="spinWheel()">🎡 轉動！</button>
     <button class="game-close-btn" onclick="closeGame('wheelOverlay')">關閉</button>
   </div>
@@ -534,29 +608,37 @@ select.propose-input {
 <div class="game-modal-overlay" id="memoryOverlay">
   <div class="game-modal">
     <div class="game-modal-title">🃏 記憶翻牌</div>
-    <div class="game-modal-sub">找出所有配對！完成越快星星越多</div>
+    <div class="game-modal-sub">找出所有 16 對配對！完成越快星星越多</div>
     <div class="game-credits-left" id="memoryCreditsLeft">剩餘遊戲次數：0 次</div>
-    <div class="mem-stats"><span>翻牌次數：<b id="memMoves">0</b></span><span>配對：<b id="memMatched">0</b>/8</span><span id="memTimer">⏱ 0s</span></div>
+    <div class="mem-stats"><span>翻牌次數：<b id="memMoves">0</b></span><span>配對：<b id="memMatched">0</b>/16</span><span id="memTimer">⏱ 0s</span></div>
     <div class="mem-result" id="memResult"></div>
-    <div class="memory-grid" id="memoryGrid" style="grid-template-columns:repeat(4,1fr)"></div>
+    <div class="memory-grid" id="memoryGrid" style="grid-template-columns:repeat(8,1fr)"></div>
     <button class="wheel-spin-btn" onclick="initMemory()">🔄 重新開始</button>
     <button class="game-close-btn" onclick="closeGame('memoryOverlay')">關閉</button>
   </div>
 </div>
 
-<!-- QUIZ MODAL -->
-<div class="game-modal-overlay" id="quizOverlay">
+<!-- GUESS NUMBER MODAL -->
+<div class="game-modal-overlay" id="guessOverlay">
   <div class="game-modal">
-    <div class="game-modal-title">🧠 小知識問答</div>
-    <div class="game-credits-left" id="quizCreditsLeft">剩餘遊戲次數：0 次</div>
-    <div class="quiz-score" id="quizScore">第 1 題 / 共 5 題 ｜ 得分：0</div>
-    <div class="quiz-question" id="quizQuestion"></div>
-    <div class="quiz-options" id="quizOptions"></div>
-    <div class="quiz-result-box" id="quizResult" style="display:none">
-      <div class="big" id="quizResultPts">0 ⭐</div>
-      <div style="font-size:13px;color:var(--gold-deep);font-weight:700;margin-top:4px;" id="quizResultMsg"></div>
+    <div class="game-modal-title">🎯 猜數字</div>
+    <div class="game-modal-sub">猜 1~100 之間的數字，越少猜越高分！</div>
+    <div class="game-credits-left" id="guessCreditsLeft">剩餘遊戲次數：0 次</div>
+    <div class="guess-hint" id="guessHint">？</div>
+    <div class="guess-range-hint" id="guessRangeHint">範圍：1 ~ 100</div>
+    <div class="guess-progress"><div class="guess-progress-bar" id="guessProgBar" style="width:50%"></div></div>
+    <div class="guess-history" id="guessHistory"></div>
+    <div class="guess-input-wrap">
+      <input class="guess-input" type="number" id="guessInput" min="1" max="100" placeholder="輸入數字">
+      <button class="guess-btn" id="guessSubmitBtn" onclick="submitGuess()">猜！</button>
     </div>
-    <button class="game-close-btn" onclick="closeGame('quizOverlay')">關閉</button>
+    <div style="text-align:center;font-size:12px;color:var(--text-light);font-weight:700;margin-bottom:8px;" id="guessCount">已猜 0 次</div>
+    <div class="guess-result" id="guessResult">
+      <div class="big" id="guessResultPts">0 ⭐</div>
+      <div style="font-size:13px;color:var(--gold-deep);font-weight:700;margin-top:4px;" id="guessResultMsg"></div>
+    </div>
+    <button class="wheel-spin-btn" id="guessRestartBtn" onclick="initGuess()" style="display:none">🔄 再玩一次</button>
+    <button class="game-close-btn" onclick="closeGame('guessOverlay')">關閉</button>
   </div>
 </div>
 
@@ -564,12 +646,17 @@ select.propose-input {
 <div class="game-modal-overlay" id="slotOverlay">
   <div class="game-modal">
     <div class="game-modal-title">🎰 拉霸機</div>
-    <div class="game-modal-sub">拉動看看能不能三個相同！</div>
+    <div class="game-modal-sub">三連💎=大禮物！三連🌟=小禮物！</div>
     <div class="game-credits-left" id="slotCreditsLeft">剩餘遊戲次數：0 次</div>
     <div style="display:flex;justify-content:center;gap:12px;margin:16px 0;">
       <div id="slot0" style="width:72px;height:72px;background:#F8F6FC;border:2px solid var(--purple);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:36px;">🎲</div>
       <div id="slot1" style="width:72px;height:72px;background:#F8F6FC;border:2px solid var(--purple);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:36px;">🎲</div>
       <div id="slot2" style="width:72px;height:72px;background:#F8F6FC;border:2px solid var(--purple);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:36px;">🎲</div>
+    </div>
+    <!-- 獎項說明 -->
+    <div style="background:#F8F6FC;border-radius:12px;padding:10px 12px;margin-bottom:12px;font-size:11px;font-weight:700;color:var(--text-light);line-height:1.8;">
+      💎💎💎 三連鑽石 → 🎊 大禮物！&nbsp;|&nbsp;🌟🌟🌟 三連星星 → 🎁 小禮物！<br>
+      同符號三連（其他） → +15 ⭐&nbsp;|&nbsp;任意兩連 → +5 ⭐&nbsp;|&nbsp;沒中 → 無獎勵
     </div>
     <div class="wheel-result" id="slotResult"></div>
     <button class="wheel-spin-btn" id="slotSpinBtn" onclick="spinSlot()">🎰 拉！</button>
@@ -612,20 +699,8 @@ const GACHA_TABLE = [
   {weight:40,type:'pts',pts:1,icon:'⭐',title:'獲得 1 顆星星！',desc:'繼續加油，下次更多！'},
   {weight:30,type:'pts',pts:3,icon:'⭐⭐⭐',title:'獲得 3 顆星星！',desc:'不錯喔！繼續努力！'},
   {weight:15,type:'pts',pts:10,icon:'🌟🌟🌟',title:'獲得 10 顆星星！',desc:'太棒了！大豐收！'},
-  {weight:10,type:'prize',pts:0,icon:'🎁',title:'小驚喜！',desc:'抽到實體獎品！去「扭蛋」頁面申請兌換 ♡'},
-  {weight:5,type:'prize',pts:0,icon:'🎊',title:'大驚喜！！',desc:'哇！超級大獎！去「扭蛋」頁面申請兌換！🎉'},
-];
-const QUIZ_BANK = [
-  {q:'台灣最高的山是哪座？',opts:['玉山','合歡山','雪山','大霸尖山'],ans:0,pts:2},
-  {q:'1 + 1 × 2 = ？',opts:['4','3','6','2'],ans:1,pts:1},
-  {q:'水的化學式是什麼？',opts:['CO₂','O₂','H₂O','NaCl'],ans:2,pts:2},
-  {q:'一週有幾天？',opts:['5天','6天','8天','7天'],ans:3,pts:1},
-  {q:'太陽系有幾顆行星？',opts:['8顆','9顆','7顆','6顆'],ans:0,pts:2},
-  {q:'台灣的首都是哪裡？',opts:['台中','高雄','台北','桃園'],ans:2,pts:1},
-  {q:'光速大約是多少？',opts:['3萬公里/秒','30萬公里/秒','300公里/秒','3000公里/秒'],ans:1,pts:3},
-  {q:'蜘蛛有幾條腿？',opts:['6條','4條','10條','8條'],ans:3,pts:1},
-  {q:'彩虹有幾種顏色？',opts:['5種','6種','7種','8種'],ans:2,pts:1},
-  {q:'地球繞太陽一圈大約要多久？',opts:['1個月','1天','365天','30天'],ans:2,pts:2},
+  {weight:10,type:'small_gift',pts:0,icon:'🎁',title:'抽到小禮物！',desc:'恭喜！去「扭蛋」頁面申請兌換 ♡'},
+  {weight:5,type:'big_gift',pts:0,icon:'🎊',title:'抽到大禮物！！',desc:'哇！超級大獎！去「扭蛋」頁面申請兌換！🎉'},
 ];
 
 const app = initializeApp(firebaseConfig);
@@ -664,28 +739,96 @@ function updateGameCreditsUI(count) {
   document.getElementById('gameHomeAvail').textContent = count > 0 ? `${count} 次 🎮` : '還沒有';
   const hint = document.getElementById('gameCreditsHint');
   if (hint) hint.textContent = count > 0 ? `可以玩 ${count} 次，好好享受吧！✦` : '目前沒有遊戲次數，等小波發放喔 ✦';
-  // 更新各遊戲卡片狀態
-  ['wheel','memory','quiz','slot'].forEach(k => {
+  ['wheel','memory','guess','slot'].forEach(k => {
     const card = document.getElementById(`gameCard-${k}`);
     if (card) {
       if (count <= 0) card.classList.add('no-credits');
       else card.classList.remove('no-credits');
     }
   });
-  // 更新各遊戲 modal 內的次數顯示
-  ['wheelCreditsLeft','memoryCreditsLeft','quizCreditsLeft','slotCreditsLeft'].forEach(id => {
+  ['wheelCreditsLeft','memoryCreditsLeft','guessCreditsLeft','slotCreditsLeft'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.textContent = `剩餘遊戲次數：${count} 次`;
   });
 }
 
-// 消耗一次遊戲次數，回傳是否成功
 async function useGameCredit() {
   const count = getGameCredits();
   if (count <= 0) return false;
   await update(ref(db, `gameCredits/${ME}`), { count: count - 1 });
   return true;
 }
+
+// ── 禮物工具 ──
+function getGifts() {
+  const g = window._allData?.gifts?.[ME] || {};
+  return { big: g.big || 0, small: g.small || 0 };
+}
+function updateGiftUI() {
+  const g = getGifts();
+  // 所有顯示位置
+  ['bigGiftCount','bigGiftCountGacha'].forEach(id => {
+    const el = document.getElementById(id); if(el) el.textContent = g.big;
+  });
+  ['smallGiftCount','smallGiftCountGacha'].forEach(id => {
+    const el = document.getElementById(id); if(el) el.textContent = g.small;
+  });
+}
+async function addGift(type) {
+  // type: 'big' or 'small'
+  const g = getGifts();
+  const newBig = type === 'big' ? g.big + 1 : g.big;
+  const newSmall = type === 'small' ? g.small + 1 : g.small;
+  await update(ref(db, `gifts/${ME}`), { big: newBig, small: newSmall });
+}
+async function useGift(type) {
+  const g = getGifts();
+  if (type === 'big' && g.big <= 0) return false;
+  if (type === 'small' && g.small <= 0) return false;
+  const newBig = type === 'big' ? g.big - 1 : g.big;
+  const newSmall = type === 'small' ? g.small - 1 : g.small;
+  await update(ref(db, `gifts/${ME}`), { big: newBig, small: newSmall });
+  return true;
+}
+
+window.openGiftModal = function() {
+  const g = getGifts();
+  const list = document.getElementById('giftRedeemList');
+  list.innerHTML = `
+    <div class="gift-redeem-item">
+      <div class="gift-redeem-icon">🎊</div>
+      <div class="gift-redeem-info">
+        <div class="gift-redeem-name">大禮物</div>
+        <div class="gift-redeem-count">目前有 ${g.big} 個</div>
+      </div>
+      <button class="gift-redeem-btn" ${g.big<=0?'disabled':''} onclick="redeemGift('big')">申請兌換</button>
+    </div>
+    <div class="gift-redeem-item" style="background:linear-gradient(135deg,#FFF8E8,#FFF0C8);border-color:var(--gold-dark);">
+      <div class="gift-redeem-icon">🎁</div>
+      <div class="gift-redeem-info">
+        <div class="gift-redeem-name">小禮物</div>
+        <div class="gift-redeem-count">目前有 ${g.small} 個</div>
+      </div>
+      <button class="gift-redeem-btn" ${g.small<=0?'disabled':''} onclick="redeemGift('small')">申請兌換</button>
+    </div>
+  `;
+  document.getElementById('giftOverlay').classList.add('open');
+};
+
+window.redeemGift = async function(type) {
+  const g = getGifts();
+  if (type === 'big' && g.big <= 0) { toast('沒有大禮物了！'); return; }
+  if (type === 'small' && g.small <= 0) { toast('沒有小禮物了！'); return; }
+  const ok = await useGift(type);
+  if (!ok) { toast('發生錯誤，請重試！'); return; }
+  const label = type === 'big' ? '大禮物 🎊' : '小禮物 🎁';
+  const icon = type === 'big' ? '🎊' : '🎁';
+  const t = now();
+  await push(ref(db, `prizePending/${ME}`), {icon, title:`兌換${label}`, desc:`申請兌換${label}，等待小波確認`,time:t.time,date:t.date});
+  await push(ref(db,'history'), {user:ME,desc:`申請兌換${label}！`,icon,pts:0,time:t.time,date:t.date});
+  toast(`💌 已送出${label}兌換申請！等小波確認 ♡`);
+  closeModal('giftOverlay');
+};
 
 // ── 簽到 ──
 function renderCheckin(ci) {
@@ -758,10 +901,17 @@ window.spinGacha=async function(){
     await update(pr,{points:(pl.points||0)+result.pts,totalEarned:(pl.totalEarned||0)+result.pts});
     const t2=now(); await push(ref(db,'history'),{user:ME,desc:`扭蛋獲得 ${result.pts} 顆星星！`,icon:'🎰',pts:result.pts,time:t2.time,date:t2.date});
     if(result.pts>=10)rainStars();
-  } else if(result.type==='prize'){
+  } else if(result.type==='big_gift'){
+    await addGift('big');
     const t3=now();
-    await push(ref(db,`prizePending/${ME}`),{icon:result.icon,title:result.title,desc:result.desc,time:t3.time,date:t3.date});
-    await push(ref(db,'history'),{user:ME,desc:`扭蛋抽到「${result.title}」！等待兌換`,icon:'🎰',pts:0,time:t3.time,date:t3.date});
+    await push(ref(db,`prizePending/${ME}`),{icon:'🎊',title:'扭蛋抽到大禮物！',desc:'已加入禮物寶庫，去申請兌換！',time:t3.time,date:t3.date});
+    await push(ref(db,'history'),{user:ME,desc:'扭蛋抽到大禮物 🎊！',icon:'🎰',pts:0,time:t3.time,date:t3.date});
+    rainStars();
+  } else if(result.type==='small_gift'){
+    await addGift('small');
+    const t3=now();
+    await push(ref(db,`prizePending/${ME}`),{icon:'🎁',title:'扭蛋抽到小禮物！',desc:'已加入禮物寶庫，去申請兌換！',time:t3.time,date:t3.date});
+    await push(ref(db,'history'),{user:ME,desc:'扭蛋抽到小禮物 🎁！',icon:'🎰',pts:0,time:t3.time,date:t3.date});
     rainStars();
   }
   document.getElementById('gachaPhase1').style.display='none';
@@ -791,22 +941,20 @@ function startListen(){
     renderCheckin(d.checkin?.[ME]);
     renderGachaCount();
     updateGameCreditsUI(getGameCredits());
+    updateGiftUI();
     render();
-  })
-    // 監聽通知佇列
-onValue(ref(db, `notifications/${ME}`), snap => {
-  const notifs = snap.val() || {};
-  const unread = Object.entries(notifs).filter(([, n]) => !n.read);
-  for (const [nid, n] of unread) {
-    toast(`🚨 ${n.title}`);
-    update(ref(db, `notifications/${ME}/${nid}`), { read: true });
-if (window._swReg && Notification?.permission === 'granted') {
-  try {
-    window._swReg.showNotification(n.title, { body: n.body, icon: 'icon.png', tag: nid });
-  } catch(e) {}
-}
-  }
-});
+  });
+  onValue(ref(db, `notifications/${ME}`), snap => {
+    const notifs = snap.val() || {};
+    const unread = Object.entries(notifs).filter(([, n]) => !n.read);
+    for (const [nid, n] of unread) {
+      toast(`🚨 ${n.title}`);
+      update(ref(db, `notifications/${ME}/${nid}`), { read: true });
+      if (window._swReg && Notification?.permission === 'granted') {
+        try { window._swReg.showNotification(n.title, { body: n.body, icon: 'icon.png', tag: nid }); } catch(e) {}
+      }
+    }
+  });
 }
 
 async function handleLevelUp(newLv){
@@ -830,14 +978,11 @@ function getTaskState(tid, t) {
   const todayD = todayStr(), weekD = weekStr();
   const myPending = Object.values(pending).filter(p=>p.user===ME&&p.taskId===tid);
   if(myPending.length>0) return 'pending';
-  
-  // urgent 任務：當天只能申報一次
   if(t.taskType==='urgent'){
     const doneTodayByMe = history.some(h=>h.user===ME&&h.date===todayD&&h.desc&&h.desc.includes(t.name));
     if(doneTodayByMe) return 'done_today';
     return 'available';
   }
-  
   if(t.taskType==='daily'){
     const doneTodayByMe = history.some(h=>h.user===ME&&h.date===todayD&&h.desc&&h.desc.includes(t.name));
     if(doneTodayByMe) return 'done_today';
@@ -865,9 +1010,9 @@ function weekOfDate(dateStr){
 
 function render(){
   const te = Object.entries(tasks).filter(([,t]) => {
-  if (t.urgentFor && !t.urgentFor.includes(ME)) return false;
-  return true;
-});
+    if (t.urgentFor && !t.urgentFor.includes(ME)) return false;
+    return true;
+  });
   const pts=data.points||0, total=data.totalEarned||0;
   document.getElementById('ptsDisplay').textContent=pts;
   document.getElementById('shopPtsShow').textContent=pts;
@@ -886,10 +1031,10 @@ function render(){
   const normalTasks=te.filter(([,t])=>!t.taskType||t.taskType==='normal');
 
   const renderTaskList = (arr) => arr.map(([id,t])=>taskCard(id,t)).join('') || empty('📋','還沒有任務');
- const typeOrder={'urgent':0,'daily':1,'weekly':2,'normal':3};
-const availTasks=te.filter(([id,t])=>{ const s=getTaskState(id,t); return s==='available'; });
-const sortedTasks=availTasks.sort(([,a],[,b])=>(typeOrder[a.taskType||'normal']||3)-(typeOrder[b.taskType||'normal']||3));
-document.getElementById('homeTaskList').innerHTML=sortedTasks.length?sortedTasks.map(([id,t])=>taskCard(id,t)).join(''):empty('📋','目前沒有可申報任務');
+  const typeOrder={'urgent':0,'daily':1,'weekly':2,'normal':3};
+  const availTasks=te.filter(([id,t])=>{ const s=getTaskState(id,t); return s==='available'; });
+  const sortedTasks=availTasks.sort(([,a],[,b])=>(typeOrder[a.taskType||'normal']||3)-(typeOrder[b.taskType||'normal']||3));
+  document.getElementById('homeTaskList').innerHTML=sortedTasks.length?sortedTasks.map(([id,t])=>taskCard(id,t)).join(''):empty('📋','目前沒有可申報任務');
   document.getElementById('dailyTaskList').innerHTML=dailyTasks.length?renderTaskList(dailyTasks):empty('📅','沒有每日任務');
   document.getElementById('weeklyTaskList').innerHTML=weeklyTasks.length?renderTaskList(weeklyTasks):empty('🗓','沒有每週任務');
   document.getElementById('allTaskList').innerHTML=normalTasks.length?renderTaskList(normalTasks):empty('⚔️','沒有一般任務');
@@ -897,48 +1042,42 @@ document.getElementById('homeTaskList').innerHTML=sortedTasks.length?sortedTasks
   document.getElementById('allShopList').innerHTML=se.map(([id,s])=>shopCard(id,s,pts)).join('')||empty('🛍','商店空空的');
   document.getElementById('historyList').innerHTML=history.filter(h=>h.user===ME).slice(0,30).map(h=>histItem(h)).join('')||empty('📜','還沒有紀錄');
 
-  // Prize pending
   const prizePendingArr = Object.entries(window._allData?.prizePending?.[ME]||{});
   document.getElementById('prizePendingList').innerHTML = prizePendingArr.length===0
-    ? empty('🎁','暫時沒有待兌換的獎品')
-    : prizePendingArr.map(([pid,p])=>`<div class="prize-pending-card">
+    ? empty('🎁','暫時沒有已申請的兌換紀錄')
+    : prizePendingArr.reverse().map(([pid,p])=>`<div class="prize-pending-card">
         <div class="prize-pending-icon">${p.icon||'🎁'}</div>
         <div class="prize-pending-info"><div class="prize-pending-title">${p.title}</div><div class="prize-pending-sub">${p.desc}｜${p.time||''}</div></div>
         <div class="prize-pending-badge">等待確認</div>
       </div>`).join('');
 
-  // My proposals
   const myProposals=Object.entries(proposals).filter(([,p])=>p.user===ME);
   document.getElementById('myProposalList').innerHTML=myProposals.length===0?empty('💌','還沒有提出自訂任務'):myProposals.reverse().map(([id,p])=>`<div class="task-card pending"><div class="task-icon">${p.icon||'💡'}</div><div class="task-info"><div class="task-name">${p.name}</div>
-  <div class="task-pts">建議 ${p.suggestPts} ${
-  p.rewardType === 'gacha' ? '顆扭蛋 🎰' :
-  p.rewardType === 'game' ? '次遊戲 🎮' : '顆星星 ⭐'
-}</div> </div><div class="task-status status-pending">審核中</div></div>`).join('');
+  <div class="task-pts">建議 ${p.suggestPts} ${p.rewardType==='gacha'?'顆扭蛋 🎰':p.rewardType==='game'?'次遊戲 🎮':'顆星星 ⭐'}</div></div><div class="task-status status-pending">審核中</div></div>`).join('');
   const myShopProposals=Object.entries(window._allData?.shopProposals||{}).filter(([,p])=>p.user===ME);
   const shopPropEl=document.getElementById('myShopProposalList');
-  if(shopPropEl) shopPropEl.innerHTML=myShopProposals.length===0?empty('💌','還沒有提出獎勵申請'):myShopProposals.reverse().map(([id,p])=>`<div class="task-card pending"><div class="task-icon">${p.icon||'🎁'}</div>
-  <div class="task-info"><div class="task-name">${p.name}</div>
-  <div class="task-pts">建議 ${p.suggestPts} 顆星星</div></div><div class="task-status status-pending">審核中</div></div>`).join('');
+  if(shopPropEl) shopPropEl.innerHTML=myShopProposals.length===0?empty('💌','還沒有提出獎勵申請'):myShopProposals.reverse().map(([id,p])=>`<div class="task-card pending"><div class="task-icon">${p.icon||'🎁'}</div><div class="task-info"><div class="task-name">${p.name}</div><div class="task-pts">建議 ${p.suggestPts} 顆星星</div></div><div class="task-status status-pending">審核中</div></div>`).join('');
 
-  // Game history log (all, not just today)
   const gameHistory=history.filter(h=>h.user===ME&&h.icon==='🎮').slice(0,10);
   document.getElementById('gameTodayList').innerHTML=gameHistory.length?gameHistory.map(h=>histItem(h)).join(''):empty('🎮','還沒有遊戲紀錄');
+
+  updateGiftUI();
 }
 
 function taskCard(id, t) {
   const state = getTaskState(id, t);
   let typeTag='', statusEl='', clickAttr='', cardClass='task-card';
   if(t.taskType==='urgent') typeTag=`<span class="task-type-tag tag-urgent">🚨 緊急</span>`;
-else if(t.taskType==='daily') typeTag=`<span class="task-type-tag tag-daily">每日</span>`;
-else if(t.taskType==='weekly') typeTag=`<span class="task-type-tag tag-weekly">每週</span>`;
-if(state==='pending'){cardClass+=' pending';statusEl=`<div class="task-status status-pending">審核中</div>`;}
-else if(state==='done_today'){cardClass+=' pending';statusEl=`<div class="task-status status-done">已完成</div>`;}
-else if(state==='locked_exclusive'){cardClass+=' locked-excl';statusEl=`<div class="task-status status-locked">🔒 已被完成</div>`;}
-else{
-  if(t.taskType==='urgent') cardClass+=' urgent';
-  clickAttr=`onclick="openTaskModal('${id}','${t.name.replace(/'/g,"\\'")}','${t.icon}',${t.pts},'${t.taskType||'normal'}')"`;
-  statusEl=`<div class="task-status status-available">可申報</div>`;
-}
+  else if(t.taskType==='daily') typeTag=`<span class="task-type-tag tag-daily">每日</span>`;
+  else if(t.taskType==='weekly') typeTag=`<span class="task-type-tag tag-weekly">每週</span>`;
+  if(state==='pending'){cardClass+=' pending';statusEl=`<div class="task-status status-pending">審核中</div>`;}
+  else if(state==='done_today'){cardClass+=' pending';statusEl=`<div class="task-status status-done">已完成</div>`;}
+  else if(state==='locked_exclusive'){cardClass+=' locked-excl';statusEl=`<div class="task-status status-locked">🔒 已被完成</div>`;}
+  else{
+    if(t.taskType==='urgent') cardClass+=' urgent';
+    clickAttr=`onclick="openTaskModal('${id}','${t.name.replace(/'/g,"\\'")}','${t.icon}',${t.pts},'${t.taskType||'normal'}')"`;
+    statusEl=`<div class="task-status status-available">可申報</div>`;
+  }
   return `<div class="${cardClass}" ${clickAttr}><div class="task-icon">${t.icon}</div><div class="task-info"><div class="task-name">${t.name}${typeTag}</div><div class="task-pts">+${t.pts} 顆星星</div></div>${statusEl}</div>`;
 }
 function shopCard(id,s,pts){const can=pts>=s.cost;return `<div class="shop-card${can?'':' locked'}" onclick="${can?`openShopModal('${id}','${s.name.replace(/'/g,"\\'")}','${s.icon}',${s.cost})`:''}"><div class="shop-icon">${s.icon}</div><div class="shop-name">${s.name}</div><div class="shop-cost">${s.cost} ⭐</div></div>`;}
@@ -976,27 +1115,13 @@ window.submitProposal = async () => {
   const name = document.getElementById('proposeName').value.trim();
   const pts = parseInt(document.getElementById('proposePts').value);
   const reason = document.getElementById('proposeReason').value.trim();
-  const rewardType = document.getElementById('proposeRewardType').value; // ← 新增
-
+  const rewardType = document.getElementById('proposeRewardType').value;
   if (!name) { toast('請填寫任務名稱！'); return; }
   if (!pts || pts <= 0) { toast('請填寫建議數量！'); return; }
-
   const rewardLabel = { pts: '顆星星', gacha: '顆扭蛋', game: '次遊戲次數' }[rewardType];
   const t6 = now();
-  await push(ref(db, 'proposals'), {
-    user: ME, icon, name,
-    suggestPts: pts,
-    rewardType,           // ← 新增
-    reason: reason || '',
-    time: t6.time, date: t6.date, type: 'custom'
-  });
-
-  document.getElementById('proposeIcon').value = '';
-  document.getElementById('proposeName').value = '';
-  document.getElementById('proposePts').value = '';
-  document.getElementById('proposeReason').value = '';
-  document.getElementById('proposeRewardType').value = 'pts'; // ← 重設
-
+  await push(ref(db, 'proposals'), {user:ME,icon,name,suggestPts:pts,rewardType,reason:reason||'',time:t6.time,date:t6.date,type:'custom'});
+  document.getElementById('proposeIcon').value='';document.getElementById('proposeName').value='';document.getElementById('proposePts').value='';document.getElementById('proposeReason').value='';document.getElementById('proposeRewardType').value='pts';
   toast(`💌 自訂任務「${name}」已送出！建議 ${pts} ${rewardLabel} ✦`);
 };
 window.submitShopProposal=async()=>{
@@ -1017,28 +1142,56 @@ async function addPts(pts, desc, icon='🎮'){
 }
 
 // ═══════════════════════════════
-// 🎡 幸運輪盤
+// 🎡 幸運輪盤（8格，轉3次，1次遊戲機會）
+// 機率：1⭐=30% 2⭐=20% 3⭐=15% 5⭐=10% 沒中=25%
 // ═══════════════════════════════
+// 8格輪盤配置（按機率分配8格）
+// 30%1⭐→約2.4格, 20%2⭐→1.6格, 15%3⭐→1.2格, 10%5⭐→0.8格, 25%沒中→2格
+// 用weight來精確控制
 const WHEEL_SEGMENTS=[
-  {label:'1⭐',pts:1,color:'#BFD0F5'},{label:'沒中',pts:0,color:'#F5D5C8'},
-  {label:'3⭐',pts:3,color:'#C8E8D8'},{label:'沒中',pts:0,color:'#D4C5E8'},
-  {label:'5⭐',pts:5,color:'#F2BEC8'},{label:'沒中',pts:0,color:'#FFF0C0'},
-  {label:'2⭐',pts:2,color:'#BFD0F5'},{label:'沒中',pts:0,color:'#F5D5C8'},
+  {label:'1⭐', pts:1, color:'#BFD0F5'},
+  {label:'沒中', pts:0, color:'#F5D5C8'},
+  {label:'2⭐', pts:2, color:'#C8E8D8'},
+  {label:'沒中', pts:0, color:'#D4C5E8'},
+  {label:'1⭐', pts:1, color:'#BFD0F5'},
+  {label:'3⭐', pts:3, color:'#F2BEC8'},
+  {label:'2⭐', pts:2, color:'#C8E8D8'},
+  {label:'5⭐', pts:5, color:'#FFF0C0'},
 ];
-let wheelAngle=0, wheelSpinning=false;
+// 實際轉動時用加權隨機決定結果，輪盤僅作視覺
+const WHEEL_WEIGHTS=[
+  {pts:0, w:25, label:'沒中 💨'},
+  {pts:1, w:30, label:'+1 ⭐'},
+  {pts:2, w:20, label:'+2 ⭐'},
+  {pts:3, w:15, label:'+3 ⭐'},
+  {pts:5, w:10, label:'+5 ⭐'},
+];
+function drawWeightedWheel(){
+  const total=WHEEL_WEIGHTS.reduce((s,w)=>s+w.w,0);
+  let r=Math.random()*total;
+  for(const w of WHEEL_WEIGHTS){r-=w.w;if(r<=0)return w;}
+  return WHEEL_WEIGHTS[0];
+}
 
-window.openWheel=function(){
+let wheelAngle=0, wheelSpinning=false, wheelSpinsLeft=0, wheelTotalPts=0;
+
+window.openWheel=async function(){
   const credits = getGameCredits();
   if(credits<=0){toast('目前沒有遊戲次數！等小波發放喔 ✦');return;}
+  const ok = await useGameCredit();
+  if(!ok){toast('遊戲次數扣除失敗！');return;}
+  updateGameCreditsUI(getGameCredits());
+  wheelSpinsLeft=3; wheelTotalPts=0; wheelSpinning=false;
   document.getElementById('wheelOverlay').classList.add('open');
-  updateGameCreditsUI(credits);
-  drawWheel(wheelAngle);
+  document.getElementById('wheelSpinsLeft').textContent=`本局剩餘轉數：${wheelSpinsLeft} 次`;
+  document.getElementById('wheelTotalPts').textContent=`本局累計：0 ⭐`;
   const btn=document.getElementById('wheelSpinBtn');
   btn.disabled=false; btn.textContent='🎡 轉動！';
   document.getElementById('wheelResult').textContent='';
+  drawWheelCanvas(wheelAngle);
 };
 
-function drawWheel(angle){
+function drawWheelCanvas(angle){
   const canvas=document.getElementById('wheelCanvas'), ctx=canvas.getContext('2d');
   const cx=130,cy=130,r=120, seg=WHEEL_SEGMENTS.length, arc=Math.PI*2/seg;
   ctx.clearRect(0,0,260,260);
@@ -1057,10 +1210,7 @@ function drawWheel(angle){
 
 window.spinWheel=async function(){
   if(wheelSpinning) return;
-  const credits = getGameCredits();
-  if(credits<=0){toast('遊戲次數不足！');return;}
-  const ok = await useGameCredit();
-  if(!ok){toast('遊戲次數扣除失敗，請重試！');return;}
+  if(wheelSpinsLeft<=0){toast('本局次數用完了！');return;}
   wheelSpinning=true;
   document.getElementById('wheelSpinBtn').disabled=true;
   document.getElementById('wheelResult').textContent='轉動中...';
@@ -1069,34 +1219,47 @@ window.spinWheel=async function(){
   await new Promise(resolve=>{
     function frame(now){
       const elapsed=now-start, t=Math.min(elapsed/dur,1), ease=1-Math.pow(1-t,4);
-      wheelAngle=startAngle+totalRot*ease; drawWheel(wheelAngle);
+      wheelAngle=startAngle+totalRot*ease; drawWheelCanvas(wheelAngle);
       if(t<1){requestAnimationFrame(frame);}else{resolve();}
     }
     requestAnimationFrame(frame);
   });
-  const seg=WHEEL_SEGMENTS.length, arc=Math.PI*2/seg;
-  const normalizedAngle=((-wheelAngle)%(Math.PI*2)+Math.PI*2)%(Math.PI*2);
-  const idx=Math.floor(normalizedAngle/arc)%seg;
-  const result=WHEEL_SEGMENTS[idx];
+  // 用加權隨機決定真正的結果
+  const result = drawWeightedWheel();
+  wheelSpinsLeft--;
+  document.getElementById('wheelSpinsLeft').textContent=`本局剩餘轉數：${wheelSpinsLeft} 次`;
   wheelSpinning=false;
-  document.getElementById('wheelSpinBtn').disabled=false;
-  document.getElementById('wheelSpinBtn').textContent='🎡 再轉一次！';
   if(result.pts>0){
-    await addPts(result.pts,`[幸運輪盤] 獲得 ${result.pts} 顆星星！`);
-    document.getElementById('wheelResult').textContent=`🎉 恭喜！獲得 ${result.pts} 顆星星！`;
-    toast(`🎡 幸運輪盤 +${result.pts} ⭐`);
+    wheelTotalPts+=result.pts;
+    document.getElementById('wheelTotalPts').textContent=`本局累計：${wheelTotalPts} ⭐`;
+    document.getElementById('wheelResult').textContent=`🎉 ${result.label}！`;
   } else {
-    const t=now(); await push(ref(db,'history'),{user:ME,desc:'[幸運輪盤] 沒中，繼續加油！',icon:'🎮',pts:0,time:t.time,date:t.date});
-    document.getElementById('wheelResult').textContent='💨 沒中！再試試？';
-    toast('🎡 很可惜！');
+    document.getElementById('wheelResult').textContent=`💨 沒中！`;
   }
-  updateGameCreditsUI(getGameCredits());
+  if(wheelSpinsLeft>0){
+    document.getElementById('wheelSpinBtn').disabled=false;
+    document.getElementById('wheelSpinBtn').textContent=`🎡 再轉！（剩 ${wheelSpinsLeft} 次）`;
+  } else {
+    // 本局結束，給予累計點數
+    document.getElementById('wheelSpinBtn').disabled=true;
+    document.getElementById('wheelSpinBtn').textContent='本局結束！';
+    if(wheelTotalPts>0){
+      await addPts(wheelTotalPts,`[幸運輪盤] 本局獲得 ${wheelTotalPts} 顆星星！`);
+      toast(`🎡 輪盤結束！本局共獲得 +${wheelTotalPts} ⭐`);
+      document.getElementById('wheelResult').textContent=`🎊 本局共獲得 ${wheelTotalPts} ⭐！`;
+    } else {
+      const t=now(); await push(ref(db,'history'),{user:ME,desc:'[幸運輪盤] 本局沒中，繼續加油！',icon:'🎮',pts:0,time:t.time,date:t.date});
+      document.getElementById('wheelResult').textContent='💨 本局沒中！下次一定！';
+      toast('🎡 很可惜！');
+    }
+  }
 };
 
 // ═══════════════════════════════
-// 🃏 記憶翻牌
+// 🃏 記憶翻牌（16對32張）
+// ≤30s +20⭐ | 31-40s +15⭐ | 41-50s +10⭐ | 51-60s +5⭐ | 60s+ +3⭐
 // ═══════════════════════════════
-const MEM_EMOJIS=['🐵','🐷','🐶','🐱','🦊','🐻','🦁','🐸'];
+const MEM_EMOJIS=['🐵','🐷','🐶','🐱','🦊','🐻','🦁','🐸','🐧','🦉','🦄','🐳','🦋','🌸','🍎','🌟'];
 let memCards=[], memFlipped=[], memMatchCount=0, memMoves=0, memTimer=0, memTimerInterval=null, memLocked=false;
 let memCreditUsed=false;
 
@@ -1109,7 +1272,6 @@ window.openMemory=function(){
   initMemory();
 };
 window.initMemory=async function(){
-  // 只有第一次（或重新開始）才扣次數
   if(!memCreditUsed){
     const ok = await useGameCredit();
     if(!ok){toast('遊戲次數不足！');closeGame('memoryOverlay');return;}
@@ -1122,6 +1284,8 @@ window.initMemory=async function(){
   const pairs=[...MEM_EMOJIS,...MEM_EMOJIS].sort(()=>Math.random()-0.5);
   memCards=pairs;
   const grid=document.getElementById('memoryGrid'); grid.innerHTML='';
+  // 32張用8列4行或4列8行
+  grid.style.gridTemplateColumns='repeat(8,1fr)';
   pairs.forEach((emoji,i)=>{
     const btn=document.createElement('button'); btn.className='mem-card'; btn.dataset.idx=i; btn.dataset.emoji=emoji;
     btn.onclick=()=>flipCard(btn); grid.appendChild(btn);
@@ -1138,7 +1302,7 @@ function flipCard(btn){
       memFlipped[0].classList.add('matched'); memFlipped[1].classList.add('matched');
       memFlipped=[]; memLocked=false; memMatchCount++;
       document.getElementById('memMatched').textContent=memMatchCount;
-      if(memMatchCount===8) finishMemory();
+      if(memMatchCount===16) finishMemory();
     } else {
       setTimeout(()=>{memFlipped[0].classList.remove('flipped');memFlipped[0].textContent='';memFlipped[1].classList.remove('flipped');memFlipped[1].textContent='';memFlipped=[];memLocked=false;},700);
     }
@@ -1148,10 +1312,11 @@ function flipCard(btn){
 async function finishMemory(){
   clearInterval(memTimerInterval);
   let pts=0;
-  if(memTimer<=30) pts=8;
+  if(memTimer<=30) pts=20;
+  else if(memTimer<=40) pts=15;
+  else if(memTimer<=50) pts=10;
   else if(memTimer<=60) pts=5;
-  else if(memTimer<=120) pts=3;
-  else pts=1;
+  else pts=3;
   await addPts(pts,`[記憶翻牌] ${memTimer}s 完成！獲得 ${pts} 顆星星！`);
   toast(`🃏 記憶翻牌完成！+${pts} ⭐`);
   const res=document.getElementById('memResult');
@@ -1160,61 +1325,94 @@ async function finishMemory(){
 }
 
 // ═══════════════════════════════
-// 🧠 問答
+// 🎯 猜數字（1~100，大小提示）
 // ═══════════════════════════════
-let quizQuestions=[], quizCurrent=0, quizScore=0, quizAnswered=false, quizCreditUsed=false;
+let guessTarget=0, guessCount=0, guessMin=1, guessMax=100, guessFinished=false, guessCreditUsed=false;
 
-window.openQuiz=async function(){
+window.openGuess=async function(){
   const credits = getGameCredits();
   if(credits<=0){toast('目前沒有遊戲次數！等小波發放喔 ✦');return;}
   const ok = await useGameCredit();
   if(!ok){toast('遊戲次數不足！');return;}
-  quizCreditUsed=true;
+  guessCreditUsed=true;
   updateGameCreditsUI(getGameCredits());
-  document.getElementById('quizOverlay').classList.add('open');
-  initQuiz();
+  document.getElementById('guessOverlay').classList.add('open');
+  initGuess();
 };
-function initQuiz(){
-  const shuffled=[...QUIZ_BANK].sort(()=>Math.random()-0.5).slice(0,5);
-  quizQuestions=shuffled; quizCurrent=0; quizScore=0;
-  document.getElementById('quizResult').style.display='none';
-  showQuizQuestion();
-}
-function showQuizQuestion(){
-  if(quizCurrent>=quizQuestions.length){finishQuiz();return;}
-  const q=quizQuestions[quizCurrent]; quizAnswered=false;
-  document.getElementById('quizScore').textContent=`第 ${quizCurrent+1} 題 / 共 ${quizQuestions.length} 題 ｜ 得分：${quizScore}`;
-  document.getElementById('quizQuestion').textContent=q.q;
-  const optEl=document.getElementById('quizOptions'); optEl.innerHTML='';
-  q.opts.forEach((opt,i)=>{
-    const btn=document.createElement('button'); btn.className='quiz-opt-btn'; btn.textContent=opt;
-    btn.onclick=()=>answerQuiz(i,btn); optEl.appendChild(btn);
-  });
-}
-function answerQuiz(i, btn){
-  if(quizAnswered)return; quizAnswered=true;
-  const q=quizQuestions[quizCurrent];
-  document.querySelectorAll('.quiz-opt-btn').forEach(b=>b.disabled=true);
-  if(i===q.ans){btn.classList.add('correct');quizScore+=q.pts;}
-  else{btn.classList.add('wrong');document.querySelectorAll('.quiz-opt-btn')[q.ans].classList.add('correct');}
-  quizCurrent++;
-  setTimeout(()=>showQuizQuestion(),900);
-}
-async function finishQuiz(){
-  if(quizScore>0){await addPts(quizScore,`[問答遊戲] 獲得 ${quizScore} 顆星星！`);toast(`🧠 問答完成！+${quizScore} ⭐`);}
-  else{toast('很可惜，下次加油！');}
-  const res=document.getElementById('quizResult');
-  res.style.display='block';
-  document.getElementById('quizResultPts').textContent=`+${quizScore} ⭐`;
-  document.getElementById('quizResultMsg').textContent=quizScore>=8?'哇！全部答對！🎉':quizScore>=4?'很不錯！繼續加油！':'下次一定更好！';
-  document.getElementById('quizOptions').innerHTML='';
-  document.getElementById('quizQuestion').textContent='';
-}
+
+window.initGuess=function(){
+  guessTarget=Math.floor(Math.random()*100)+1;
+  guessCount=0; guessMin=1; guessMax=100; guessFinished=false;
+  document.getElementById('guessHint').textContent='🤔 我想好了！';
+  document.getElementById('guessRangeHint').textContent='範圍：1 ~ 100';
+  document.getElementById('guessProgBar').style.width='50%';
+  document.getElementById('guessHistory').innerHTML='';
+  document.getElementById('guessCount').textContent='已猜 0 次';
+  document.getElementById('guessResult').style.display='none';
+  document.getElementById('guessRestartBtn').style.display='none';
+  document.getElementById('guessInput').value='';
+  document.getElementById('guessInput').disabled=false;
+  document.getElementById('guessSubmitBtn').disabled=false;
+};
+
+window.submitGuess=function(){
+  if(guessFinished) return;
+  const input=document.getElementById('guessInput');
+  const val=parseInt(input.value);
+  if(isNaN(val)||val<1||val>100){toast('請輸入 1~100 的數字！');return;}
+  guessCount++;
+  document.getElementById('guessCount').textContent=`已猜 ${guessCount} 次`;
+  input.value='';
+  if(val===guessTarget){
+    guessFinished=true;
+    document.getElementById('guessHint').textContent=`🎉 答對了！是 ${guessTarget}！`;
+    document.getElementById('guessInput').disabled=true;
+    document.getElementById('guessSubmitBtn').disabled=true;
+    document.getElementById('guessRestartBtn').style.display='block';
+    // 計分：猜越少越高分
+    let pts=0;
+    if(guessCount<=5) pts=10;
+    else if(guessCount<=8) pts=7;
+    else if(guessCount<=12) pts=5;
+    else if(guessCount<=18) pts=3;
+    else pts=1;
+    document.getElementById('guessResult').style.display='block';
+    document.getElementById('guessResultPts').textContent=`+${pts} ⭐`;
+    const msgs=['','神了！','','超厲害！','','很棒！','','不錯！','','繼續加油！'];
+    document.getElementById('guessResultMsg').textContent=`用了 ${guessCount} 次猜到！${guessCount<=5?'🏆 神了！':guessCount<=8?'🌟 超厲害！':guessCount<=12?'✨ 很棒！':'💪 繼續加油！'}`;
+    addPts(pts,`[猜數字] ${guessCount}次猜到 ${guessTarget}！獲得 ${pts} 顆星星！`);
+    toast(`🎯 猜對了！+${pts} ⭐`);
+    if(pts>=5) rainStars();
+  } else if(val<guessTarget){
+    guessMin=Math.max(guessMin,val+1);
+    document.getElementById('guessHint').textContent=`📈 太小了！往大一點猜！`;
+    const tag=document.createElement('span'); tag.className='guess-tag too-small'; tag.textContent=`${val} ↑`;
+    document.getElementById('guessHistory').appendChild(tag);
+  } else {
+    guessMax=Math.min(guessMax,val-1);
+    document.getElementById('guessHint').textContent=`📉 太大了！往小一點猜！`;
+    const tag=document.createElement('span'); tag.className='guess-tag too-big'; tag.textContent=`${val} ↓`;
+    document.getElementById('guessHistory').appendChild(tag);
+  }
+  document.getElementById('guessRangeHint').textContent=`範圍：${guessMin} ~ ${guessMax}`;
+  const pct=((val-1)/99)*100;
+  document.getElementById('guessProgBar').style.width=pct+'%';
+};
+
+// Enter鍵提交猜測
+document.getElementById('guessInput').addEventListener('keydown', function(e){
+  if(e.key==='Enter') window.submitGuess();
+});
 
 // ═══════════════════════════════
-// 🎰 拉霸機
+// 🎰 拉霸機（新機率）
+// 三連💎 ~1.5% → 大禮物
+// 三連🌟 ~5% → 小禮物
+// 三連其他 ~7.5% → +15⭐
+// 兩連 ~35% → +5⭐
+// 沒中 ~51% → 無
 // ═══════════════════════════════
-const SLOT_ITEMS=['⭐','🌟','🎁','💎','🌈','🦋'];
+const SLOT_ITEMS=['⭐','🌟','💎','🎁','🌈','🦋'];
 let slotSpinning=false;
 
 window.openSlot=function(){
@@ -1226,6 +1424,38 @@ window.openSlot=function(){
   btn.disabled=false; btn.textContent='🎰 拉！';
   document.getElementById('slotResult').textContent='';
 };
+
+function slotRoll(){
+  // 精確機率控制
+  const r=Math.random()*100;
+  if(r<1.5){
+    // 三連💎 (1.5%)
+    return ['💎','💎','💎'];
+  } else if(r<6.5){
+    // 三連🌟 (5%)
+    return ['🌟','🌟','🌟'];
+  } else if(r<14){
+    // 三連其他 (7.5%)
+    const others=['⭐','🎁','🌈','🦋'];
+    const pick=others[Math.floor(Math.random()*others.length)];
+    return [pick,pick,pick];
+  } else if(r<49){
+    // 兩連 (35%)
+    const item=SLOT_ITEMS[Math.floor(Math.random()*SLOT_ITEMS.length)];
+    const diff=SLOT_ITEMS.filter(s=>s!==item);
+    const other=diff[Math.floor(Math.random()*diff.length)];
+    const pos=Math.floor(Math.random()*3);
+    const res=[item,item,item]; res[pos]=other;
+    return res;
+  } else {
+    // 沒中（全不同）
+    let a=SLOT_ITEMS[Math.floor(Math.random()*SLOT_ITEMS.length)];
+    let b,c;
+    do{b=SLOT_ITEMS[Math.floor(Math.random()*SLOT_ITEMS.length)];}while(b===a);
+    do{c=SLOT_ITEMS[Math.floor(Math.random()*SLOT_ITEMS.length)];}while(c===a||c===b);
+    return [a,b,c];
+  }
+}
 
 window.spinSlot=async function(){
   if(slotSpinning) return;
@@ -1240,22 +1470,36 @@ window.spinSlot=async function(){
   const slots=[document.getElementById('slot0'),document.getElementById('slot1'),document.getElementById('slot2')];
   const interval=setInterval(()=>{slots.forEach(s=>s.textContent=SLOT_ITEMS[Math.floor(Math.random()*SLOT_ITEMS.length)]);},80);
   await new Promise(r=>setTimeout(r,2000)); clearInterval(interval);
-  const finalResults=[SLOT_ITEMS[Math.floor(Math.random()*SLOT_ITEMS.length)],SLOT_ITEMS[Math.floor(Math.random()*SLOT_ITEMS.length)],SLOT_ITEMS[Math.floor(Math.random()*SLOT_ITEMS.length)]];
-  if(Math.random()<0.1){finalResults[1]=finalResults[0];finalResults[2]=finalResults[0];}
-  else if(Math.random()<0.25){finalResults[2]=finalResults[0];}
+  const finalResults=slotRoll();
   slots.forEach((s,i)=>s.textContent=finalResults[i]);
   slotSpinning=false;
   document.getElementById('slotSpinBtn').disabled=false;
   document.getElementById('slotSpinBtn').textContent='🎰 再拉！';
   const t=now();
-  if(finalResults[0]===finalResults[1]&&finalResults[1]===finalResults[2]){
-    await addPts(10,'[拉霸機] 三連！獲得 10 顆星星！');
-    document.getElementById('slotResult').textContent='🎊 三連！大獎！+10 ⭐！';
-    toast('🎰 拉霸大獎！+10 ⭐！'); rainStars();
-  } else if(finalResults[0]===finalResults[1]||finalResults[1]===finalResults[2]||finalResults[0]===finalResults[2]){
-    await addPts(3,'[拉霸機] 兩連！獲得 3 顆星星！');
-    document.getElementById('slotResult').textContent='✨ 兩連！+3 ⭐！';
-    toast('🎰 兩連！+3 ⭐！');
+  const isTriple=finalResults[0]===finalResults[1]&&finalResults[1]===finalResults[2];
+  const isDouble=!isTriple&&(finalResults[0]===finalResults[1]||finalResults[1]===finalResults[2]||finalResults[0]===finalResults[2]);
+  if(isTriple&&finalResults[0]==='💎'){
+    // 大禮物
+    await addGift('big');
+    await push(ref(db,`prizePending/${ME}`),{icon:'🎊',title:'拉霸三連💎！大禮物！',desc:'已加入禮物寶庫，去申請兌換！',time:t.time,date:t.date});
+    await push(ref(db,'history'),{user:ME,desc:'[拉霸機] 三連💎！獲得大禮物 🎊！',icon:'🎮',pts:0,time:t.time,date:t.date});
+    document.getElementById('slotResult').textContent='🎊 三連💎！大禮物入帳！';
+    toast('🎰 三連💎！大禮物！'); rainStars();
+  } else if(isTriple&&finalResults[0]==='🌟'){
+    // 小禮物
+    await addGift('small');
+    await push(ref(db,`prizePending/${ME}`),{icon:'🎁',title:'拉霸三連🌟！小禮物！',desc:'已加入禮物寶庫，去申請兌換！',time:t.time,date:t.date});
+    await push(ref(db,'history'),{user:ME,desc:'[拉霸機] 三連🌟！獲得小禮物 🎁！',icon:'🎮',pts:0,time:t.time,date:t.date});
+    document.getElementById('slotResult').textContent='🎁 三連🌟！小禮物入帳！';
+    toast('🎰 三連🌟！小禮物！'); rainStars();
+  } else if(isTriple){
+    await addPts(15,'[拉霸機] 三連！獲得 15 顆星星！');
+    document.getElementById('slotResult').textContent=`✨ 三連${finalResults[0]}！+15 ⭐！`;
+    toast('🎰 三連！+15 ⭐！'); rainStars();
+  } else if(isDouble){
+    await addPts(5,'[拉霸機] 兩連！獲得 5 顆星星！');
+    document.getElementById('slotResult').textContent='✨ 兩連！+5 ⭐！';
+    toast('🎰 兩連！+5 ⭐！');
   } else {
     await push(ref(db,'history'),{user:ME,desc:'[拉霸機] 沒中，繼續加油！',icon:'🎮',pts:0,time:t.time,date:t.date});
     document.getElementById('slotResult').textContent='💨 沒中！再試試？';
@@ -1295,14 +1539,12 @@ window.requestChildNotif = async function() {
   }
 };
 
-// 初始化時檢查
 if (localStorage.getItem('child1_notif') === 'granted' || Notification?.permission === 'granted') {
   document.addEventListener('DOMContentLoaded', () => {
     const banner = document.getElementById('notifBanner');
     if (banner) banner.style.display = 'none';
   });
 }
-  // 自動註冊 Service Worker
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('./sw.js').then(reg => {
     window._swReg = reg;
@@ -1313,3 +1555,5 @@ initDefaults().then(()=>startListen());
 </script>
 </body>
 </html>
+HTMLEOF
+echo "Done. File size: $(wc -c < /mnt/user-data/outputs/child1.html) bytes"
