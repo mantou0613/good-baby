@@ -90,19 +90,9 @@
   .player-name { font-size: 18px; font-weight: 900; color: var(--text); }
   .player-level { font-size: 11px; color: var(--text-light); font-weight: 700; margin-top: 2px; }
 
-  /* 三格資源總覽 */
-  .resource-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 8px;
-    margin-bottom: 14px;
-  }
-  .resource-block {
-    border-radius: 14px;
-    padding: 10px 6px;
-    text-align: center;
-    border: 1.5px solid rgba(0,0,0,0.07);
-  }
+  /* 資源總覽 */
+  .resource-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+  .resource-block { border-radius: 14px; padding: 10px 6px; text-align: center; border: 1.5px solid rgba(0,0,0,0.07); }
   .resource-block.stars  { background: linear-gradient(135deg,#FFFBEA,#FFF3C0); border-color: #D4A820; }
   .resource-block.gacha  { background: linear-gradient(135deg,#FFF4F7,#FFE4EE); border-color: #D4849A; }
   .resource-block.game   { background: linear-gradient(135deg,#EEF3FF,#DDE8FF); border-color: #7090C8; }
@@ -113,56 +103,28 @@
   .gacha .resource-val  { color: #9B5068; }
   .game  .resource-val  { color: #3A62B0; }
 
+  /* 禮物資源格 */
+  .resource-grid-gifts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+  .resource-block.bigift { background: linear-gradient(135deg,#FFF0F8,#FFE0F0); border-color: #D060A0; }
+  .resource-block.smgift { background: linear-gradient(135deg,#F0FFF8,#D8FFE8); border-color: #40A870; }
+  .bigift .resource-val { color: #8A1060; }
+  .smgift .resource-val { color: #1A6840; }
+
   /* 管理區塊 */
-  .manage-block {
-    background: #F8F7FC;
-    border-radius: 14px;
-    padding: 12px 12px 10px;
-    margin-bottom: 8px;
-  }
+  .manage-block { background: #F8F7FC; border-radius: 14px; padding: 12px 12px 10px; margin-bottom: 8px; }
   .manage-block:last-child { margin-bottom: 0; }
-  .manage-block-title {
-    font-size: 11px;
-    font-weight: 900;
-    color: var(--text-light);
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-  }
+  .manage-block-title { font-size: 11px; font-weight: 900; color: var(--text-light); margin-bottom: 8px; display: flex; align-items: center; gap: 4px; text-transform: uppercase; letter-spacing: 0.04em; }
   .manage-block.stars-blk  { background: linear-gradient(135deg,#FFFDF0,#FFFBE8); }
   .manage-block.gacha-blk  { background: linear-gradient(135deg,#FFF8FA,#FFF0F4); }
   .manage-block.game-blk   { background: linear-gradient(135deg,#F4F7FF,#EEF3FF); }
+  .manage-block.bigift-blk { background: linear-gradient(135deg,#FFF0F8,#FFE8F4); }
+  .manage-block.smgift-blk { background: linear-gradient(135deg,#F0FFF8,#E0FFE8); }
 
   /* 輸入行 */
   .manage-row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
-  .manage-input {
-    flex: 1;
-    min-width: 0;
-    background: white;
-    border: 1.5px solid rgba(0,0,0,0.10);
-    border-radius: 10px;
-    padding: 9px 12px;
-    font-family: 'Nunito', sans-serif;
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--text);
-    outline: none;
-  }
+  .manage-input { flex: 1; min-width: 0; background: white; border: 1.5px solid rgba(0,0,0,0.10); border-radius: 10px; padding: 9px 12px; font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 700; color: var(--text); outline: none; }
   .manage-input.reason { margin-top: 6px; width: 100%; flex: none; }
-  .manage-btn {
-    border: none;
-    border-radius: 10px;
-    padding: 9px 14px;
-    font-family: 'Nunito', sans-serif;
-    font-size: 12px;
-    font-weight: 900;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: all 0.15s;
-  }
+  .manage-btn { border: none; border-radius: 10px; padding: 9px 14px; font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 900; cursor: pointer; white-space: nowrap; transition: all 0.15s; }
   .manage-btn:active { transform: scale(0.95); }
   .btn-give  { background: var(--mint);  color: var(--mint-deep); }
   .btn-give:hover  { background: var(--mint-dark); color: white; }
@@ -170,6 +132,8 @@
   .btn-take:hover  { background: var(--red-dark);  color: white; }
   .btn-gacha-give { background: linear-gradient(135deg,var(--pink),var(--purple)); color: white; }
   .btn-game-give  { background: linear-gradient(135deg,var(--blue-dark),var(--purple-dark)); color: white; }
+  .btn-bigift-give { background: linear-gradient(135deg,#E060A0,#C02080); color: white; }
+  .btn-smgift-give { background: linear-gradient(135deg,#40A870,#208050); color: white; }
 
   /* SHOP / TASK MANAGE */
   .shop-manage { padding: 0 16px; margin-bottom: 22px; }
@@ -239,10 +203,16 @@
   .pts-neg { color: #C04060; }
   .pts-neutral { color: var(--purple-deep); }
 
+  /* 禮物兌換審核 */
+  .gift-pending-card { background: white; border-radius: 16px; padding: 14px 16px; border: 2px solid #E060A0; }
+  .gift-tag-big { background: linear-gradient(135deg,#FFE0F0,#FFC0E0); color: #8A1060; border-radius: 10px; padding: 3px 10px; font-size: 11px; font-weight: 900; }
+  .gift-tag-sm  { background: linear-gradient(135deg,#D0FFE8,#A0F0C0); color: #1A6840; border-radius: 10px; padding: 3px 10px; font-size: 11px; font-weight: 900; }
+
   .empty { text-align: center; padding: 32px 20px; color: var(--text-light); font-size: 14px; font-weight: 700; }
   .empty-icon { font-size: 44px; margin-bottom: 10px; }
   .badge { display: inline-block; background: var(--peach); color: var(--peach-deep); border-radius: 12px; padding: 2px 10px; font-size: 11px; font-weight: 900; margin-left: 6px; }
   .badge-gold { background: var(--gold); color: var(--gold-deep); }
+  .badge-gift { background: #FFE0F0; color: #8A1060; }
   .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-80px); background: #3A4A3A; color: white; border-radius: 20px; padding: 12px 24px; font-size: 14px; font-weight: 700; z-index: 999; transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1); white-space: nowrap; max-width: 90vw; text-align: center; }
   .toast.show { transform: translateX(-50%) translateY(0); }
 </style>
@@ -261,6 +231,7 @@
     <div class="nav-tab active" onclick="showTab('review',this)">✅ 審核</div>
     <div class="nav-tab" onclick="showTab('proposals',this)">💡 申請</div>
     <div class="nav-tab" onclick="showTab('points',this)">⭐ 點數</div>
+    <div class="nav-tab" onclick="showTab('gifts',this)">🎁 禮物</div>
     <div class="nav-tab" onclick="showTab('tasks',this)">⚔️ 任務</div>
     <div class="nav-tab" onclick="showTab('shop',this)">🛍 商店</div>
     <div class="nav-tab" onclick="showTab('shopReview',this)">🛍 兌換</div>
@@ -291,9 +262,9 @@
       <div class="stat-label">今日通過</div>
     </div>
     <div class="stat-card">
-      <div class="stat-icon">🛍</div>
-      <div class="stat-val" id="shopPendingCount">0</div>
-      <div class="stat-label">待兌換審核</div>
+      <div class="stat-icon">🎁</div>
+      <div class="stat-val" id="giftPendingCount">0</div>
+      <div class="stat-label">禮物兌換待審</div>
     </div>
   </div>
   <div class="section-title">⏳ 任務審核中心 <span class="badge" id="pendingBadge">0</span></div>
@@ -311,6 +282,20 @@
 <div id="tab-points" class="tab-sec">
   <div class="section-title" style="margin-top:6px">⭐ 點數、扭蛋與遊戲次數管理</div>
   <div class="player-list" id="playerList"></div>
+</div>
+
+<!-- GIFTS TAB (新增) -->
+<div id="tab-gifts" class="tab-sec">
+  <div class="section-title" style="margin-top:6px">🎁 禮物管理 <span class="badge badge-gift" id="giftPendingBadge">0</span></div>
+  <p style="padding:0 16px;margin-bottom:14px;font-size:12px;color:var(--text-light);font-weight:700;">孩子透過拉霸機獲得的大禮物🎀 / 小禮物🎁，在此管理數量與兌換審核。</p>
+
+  <!-- 禮物兌換審核 -->
+  <div class="section-title" style="font-size:14px">📬 兌換審核</div>
+  <div class="pending-list" id="giftPendingList"></div>
+
+  <!-- 各孩子禮物數量 -->
+  <div class="section-title" style="font-size:14px">🎀 禮物庫存管理</div>
+  <div class="player-list" id="giftPlayerList"></div>
 </div>
 
 <!-- TASKS TAB -->
@@ -612,15 +597,18 @@ function render() {
   const proposalArr = Object.entries(proposals);
   const shopPendingArr = Object.entries(allData.shopPending || {});
   const shopProposalArr = Object.entries(allData.shopProposals || {});
+  const giftPendingArr = Object.entries(allData.giftPending || {});
 
   document.getElementById('shopProposalBadge').textContent = shopProposalArr.length;
+  document.getElementById('giftPendingBadge').textContent = giftPendingArr.length;
+  document.getElementById('giftPendingCount').textContent = giftPendingArr.length;
+
   const today = new Date();
   const todayDate = `${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}`;
   const todayApproved = history.filter(h => h.pts > 0 && h.date === todayDate && h.desc?.includes('完成')).length;
 
   document.getElementById('pendingCount').textContent = pendingArr.length;
   document.getElementById('proposalCount').textContent = proposalArr.length;
-  document.getElementById('shopPendingCount').textContent = shopPendingArr.length;
   document.getElementById('shopPendingBadge').textContent = shopPendingArr.length;
   document.getElementById('approvedCount').textContent = todayApproved;
   document.getElementById('pendingBadge').textContent = pendingArr.length;
@@ -650,7 +638,6 @@ function render() {
       }).join('');
 
   // Proposals
-// Proposals
   document.getElementById('proposalList').innerHTML = proposalArr.length === 0
     ? `<div class="empty"><div class="empty-icon">💡</div>目前沒有自訂任務申請</div>`
     : proposalArr.map(([pid, p]) => {
@@ -683,7 +670,7 @@ function render() {
         </div>`;
       }).join('');
 
-  // ── Players — 重新設計版面 ──
+  // ── Players ──
   document.getElementById('playerList').innerHTML = Object.entries(USERS).map(([uid, u]) => {
     const p = players[uid] || { points: 0, totalEarned: 0 };
     const pts = p.points || 0;
@@ -694,7 +681,6 @@ function render() {
     const gameCreditsCount = (allData.gameCredits?.[uid]?.count) || 0;
 
     return `<div class="player-card">
-      <!-- 標題列 -->
       <div class="player-header">
         <div class="player-avatar">${u.avatar}</div>
         <div>
@@ -702,8 +688,6 @@ function render() {
           <div class="player-level">Lv.${lv.lv} ${lv.name}｜累計 ${total} 顆</div>
         </div>
       </div>
-
-      <!-- 三格資源總覽 -->
       <div class="resource-grid">
         <div class="resource-block stars">
           <div class="resource-icon">⭐</div>
@@ -721,8 +705,6 @@ function render() {
           <div class="resource-label">遊戲次數</div>
         </div>
       </div>
-
-      <!-- ⭐ 星星管理 -->
       <div class="manage-block stars-blk">
         <div class="manage-block-title">⭐ 星星管理</div>
         <div class="manage-row">
@@ -732,8 +714,6 @@ function render() {
         </div>
         <input class="manage-input reason" id="reason-${uid}" placeholder="原因（選填）">
       </div>
-
-      <!-- 🎰 扭蛋管理 -->
       <div class="manage-block gacha-blk">
         <div class="manage-block-title">🎰 扭蛋管理</div>
         <div class="manage-row">
@@ -742,14 +722,82 @@ function render() {
           <button class="manage-btn btn-take" onclick="sendGacha('${uid}',-1)">➖ 扣除</button>
         </div>
       </div>
-
-      <!-- 🎮 遊戲次數管理 -->
       <div class="manage-block game-blk">
         <div class="manage-block-title">🎮 遊戲次數管理</div>
         <div class="manage-row">
           <input class="manage-input" type="number" id="game-amt-${uid}" placeholder="次數" min="1">
           <button class="manage-btn btn-game-give" onclick="sendGameCredits('${uid}',1)">🎮 發放</button>
           <button class="manage-btn btn-take" onclick="sendGameCredits('${uid}',-1)">➖ 扣除</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // ── 禮物兌換審核 ──
+  document.getElementById('giftPendingList').innerHTML = giftPendingArr.length === 0
+    ? `<div class="empty"><div class="empty-icon">🎉</div>沒有待審核的禮物兌換！</div>`
+    : giftPendingArr.map(([gpid, gp]) => {
+        const u = USERS[gp.user] || { name: gp.user, avatar: '👤' };
+        const isBig = gp.giftType === 'big';
+        return `<div class="pending-card gift-pending-card" style="border-color:${isBig?'#E060A0':'#40A870'}">
+          <div class="pending-top">
+            <div class="pending-avatar">${u.avatar}</div>
+            <div class="pending-info">
+              <div class="pending-who">${u.name}</div>
+              <div class="pending-task">${isBig?'🎀':'🎁'} ${gp.wishName || (isBig?'大禮物':'小禮物')} 兌換申請</div>
+              <div class="pending-pts" style="color:${isBig?'#8A1060':'#1A6840'}">
+                ${isBig?'🎀 大禮物':'🎁 小禮物'} × 1
+                <span class="${isBig?'gift-tag-big':'gift-tag-sm'}" style="margin-left:6px">${isBig?'大禮物':'小禮物'}</span>
+              </div>
+              ${gp.wishDesc ? `<div style="font-size:11px;color:var(--text-light);font-weight:700;margin-top:3px;font-style:italic">「${gp.wishDesc}」</div>` : ''}
+            </div>
+            <div class="pending-time">${gp.time||''}</div>
+          </div>
+          <div class="pending-actions">
+            <button class="action-btn btn-approve" onclick="approveGiftPending('${gpid}')">確認兌換 ✓</button>
+            <button class="action-btn btn-reject" onclick="rejectGiftPending('${gpid}')">取消 ✗</button>
+          </div>
+        </div>`;
+      }).join('');
+
+  // ── 禮物庫存管理 ──
+  document.getElementById('giftPlayerList').innerHTML = Object.entries(USERS).map(([uid, u]) => {
+    const bigGifts  = allData.gifts?.[uid]?.big  || 0;
+    const smGifts   = allData.gifts?.[uid]?.small || 0;
+    return `<div class="player-card" style="border-color:#E0C0F0">
+      <div class="player-header">
+        <div class="player-avatar">${u.avatar}</div>
+        <div>
+          <div class="player-name">${u.name}</div>
+          <div class="player-level">拉霸機禮物庫存</div>
+        </div>
+      </div>
+      <div class="resource-grid-gifts">
+        <div class="resource-block bigift">
+          <div class="resource-icon">🎀</div>
+          <div class="resource-val">${bigGifts}</div>
+          <div class="resource-label">大禮物</div>
+        </div>
+        <div class="resource-block smgift">
+          <div class="resource-icon">🎁</div>
+          <div class="resource-val">${smGifts}</div>
+          <div class="resource-label">小禮物</div>
+        </div>
+      </div>
+      <div class="manage-block bigift-blk">
+        <div class="manage-block-title">🎀 大禮物調整</div>
+        <div class="manage-row">
+          <input class="manage-input" type="number" id="bigift-amt-${uid}" placeholder="數量" min="1">
+          <button class="manage-btn btn-bigift-give" onclick="adjustGift('${uid}','big',1)">➕ 給</button>
+          <button class="manage-btn btn-take" onclick="adjustGift('${uid}','big',-1)">➖ 扣</button>
+        </div>
+      </div>
+      <div class="manage-block smgift-blk">
+        <div class="manage-block-title">🎁 小禮物調整</div>
+        <div class="manage-row">
+          <input class="manage-input" type="number" id="smgift-amt-${uid}" placeholder="數量" min="1">
+          <button class="manage-btn btn-smgift-give" onclick="adjustGift('${uid}','small',1)">➕ 給</button>
+          <button class="manage-btn btn-take" onclick="adjustGift('${uid}','small',-1)">➖ 扣</button>
         </div>
       </div>
     </div>`;
@@ -1058,6 +1106,65 @@ window.sendGameCredits = async function(uid, sign) {
   await push(ref(db, 'history'), { user: uid, desc: action, icon: '🎮', pts: 0, time: t.time, date: t.date });
   document.getElementById(`game-amt-${uid}`).value = '';
   toast(`🎮 ${USERS[uid]?.name} 遊戲次數 ${sign > 0 ? '+' : '-'}${amt}（現有 ${newCount} 次）`);
+};
+
+// ── 禮物調整（手動增減）──
+window.adjustGift = async function(uid, type, sign) {
+  const inputId = type === 'big' ? `bigift-amt-${uid}` : `smgift-amt-${uid}`;
+  const amt = parseInt(document.getElementById(inputId).value);
+  if (!amt || amt <= 0) { toast('請輸入數量！'); return; }
+  const giftRef = ref(db, `gifts/${uid}`);
+  const snap = await get(giftRef);
+  const current = snap.val() || { big: 0, small: 0 };
+  const key = type === 'big' ? 'big' : 'small';
+  const newVal = Math.max(0, (current[key] || 0) + sign * amt);
+  await update(giftRef, { [key]: newVal });
+  const t = now();
+  const giftName = type === 'big' ? '大禮物🎀' : '小禮物🎁';
+  await push(ref(db, 'history'), {
+    user: uid,
+    desc: sign > 0 ? `手動新增 ${amt} 個${giftName}` : `手動扣除 ${amt} 個${giftName}`,
+    icon: type === 'big' ? '🎀' : '🎁',
+    pts: 0, time: t.time, date: t.date
+  });
+  document.getElementById(inputId).value = '';
+  toast(`${giftName} ${USERS[uid]?.name} ${sign>0?'+':'-'}${amt}（現有 ${newVal} 個）`);
+};
+
+// ── 禮物兌換審核 ──
+window.approveGiftPending = async function(gpid) {
+  const gp = (allData.giftPending || {})[gpid]; if (!gp) return;
+  const giftRef = ref(db, `gifts/${gp.user}`);
+  const snap = await get(giftRef);
+  const current = snap.val() || { big: 0, small: 0 };
+  const key = gp.giftType === 'big' ? 'big' : 'small';
+  const giftName = gp.giftType === 'big' ? '大禮物🎀' : '小禮物🎁';
+  if ((current[key] || 0) <= 0) {
+    toast(`❌ ${USERS[gp.user]?.name} 的${giftName}數量不足！`);
+    return;
+  }
+  await update(giftRef, { [key]: (current[key] || 0) - 1 });
+  const t = now();
+  await push(ref(db, 'history'), {
+    user: gp.user,
+    desc: `兌換${giftName}${gp.wishName ? '：' + gp.wishName : ''}`,
+    icon: gp.giftType === 'big' ? '🎀' : '🎁',
+    pts: 0, time: t.time, date: t.date
+  });
+  await remove(ref(db, `giftPending/${gpid}`));
+  toast(`✓ 已確認！${USERS[gp.user]?.name} 使用 1 個${giftName}`);
+};
+
+window.rejectGiftPending = async function(gpid) {
+  const gp = (allData.giftPending || {})[gpid]; if (!gp) return;
+  const t = now();
+  const giftName = gp.giftType === 'big' ? '大禮物🎀' : '小禮物🎁';
+  await push(ref(db, 'history'), {
+    user: gp.user, desc: `${giftName}兌換申請被取消`,
+    icon: '❌', pts: 0, time: t.time, date: t.date
+  });
+  await remove(ref(db, `giftPending/${gpid}`));
+  toast('✗ 已取消兌換申請');
 };
 
 window.approvePending = async function(pid) {
