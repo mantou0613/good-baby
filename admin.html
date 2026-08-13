@@ -232,7 +232,11 @@
   .ledger-capture-btn:active { transform: scale(0.96); }
   .ledger-capture-btn.secondary { background: white; color: #1A6A60; border: 2px solid #3A8A80; }
   .ledger-preview-wrap { margin: 0 16px 14px; }
-  .ledger-preview-img { width: 100%; max-height: 260px; object-fit: contain; border-radius: 16px; border: 1.5px solid #A8D8D0; background: #F4F4F4; }
+  .ledger-preview-grid { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
+  .ledger-preview-thumb-wrap { position: relative; flex-shrink: 0; }
+  .ledger-preview-img { height: 140px; width: auto; max-width: 200px; object-fit: contain; border-radius: 14px; border: 1.5px solid #A8D8D0; background: #F4F4F4; }
+  .ledger-preview-thumb-badge { position: absolute; top: 4px; left: 4px; background: rgba(26,106,96,0.85); color: white; font-size: 10px; font-weight: 900; border-radius: 8px; padding: 2px 7px; }
+  .ledger-preview-thumb-dupe { position: absolute; bottom: 4px; left: 4px; right: 4px; background: rgba(200,80,80,0.9); color: white; font-size: 9px; font-weight: 900; border-radius: 6px; padding: 2px 6px; text-align: center; }
   .ledger-ocr-status { margin: 10px 16px; background: white; border-radius: 14px; padding: 12px 14px; border: 1.5px solid #A8D8D0; font-size: 12px; font-weight: 700; color: #1A6A60; display: none; align-items: center; gap: 8px; }
   .ledger-ocr-status.show { display: flex; }
   .ledger-ocr-bar { flex: 1; height: 6px; background: #E0F2EE; border-radius: 4px; overflow: hidden; }
@@ -509,14 +513,14 @@
     <div class="ledger-capture-sub">辨識後可再手動修改品項與金額，確認無誤再儲存</div>
     <div class="ledger-capture-btns">
       <button class="ledger-capture-btn" onclick="document.getElementById('ledgerCameraInput').click()">📷 拍照</button>
-      <button class="ledger-capture-btn secondary" onclick="document.getElementById('ledgerFileInput').click()">🖼 選相簿</button>
+      <button class="ledger-capture-btn secondary" onclick="document.getElementById('ledgerFileInput').click()">🖼 選相簿（可多選）</button>
     </div>
     <input type="file" id="ledgerCameraInput" accept="image/*" capture="environment" style="display:none">
-    <input type="file" id="ledgerFileInput" accept="image/*" style="display:none">
+    <input type="file" id="ledgerFileInput" accept="image/*" multiple style="display:none">
   </div>
 
   <div class="ledger-preview-wrap" id="ledgerPreviewWrap" style="display:none">
-    <img id="ledgerPreviewImg" class="ledger-preview-img">
+    <div class="ledger-preview-grid" id="ledgerPreviewGrid"></div>
   </div>
   <div class="ledger-ocr-status" id="ledgerOcrStatus">
     <span id="ledgerOcrStatusText">辨識中...</span>
@@ -1611,7 +1615,7 @@ function toast(msg) {
 // 🧾 記帳 LEDGER
 // ═══════════════════════════════════════
 let ledgerItemIdSeq = 0;
-let ledgerCurrentImageDataUrl = null;
+let ledgerCurrentImages = []; // [{ dataUrl, isDupe }]
 
 function newLedgerItemId() { return 'li' + (++ledgerItemIdSeq); }
 
@@ -1625,8 +1629,17 @@ const LEDGER_NOISE_WORDS = [
   '統一編號','統編','地址','電話','發票','電子發票','證明聯','愛心碼','載具',
   '小計','應稅','免稅','合計','總計','總計金額','現金','找零','找零金額',
   '交易時間','機台','收銀','店號','客戶','品名','數量','單價','金額',
-  '謝謝惠顧','歡迎','會員','點數','折扣','營業','統一發票','隨機碼','服務'
+  '謝謝惠顧','歡迎','會員','點數','折扣','營業','統一發票','隨機碼','服務',
+  '生鮮雜糧','生活居家','文具','餐點','分類','編輯','刪除','分享'
 ];
+
+// 品名開頭的「x1」「x2」數量標籤（含常見 OCR 誤讀：xi、xI、xl、x l 等）
+function ledgerStripQtyPrefix(name) {
+  return name
+    .replace(/^[x×]\s*[0-9ilIoOlL]{1,3}[.,。:：、]?\s*/i, '')
+    .replace(/^[0-9ilIoOlL]{1,2}[.,。:：、]\s*/, '')
+    .trim();
+}
 
 function ledgerParseReceiptText(text) {
   const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
@@ -1667,9 +1680,10 @@ function ledgerParseReceiptText(text) {
     if (l.includes('全聯') || l.includes('PX')) continue;
     const m = l.match(/^(.{2,20}?)[\s:：]*\$?(\d{1,6})$/);
     if (m) {
-      const name = m[1].replace(/[*#]/g, '').trim();
+      const rawName = m[1].replace(/[*#]/g, '').trim();
+      const name = ledgerStripQtyPrefix(rawName);
       const price = parseInt(m[2]);
-      if (name && price > 0 && price < 100000 && !/^\d+$/.test(name)) {
+      if (name && name.length >= 1 && price > 0 && price < 100000 && !/^\d+$/.test(name)) {
         items.push({ id: newLedgerItemId(), name, price });
       }
     }
@@ -1725,76 +1739,117 @@ function ledgerCollectItemsFromDom() {
 window.resetLedgerForm = function() {
   document.getElementById('ledgerForm').style.display = 'none';
   document.getElementById('ledgerPreviewWrap').style.display = 'none';
+  document.getElementById('ledgerPreviewGrid').innerHTML = '';
   document.getElementById('ledgerOcrStatus').classList.remove('show');
   document.getElementById('ledgerStore').value = '';
   document.getElementById('ledgerNote').value = '';
   window.ledgerCurrentItems = [];
-  ledgerCurrentImageDataUrl = null;
+  ledgerCurrentImages = [];
   document.getElementById('ledgerCameraInput').value = '';
   document.getElementById('ledgerFileInput').value = '';
 };
 
-async function ledgerHandleFile(file) {
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = async (e) => {
-    ledgerCurrentImageDataUrl = e.target.result;
-    document.getElementById('ledgerPreviewImg').src = ledgerCurrentImageDataUrl;
-    document.getElementById('ledgerPreviewWrap').style.display = 'block';
-    await ledgerRunOcr(ledgerCurrentImageDataUrl);
-  };
-  reader.readAsDataURL(file);
+function ledgerFileToDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = e => resolve(e.target.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
 }
 
-document.getElementById('ledgerCameraInput').addEventListener('change', e => ledgerHandleFile(e.target.files[0]));
-document.getElementById('ledgerFileInput').addEventListener('change', e => ledgerHandleFile(e.target.files[0]));
+function ledgerRenderPreviewGrid() {
+  const grid = document.getElementById('ledgerPreviewGrid');
+  grid.innerHTML = ledgerCurrentImages.map((img, i) => `
+    <div class="ledger-preview-thumb-wrap">
+      <img class="ledger-preview-img" src="${img.dataUrl}">
+      <div class="ledger-preview-thumb-badge">${i+1}</div>
+      ${img.isDupe ? `<div class="ledger-preview-thumb-dupe">與其他張重複，已略過</div>` : ''}
+    </div>`).join('');
+}
 
-async function ledgerRunOcr(imageDataUrl) {
+async function ledgerHandleFiles(fileList) {
+  const files = Array.from(fileList || []);
+  if (files.length === 0) return;
+
+  document.getElementById('ledgerPreviewWrap').style.display = 'block';
+  const dataUrls = await Promise.all(files.map(ledgerFileToDataUrl));
+  ledgerCurrentImages = dataUrls.map(dataUrl => ({ dataUrl, isDupe: false }));
+  ledgerRenderPreviewGrid();
+  await ledgerRunOcrBatch(ledgerCurrentImages);
+}
+
+document.getElementById('ledgerCameraInput').addEventListener('change', e => ledgerHandleFiles(e.target.files));
+document.getElementById('ledgerFileInput').addEventListener('change', e => ledgerHandleFiles(e.target.files));
+
+// 跨照片去重：同名同價視為同一品項（多半是截圖重疊），只保留第一次出現
+function ledgerDedupeAcrossImages(itemsPerImage) {
+  const seen = new Set();
+  const merged = [];
+  const dupeFoundInImage = itemsPerImage.map(() => false);
+
+  itemsPerImage.forEach((items, imgIdx) => {
+    items.forEach(it => {
+      const key = it.name.replace(/\s+/g, '') + '|' + it.price;
+      if (seen.has(key)) {
+        if (imgIdx > 0) dupeFoundInImage[imgIdx] = true;
+        return;
+      }
+      seen.add(key);
+      merged.push(it);
+    });
+  });
+
+  return { merged, dupeFoundInImage };
+}
+
+async function ledgerRunOcrBatch(images) {
   const statusEl = document.getElementById('ledgerOcrStatus');
   const statusText = document.getElementById('ledgerOcrStatusText');
   const barFill = document.getElementById('ledgerOcrBarFill');
   statusEl.classList.add('show');
-  statusText.textContent = '辨識中，請稍候...';
-  barFill.style.width = '5%';
   document.getElementById('ledgerForm').style.display = 'none';
 
-  try {
-    const result = await Tesseract.recognize(imageDataUrl, 'chi_tra+eng', {
-      logger: m => {
-        if (m.status === 'recognizing text') {
-          const pct = Math.round((m.progress || 0) * 100);
-          barFill.style.width = pct + '%';
-          statusText.textContent = `辨識中... ${pct}%`;
-        } else if (m.status) {
-          statusText.textContent = m.status;
-        }
-      }
-    });
-    const text = result.data.text || '';
-    const parsed = ledgerParseReceiptText(text);
+  const perImageParsed = [];
+  let store = '';
+  let dateGuess = null;
 
-    document.getElementById('ledgerStore').value = parsed.store || '全聯';
-    document.getElementById('ledgerDate').value = parsed.dateGuess || ledgerTodayISO();
-    window.ledgerCurrentItems = parsed.items.length
-      ? parsed.items
+  try {
+    for (let i = 0; i < images.length; i++) {
+      statusText.textContent = `辨識第 ${i+1}/${images.length} 張...`;
+      barFill.style.width = '5%';
+      const result = await Tesseract.recognize(images[i].dataUrl, 'chi_tra+eng', {
+        logger: m => {
+          if (m.status === 'recognizing text') {
+            const pct = Math.round((m.progress || 0) * 100);
+            barFill.style.width = pct + '%';
+            statusText.textContent = `辨識第 ${i+1}/${images.length} 張... ${pct}%`;
+          }
+        }
+      });
+      const parsed = ledgerParseReceiptText(result.data.text || '');
+      perImageParsed.push(parsed.items);
+      if (!store && parsed.store) store = parsed.store;
+      if (!dateGuess && parsed.dateGuess) dateGuess = parsed.dateGuess;
+    }
+
+    const { merged, dupeFoundInImage } = ledgerDedupeAcrossImages(perImageParsed);
+    ledgerCurrentImages.forEach((img, i) => { img.isDupe = dupeFoundInImage[i]; });
+    ledgerRenderPreviewGrid();
+
+    document.getElementById('ledgerStore').value = store || '全聯';
+    document.getElementById('ledgerDate').value = dateGuess || ledgerTodayISO();
+    window.ledgerCurrentItems = merged.length
+      ? merged
       : [{ id: newLedgerItemId(), name: '', price: '' }];
     ledgerRenderItemRows(window.ledgerCurrentItems);
 
-    if (parsed.total) {
-      // 如果辨識到總計但加總對不上，補一行「其他/雜項」讓總額能對齊
-      setTimeout(() => {
-        const rows = document.querySelectorAll('#ledgerItemRows .ledger-item-row');
-        let sum = 0;
-        rows.forEach(row => sum += (parseInt(row.querySelector('.ledger-item-price').value) || 0));
-        if (parsed.total > sum) {
-          window.addLedgerItemRow('其他/未辨識品項', parsed.total - sum);
-        }
-      }, 50);
-    }
-
     statusEl.classList.remove('show');
     document.getElementById('ledgerForm').style.display = 'block';
-    toast(parsed.items.length ? `✓ 辨識到 ${parsed.items.length} 項，請確認金額` : '辨識完成，請手動輸入品項');
+    const dupeCount = dupeFoundInImage.filter(Boolean).length;
+    toast(merged.length
+      ? `✓ 辨識到 ${merged.length} 項${dupeCount ? `，已略過 ${dupeCount} 張重複截圖` : ''}，請確認金額`
+      : '辨識完成，請手動輸入品項');
   } catch (err) {
     statusEl.classList.remove('show');
     document.getElementById('ledgerDate').value = ledgerTodayISO();
