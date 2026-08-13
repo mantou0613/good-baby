@@ -1,6 +1,25 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
+  <!-- Google tag (gtag.js) -->
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2MQ6X5YG1L"></script>
+
+<script>
+
+window.dataLayer = window.dataLayer || [];
+
+function gtag(){dataLayer.push(arguments);}
+
+gtag('js', new Date());
+
+
+
+gtag('config', 'G-2MQ6X5YG1L');
+
+</script> 
+
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <link rel="apple-touch-icon" href="icon.png">
@@ -352,6 +371,14 @@
       <div class="progress-wrap">
         <div class="progress-track"><div class="progress-bar" id="progBar" style="width:0%"></div></div>
         <div class="progress-text"><span id="progLeft">距離升級還差 10 顆</span><span id="progRight">Lv.2</span></div>
+      </div>
+    </div>
+    <!-- 本月公費累積金額 -->
+    <div style="margin:0 16px 14px;background:white;border-radius:16px;padding:12px 16px;border:1.5px solid #A8D8D0;display:flex;align-items:center;gap:12px;">
+      <div style="font-size:24px;">🧾</div>
+      <div style="flex:1;">
+        <div style="font-size:11px;color:var(--text-light);font-weight:700;">本月公費累積金額</div>
+        <div style="font-size:20px;font-weight:900;color:#1A6A60;" id="monthlyLedgerTotal">$0</div>
       </div>
     </div>
     <!-- 禮物寶庫 -->
@@ -1493,6 +1520,16 @@ async function loadAIHoroscope(){
   }
 }
 
+// ── 本月公費累積金額 ──
+function updateMonthlyLedgerTotal(allData){
+  const expenses = allData.expenses || {};
+  const today = new Date();
+  const thisMonth = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}`;
+  const total = Object.values(expenses).filter(e=>(e.date||'').startsWith(thisMonth)).reduce((s,e)=>s+(e.total||0),0);
+  const el = document.getElementById('monthlyLedgerTotal');
+  if(el) el.textContent = `$${total.toLocaleString()}`;
+}
+
 // ── 主資料監聽 ──
 function onDataUpdate(allData){
   window._allData=allData;
@@ -1511,6 +1548,7 @@ function onDataUpdate(allData){
   const gameHistory=Object.values(allData.history||{}).filter(h=>h.user===ME&&h.icon==='🎮').reverse().slice(0,10);
   document.getElementById('gameTodayList').innerHTML=gameHistory.length?gameHistory.map(h=>`<div class="history-item"><div class="h-icon">${h.icon||'🎮'}</div><div class="h-info"><div class="h-desc">${h.desc||''}</div><div class="h-time">${h.time||''}</div></div><div class="h-pts ${h.pts>0?'pts-pos':''}">${h.pts>0?'+'+h.pts+' ⭐':''}</div></div>`).join(''):empty('🎮','還沒有遊戲紀錄');
   if(currentMode==='love')renderLove();
+  updateMonthlyLedgerTotal(allData);
 }
 
 // 通知監聽
