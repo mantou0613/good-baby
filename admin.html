@@ -215,6 +215,58 @@
   .badge-gift { background: #FFE0F0; color: #8A1060; }
   .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-80px); background: #3A4A3A; color: white; border-radius: 20px; padding: 12px 24px; font-size: 14px; font-weight: 700; z-index: 999; transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1); white-space: nowrap; max-width: 90vw; text-align: center; }
   .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* ── 記帳 (LEDGER) ── */
+  --ledger-teal: #3A8A80;
+  .ledger-hero { padding: 0 16px; margin-bottom: 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .ledger-stat { background: white; border-radius: 20px; padding: 14px 10px; text-align: center; border: 1.5px solid #A8D8D0; }
+  .ledger-stat-val { font-size: 24px; font-weight: 900; color: #1A6A60; line-height: 1; }
+  .ledger-stat-label { font-size: 10px; color: var(--text-light); font-weight: 700; margin-top: 4px; }
+
+  .ledger-capture { margin: 0 16px 18px; background: linear-gradient(135deg,#F0FBF9,#E4F7F2); border: 2px dashed #3A8A80; border-radius: 18px; padding: 18px; text-align: center; }
+  .ledger-capture-icon { font-size: 34px; margin-bottom: 6px; }
+  .ledger-capture-title { font-size: 14px; font-weight: 900; color: #1A6A60; margin-bottom: 4px; }
+  .ledger-capture-sub { font-size: 11px; color: var(--text-light); font-weight: 700; margin-bottom: 14px; }
+  .ledger-capture-btns { display: flex; gap: 8px; }
+  .ledger-capture-btn { flex: 1; border: none; border-radius: 14px; padding: 12px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 900; cursor: pointer; background: #3A8A80; color: white; transition: all 0.15s; }
+  .ledger-capture-btn:active { transform: scale(0.96); }
+  .ledger-capture-btn.secondary { background: white; color: #1A6A60; border: 2px solid #3A8A80; }
+  .ledger-preview-wrap { margin: 0 16px 14px; }
+  .ledger-preview-img { width: 100%; max-height: 260px; object-fit: contain; border-radius: 16px; border: 1.5px solid #A8D8D0; background: #F4F4F4; }
+  .ledger-ocr-status { margin: 10px 16px; background: white; border-radius: 14px; padding: 12px 14px; border: 1.5px solid #A8D8D0; font-size: 12px; font-weight: 700; color: #1A6A60; display: none; align-items: center; gap: 8px; }
+  .ledger-ocr-status.show { display: flex; }
+  .ledger-ocr-bar { flex: 1; height: 6px; background: #E0F2EE; border-radius: 4px; overflow: hidden; }
+  .ledger-ocr-bar-fill { height: 100%; width: 0%; background: #3A8A80; transition: width 0.2s; }
+
+  .ledger-form { margin: 0 16px 16px; background: white; border-radius: 18px; padding: 16px; border: 1.5px solid #A8D8D0; }
+  .ledger-form-row { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+  .ledger-input { flex: 1; min-width: 0; background: #F8FFFE; border: 1.5px solid #A8D8D0; border-radius: 10px; padding: 10px 12px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700; color: var(--text); outline: none; }
+  .ledger-input-sm { width: 110px; flex: none; }
+  .ledger-items-title { font-size: 12px; font-weight: 900; color: #1A6A60; margin: 10px 0 6px; display: flex; align-items: center; justify-content: space-between; }
+  .ledger-item-row { display: flex; gap: 6px; margin-bottom: 6px; align-items: center; }
+  .ledger-item-name { flex: 1; min-width: 0; background: #F8FFFE; border: 1.5px solid #D0EAE5; border-radius: 8px; padding: 8px 10px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700; color: var(--text); outline: none; }
+  .ledger-item-price { width: 76px; flex: none; background: #F8FFFE; border: 1.5px solid #D0EAE5; border-radius: 8px; padding: 8px 8px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700; color: var(--text); outline: none; text-align: right; }
+  .ledger-item-del { flex: none; background: var(--red); color: var(--red-deep); border: none; border-radius: 8px; width: 32px; height: 32px; font-size: 14px; font-weight: 900; cursor: pointer; }
+  .ledger-add-item-btn { background: #E0F2EE; color: #1A6A60; border: none; border-radius: 10px; padding: 8px 12px; font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 900; cursor: pointer; width: 100%; margin-top: 4px; }
+  .ledger-total-row { display: flex; align-items: center; justify-content: space-between; margin: 14px 0 4px; padding-top: 10px; border-top: 1.5px dashed #D0EAE5; }
+  .ledger-total-label { font-size: 13px; font-weight: 900; color: var(--text); }
+  .ledger-total-val { font-size: 20px; font-weight: 900; color: #1A6A60; }
+  .ledger-save-btn { width: 100%; margin-top: 12px; background: #1A6A60; color: white; border: none; border-radius: 50px; padding: 13px; font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 900; cursor: pointer; transition: all 0.2s; }
+  .ledger-save-btn:active { transform: scale(0.97); }
+  .ledger-reset-link { text-align: center; margin-top: 8px; font-size: 11px; color: var(--text-light); font-weight: 700; cursor: pointer; text-decoration: underline; }
+
+  .ledger-filter-row { padding: 0 16px; display: flex; gap: 8px; margin-bottom: 12px; align-items: center; }
+  .ledger-month-select { flex: 1; background: white; border: 1.5px solid #A8D8D0; border-radius: 10px; padding: 9px 12px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700; color: #1A6A60; outline: none; }
+  .ledger-list { padding: 0 16px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+  .ledger-record { background: white; border-radius: 16px; padding: 14px 16px; border: 1.5px solid #D0EAE5; }
+  .ledger-record-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 8px; }
+  .ledger-record-store { font-size: 14px; font-weight: 900; color: var(--text); }
+  .ledger-record-date { font-size: 11px; color: var(--text-light); font-weight: 700; }
+  .ledger-record-total { font-size: 17px; font-weight: 900; color: #1A6A60; }
+  .ledger-record-items { font-size: 12px; color: var(--text-light); font-weight: 700; line-height: 1.6; }
+  .ledger-record-actions { margin-top: 10px; display: flex; justify-content: flex-end; }
+  .ledger-del-btn { background: var(--red); color: var(--red-deep); border: none; border-radius: 10px; padding: 6px 12px; font-family: 'Nunito', sans-serif; font-size: 11px; font-weight: 700; cursor: pointer; }
+  .ledger-del-btn:hover { background: var(--red-dark); color: white; }
 </style>
 </head>
 <body>
@@ -229,6 +281,7 @@
   </div>
   <div class="nav-tabs">
     <div class="nav-tab active" onclick="showTab('review',this)">✅ 審核</div>
+    <div class="nav-tab" onclick="showTab('ledger',this)">🧾 記帳</div>
     <div class="nav-tab" onclick="showTab('proposals',this)">💡 申請</div>
     <div class="nav-tab" onclick="showTab('points',this)">⭐ 點數</div>
     <div class="nav-tab" onclick="showTab('gifts',this)">🎁 禮物</div>
@@ -437,8 +490,69 @@
   <div class="hist-list" id="allHistoryList"></div>
 </div>
 
+<!-- LEDGER TAB -->
+<div id="tab-ledger" class="tab-sec">
+  <div class="ledger-hero">
+    <div class="ledger-stat">
+      <div class="ledger-stat-val" id="ledgerMonthTotal">$0</div>
+      <div class="ledger-stat-label">本月支出</div>
+    </div>
+    <div class="ledger-stat">
+      <div class="ledger-stat-val" id="ledgerMonthCount">0</div>
+      <div class="ledger-stat-label">本月筆數</div>
+    </div>
+  </div>
+
+  <div class="ledger-capture">
+    <div class="ledger-capture-icon">🧾</div>
+    <div class="ledger-capture-title">拍發票 / 明細，自動辨識記帳</div>
+    <div class="ledger-capture-sub">辨識後可再手動修改品項與金額，確認無誤再儲存</div>
+    <div class="ledger-capture-btns">
+      <button class="ledger-capture-btn" onclick="document.getElementById('ledgerCameraInput').click()">📷 拍照</button>
+      <button class="ledger-capture-btn secondary" onclick="document.getElementById('ledgerFileInput').click()">🖼 選相簿</button>
+    </div>
+    <input type="file" id="ledgerCameraInput" accept="image/*" capture="environment" style="display:none">
+    <input type="file" id="ledgerFileInput" accept="image/*" style="display:none">
+  </div>
+
+  <div class="ledger-preview-wrap" id="ledgerPreviewWrap" style="display:none">
+    <img id="ledgerPreviewImg" class="ledger-preview-img">
+  </div>
+  <div class="ledger-ocr-status" id="ledgerOcrStatus">
+    <span id="ledgerOcrStatusText">辨識中...</span>
+    <div class="ledger-ocr-bar"><div class="ledger-ocr-bar-fill" id="ledgerOcrBarFill"></div></div>
+  </div>
+
+  <div class="ledger-form" id="ledgerForm" style="display:none">
+    <div class="ledger-form-row">
+      <input class="ledger-input" id="ledgerStore" placeholder="🏪 店家（例如：全聯）">
+      <input class="ledger-input ledger-input-sm" id="ledgerDate" type="date">
+    </div>
+    <div class="ledger-items-title">
+      <span>🛒 品項明細</span>
+    </div>
+    <div id="ledgerItemRows"></div>
+    <button class="ledger-add-item-btn" onclick="addLedgerItemRow()">➕ 新增一行</button>
+    <input class="ledger-input" id="ledgerNote" placeholder="備註（選填）" style="margin-top:10px;width:100%">
+    <div class="ledger-total-row">
+      <div class="ledger-total-label">總金額</div>
+      <div class="ledger-total-val">$<span id="ledgerTotalVal">0</span></div>
+    </div>
+    <button class="ledger-save-btn" onclick="saveLedgerRecord()">💾 儲存記帳</button>
+    <div class="ledger-reset-link" onclick="resetLedgerForm()">清除重來</div>
+  </div>
+
+  <div class="ledger-filter-row">
+    <select class="ledger-month-select" id="ledgerMonthFilter" onchange="renderLedger()">
+      <option value="all">全部月份</option>
+    </select>
+  </div>
+  <div class="ledger-list" id="ledgerList"></div>
+</div>
+
 <div class="toast" id="toast"></div>
 
+<script src="https://unpkg.com/tesseract.js@5/dist/tesseract.min.js"></script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, get, set, push, update, remove, onValue }
@@ -1069,6 +1183,8 @@ function render() {
       <div class="h-pts ${neutral?'pts-neutral':pos?'pts-pos':'pts-neg'}">${pos?'+':''}${h.pts}</div>
     </div>`;
   }).join('') || `<div class="empty"><div class="empty-icon">📜</div>還沒有紀錄</div>`;
+
+  renderLedger();
 }
 
 // ── 更新任務互斥 ──
@@ -1489,6 +1605,278 @@ function toast(msg) {
   t.textContent = msg;
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ═══════════════════════════════════════
+// 🧾 記帳 LEDGER
+// ═══════════════════════════════════════
+let ledgerItemIdSeq = 0;
+let ledgerCurrentImageDataUrl = null;
+
+function newLedgerItemId() { return 'li' + (++ledgerItemIdSeq); }
+
+function ledgerTodayISO() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+// 全聯明細常見雜訊字樣，OCR 解析時要略過的行
+const LEDGER_NOISE_WORDS = [
+  '統一編號','統編','地址','電話','發票','電子發票','證明聯','愛心碼','載具',
+  '小計','應稅','免稅','合計','總計','總計金額','現金','找零','找零金額',
+  '交易時間','機台','收銀','店號','客戶','品名','數量','單價','金額',
+  '謝謝惠顧','歡迎','會員','點數','折扣','營業','統一發票','隨機碼','服務'
+];
+
+function ledgerParseReceiptText(text) {
+  const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+  const items = [];
+  let store = '';
+  let total = null;
+  let dateGuess = null;
+
+  // 店名：找含「全聯」或前幾行看起來像店名的文字
+  const storeLine = lines.find(l => l.includes('全聯') || l.includes('PX') || l.includes('Mart'));
+  if (storeLine) store = storeLine.replace(/[^\u4e00-\u9fa5A-Za-z0-9() ]/g, '').trim();
+
+  // 日期：抓 YYYY/MM/DD、YYYY-MM-DD 或民國年格式
+  for (const l of lines) {
+    const m = l.match(/(\d{2,4})[\/\-.](\d{1,2})[\/\-.](\d{1,2})/);
+    if (m) {
+      let y = parseInt(m[1]);
+      if (y < 1911) y += 1911; // 民國年轉西元
+      if (y < 1900) y += 2000;
+      const mo = String(m[2]).padStart(2,'0');
+      const da = String(m[3]).padStart(2,'0');
+      dateGuess = `${y}-${mo}-${da}`;
+      break;
+    }
+  }
+
+  // 總計：抓「總計/合計/應付」後面接的數字
+  for (const l of lines) {
+    if (/總計|合計|應付|消費金額/.test(l)) {
+      const nums = l.match(/\d+/g);
+      if (nums) { total = parseInt(nums[nums.length - 1]); }
+    }
+  }
+
+  // 品項：一行結尾是數字，前面是文字，且不含雜訊字樣
+  for (const l of lines) {
+    if (LEDGER_NOISE_WORDS.some(w => l.includes(w))) continue;
+    if (l.includes('全聯') || l.includes('PX')) continue;
+    const m = l.match(/^(.{2,20}?)[\s:：]*\$?(\d{1,6})$/);
+    if (m) {
+      const name = m[1].replace(/[*#]/g, '').trim();
+      const price = parseInt(m[2]);
+      if (name && price > 0 && price < 100000 && !/^\d+$/.test(name)) {
+        items.push({ id: newLedgerItemId(), name, price });
+      }
+    }
+  }
+
+  return { store, dateGuess, total, items };
+}
+
+function ledgerRenderItemRows(items) {
+  const wrap = document.getElementById('ledgerItemRows');
+  wrap.innerHTML = items.map(it => `
+    <div class="ledger-item-row" data-id="${it.id}">
+      <input class="ledger-item-name" value="${(it.name||'').replace(/"/g,'&quot;')}" oninput="ledgerRecalcTotal()">
+      <input class="ledger-item-price" type="number" value="${it.price||0}" oninput="ledgerRecalcTotal()">
+      <button class="ledger-item-del" onclick="ledgerRemoveItemRow('${it.id}')">✕</button>
+    </div>`).join('');
+  ledgerRecalcTotal();
+}
+
+window.ledgerCurrentItems = [];
+
+window.addLedgerItemRow = function(name='', price='') {
+  window.ledgerCurrentItems.push({ id: newLedgerItemId(), name, price });
+  ledgerRenderItemRows(window.ledgerCurrentItems);
+};
+
+window.ledgerRemoveItemRow = function(id) {
+  window.ledgerCurrentItems = window.ledgerCurrentItems.filter(it => it.id !== id);
+  ledgerRenderItemRows(window.ledgerCurrentItems);
+};
+
+window.ledgerRecalcTotal = function() {
+  const rows = document.querySelectorAll('#ledgerItemRows .ledger-item-row');
+  let total = 0;
+  rows.forEach(row => {
+    const price = parseInt(row.querySelector('.ledger-item-price').value) || 0;
+    total += price;
+  });
+  document.getElementById('ledgerTotalVal').textContent = total;
+};
+
+function ledgerCollectItemsFromDom() {
+  const rows = document.querySelectorAll('#ledgerItemRows .ledger-item-row');
+  const items = [];
+  rows.forEach(row => {
+    const name = row.querySelector('.ledger-item-name').value.trim();
+    const price = parseInt(row.querySelector('.ledger-item-price').value) || 0;
+    if (name || price) items.push({ name: name || '未命名品項', price });
+  });
+  return items;
+}
+
+window.resetLedgerForm = function() {
+  document.getElementById('ledgerForm').style.display = 'none';
+  document.getElementById('ledgerPreviewWrap').style.display = 'none';
+  document.getElementById('ledgerOcrStatus').classList.remove('show');
+  document.getElementById('ledgerStore').value = '';
+  document.getElementById('ledgerNote').value = '';
+  window.ledgerCurrentItems = [];
+  ledgerCurrentImageDataUrl = null;
+  document.getElementById('ledgerCameraInput').value = '';
+  document.getElementById('ledgerFileInput').value = '';
+};
+
+async function ledgerHandleFile(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    ledgerCurrentImageDataUrl = e.target.result;
+    document.getElementById('ledgerPreviewImg').src = ledgerCurrentImageDataUrl;
+    document.getElementById('ledgerPreviewWrap').style.display = 'block';
+    await ledgerRunOcr(ledgerCurrentImageDataUrl);
+  };
+  reader.readAsDataURL(file);
+}
+
+document.getElementById('ledgerCameraInput').addEventListener('change', e => ledgerHandleFile(e.target.files[0]));
+document.getElementById('ledgerFileInput').addEventListener('change', e => ledgerHandleFile(e.target.files[0]));
+
+async function ledgerRunOcr(imageDataUrl) {
+  const statusEl = document.getElementById('ledgerOcrStatus');
+  const statusText = document.getElementById('ledgerOcrStatusText');
+  const barFill = document.getElementById('ledgerOcrBarFill');
+  statusEl.classList.add('show');
+  statusText.textContent = '辨識中，請稍候...';
+  barFill.style.width = '5%';
+  document.getElementById('ledgerForm').style.display = 'none';
+
+  try {
+    const result = await Tesseract.recognize(imageDataUrl, 'chi_tra+eng', {
+      logger: m => {
+        if (m.status === 'recognizing text') {
+          const pct = Math.round((m.progress || 0) * 100);
+          barFill.style.width = pct + '%';
+          statusText.textContent = `辨識中... ${pct}%`;
+        } else if (m.status) {
+          statusText.textContent = m.status;
+        }
+      }
+    });
+    const text = result.data.text || '';
+    const parsed = ledgerParseReceiptText(text);
+
+    document.getElementById('ledgerStore').value = parsed.store || '全聯';
+    document.getElementById('ledgerDate').value = parsed.dateGuess || ledgerTodayISO();
+    window.ledgerCurrentItems = parsed.items.length
+      ? parsed.items
+      : [{ id: newLedgerItemId(), name: '', price: '' }];
+    ledgerRenderItemRows(window.ledgerCurrentItems);
+
+    if (parsed.total) {
+      // 如果辨識到總計但加總對不上，補一行「其他/雜項」讓總額能對齊
+      setTimeout(() => {
+        const rows = document.querySelectorAll('#ledgerItemRows .ledger-item-row');
+        let sum = 0;
+        rows.forEach(row => sum += (parseInt(row.querySelector('.ledger-item-price').value) || 0));
+        if (parsed.total > sum) {
+          window.addLedgerItemRow('其他/未辨識品項', parsed.total - sum);
+        }
+      }, 50);
+    }
+
+    statusEl.classList.remove('show');
+    document.getElementById('ledgerForm').style.display = 'block';
+    toast(parsed.items.length ? `✓ 辨識到 ${parsed.items.length} 項，請確認金額` : '辨識完成，請手動輸入品項');
+  } catch (err) {
+    statusEl.classList.remove('show');
+    document.getElementById('ledgerDate').value = ledgerTodayISO();
+    document.getElementById('ledgerStore').value = '全聯';
+    window.ledgerCurrentItems = [{ id: newLedgerItemId(), name: '', price: '' }];
+    ledgerRenderItemRows(window.ledgerCurrentItems);
+    document.getElementById('ledgerForm').style.display = 'block';
+    toast('❌ 辨識失敗，請手動輸入');
+  }
+}
+
+window.saveLedgerRecord = async function() {
+  const store = document.getElementById('ledgerStore').value.trim() || '未命名店家';
+  const date = document.getElementById('ledgerDate').value || ledgerTodayISO();
+  const note = document.getElementById('ledgerNote').value.trim();
+  const items = ledgerCollectItemsFromDom();
+  const total = items.reduce((s, it) => s + (parseInt(it.price) || 0), 0);
+
+  if (items.length === 0 || total <= 0) { toast('請至少輸入一項品項和金額！'); return; }
+
+  const t = now();
+  await push(ref(db, 'expenses'), {
+    store, date, note, items, total,
+    createdAt: t.time,
+  });
+  toast(`✓ 已記帳：${store} $${total}`);
+  window.resetLedgerForm();
+};
+
+window.deleteLedgerRecord = async function(eid) {
+  await remove(ref(db, `expenses/${eid}`));
+  toast('已刪除該筆記帳');
+};
+
+function renderLedger() {
+  const listEl = document.getElementById('ledgerList');
+  const monthFilterEl = document.getElementById('ledgerMonthFilter');
+  if (!listEl || !monthFilterEl) return;
+
+  const expenses = allData.expenses || {};
+  const entries = Object.entries(expenses).sort((a,b) => (b[1].date||'').localeCompare(a[1].date||''));
+
+  // 建立月份下拉選單
+  const months = Array.from(new Set(entries.map(([,e]) => (e.date||'').slice(0,7)).filter(Boolean))).sort().reverse();
+  const currentSelection = monthFilterEl.value || 'all';
+  monthFilterEl.innerHTML = '<option value="all">全部月份</option>' +
+    months.map(m => `<option value="${m}">${m}</option>`).join('');
+  if ([...monthFilterEl.options].some(o => o.value === currentSelection)) {
+    monthFilterEl.value = currentSelection;
+  }
+  const selectedMonth = monthFilterEl.value;
+
+  const filtered = selectedMonth === 'all'
+    ? entries
+    : entries.filter(([,e]) => (e.date||'').startsWith(selectedMonth));
+
+  // 本月統計（用實際目前月份，而非篩選月份，維持頂部卡片穩定）
+  const thisMonth = ledgerTodayISO().slice(0,7);
+  const thisMonthEntries = entries.filter(([,e]) => (e.date||'').startsWith(thisMonth));
+  const thisMonthTotal = thisMonthEntries.reduce((s,[,e]) => s + (e.total||0), 0);
+  document.getElementById('ledgerMonthTotal').textContent = '$' + thisMonthTotal;
+  document.getElementById('ledgerMonthCount').textContent = thisMonthEntries.length;
+
+  listEl.innerHTML = filtered.length === 0
+    ? `<div class="empty"><div class="empty-icon">🧾</div>還沒有記帳紀錄，拍張明細開始吧！</div>`
+    : filtered.map(([eid, e]) => {
+        const itemsText = (e.items||[]).map(it => `${it.name} $${it.price}`).join('、');
+        return `<div class="ledger-record">
+          <div class="ledger-record-top">
+            <div>
+              <div class="ledger-record-store">🏪 ${e.store||'未命名店家'}</div>
+              <div class="ledger-record-date">${e.date||''}</div>
+            </div>
+            <div class="ledger-record-total">$${e.total||0}</div>
+          </div>
+          <div class="ledger-record-items">${itemsText || '（無品項明細）'}</div>
+          ${e.note ? `<div class="ledger-record-items" style="font-style:italic;margin-top:2px">備註：${e.note}</div>` : ''}
+          <div class="ledger-record-actions">
+            <button class="ledger-del-btn" onclick="deleteLedgerRecord('${eid}')">刪除</button>
+          </div>
+        </div>`;
+      }).join('');
 }
 
 updateNotifUI();
