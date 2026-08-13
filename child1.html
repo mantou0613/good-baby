@@ -885,27 +885,34 @@ window.doCheckin = async function() {
 
   try {
     // 傳送到 GAS API 進行簽到（小惠）
+    // GAS 端 updateCheckIn() 成功時已經會同步寫入 Firebase（checkin/players/history）
     const response = await fetch(`${GAS_API_URL}?name=小惠&action=checkin`);
     const res = await response.json();
 
     if (res.status === 'already') {
       toast(`${res.name} 今天已經簽到過囉！`);
-    } else if (res.status === 'success') {
-      let msg = `🎉 簽到成功！獲得 1 顆星星！目前連續 ${res.days} 天 🌟`;
-      
-      // 同步寫入原有的 Firebase 或發放特效
-      const btnEl = document.getElementById('checkinBtn');
-      if (btnEl) {
-        btnEl.classList.add('did-checkin');
-        setTimeout(() => btnEl.classList.remove('did-checkin'), 500);
-      }
-      rainStars(); // 顯示星星動畫
-      toast(msg);
+      btn.textContent = '✅ 已簽';
+      btn.disabled = true; // 保持鎖定，不進 finally 恢復
+      return;
     }
+
+    if (res.status === 'success') {
+      btn.classList.add('did-checkin');
+      setTimeout(() => btn.classList.remove('did-checkin'), 500);
+      rainStars(); // 顯示星星動畫
+      toast(`🎉 簽到成功！獲得 1 顆星星！目前連續 ${res.days} 天 🌟`);
+      // 不手動改 Firebase，等 startListen() 的 onValue 監聽把畫面更新回來
+      btn.textContent = '✅ 已簽';
+      btn.disabled = true;
+      return;
+    }
+
+    // status === 'error' 或其他非預期狀況
+    toast(res.message || '簽到發生錯誤');
+    btn.disabled = false;
   } catch (err) {
     console.error("簽到失敗", err);
     toast("簽到連線失敗，請再試一次！");
-  } finally {
     btn.disabled = false;
   }
 };
@@ -1607,30 +1614,6 @@ if ('serviceWorker' in navigator) {
 }
 loadAIHoroscope();
 initDefaults().then(()=>startListen());
-
-  function syncCheckinFromSheet() {
-  fetch(`${GAS_API_URL}?name=小惠`)
-    .then(res => res.json())
-    .then(data => {
-      if (data && data.days !== undefined) {
-        // 更新連續簽到天數顯示
-        const streakLabel = document.getElementById('streakLabel');
-        if (streakLabel) streakLabel.textContent = `連續 ${data.days} 天`;
-
-        // 如果今天已簽到，停用簽到按鈕
-        const today = new Date().toISOString().split('T')[0];
-        const checkinBtn = document.getElementById('checkinBtn');
-        if (data.lastDate === today && checkinBtn) {
-          checkinBtn.textContent = '✅ 已簽';
-          checkinBtn.disabled = true;
-        }
-      }
-    })
-    .catch(err => console.error("雲端簽到同步失敗", err));
-}
-
-// 頁面載入時觸發同步
-syncCheckinFromSheet();
 </script>
 </body>
 </html>
