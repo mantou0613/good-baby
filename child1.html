@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2MQ6X5YG1L"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-2MQ6X5YG1L');
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <link rel="apple-touch-icon" href="icon.png">
@@ -335,7 +344,16 @@ select.propose-input {
     </div>
   </div>
 
-  <!-- 禮物顯示 -->
+  <!-- 本月公費累積金額 -->
+  <div style="margin:0 16px 14px;background:white;border-radius:16px;padding:12px 16px;border:1.5px solid #A8D8D0;display:flex;align-items:center;gap:12px;">
+    <div style="font-size:24px;">🧾</div>
+    <div style="flex:1;">
+      <div style="font-size:11px;color:var(--text-light);font-weight:700;">本月公費累積金額</div>
+      <div style="font-size:20px;font-weight:900;color:#1A6A60;" id="monthlyLedgerTotal">$0</div>
+    </div>
+  </div>
+
+  <!-- 禮物顯示區 -->
   <div class="gifts-hero" id="homeGiftsBanner">
     <div class="gifts-hero-title">🎁 我的禮物寶庫</div>
     <div class="gifts-row">
@@ -825,7 +843,7 @@ window.redeemGift = async function(type) {
   const icon = type === 'big' ? '🎊' : '🎁';
   const t = now();
   await push(ref(db, `prizePending/${ME}`), {icon, title:`兌換${label}`, desc:`申請兌換${label}，等待小波確認`,time:t.time,date:t.date});
-  await push(ref(db,'history'), {user:ME,desc:`申請兌換${label}！`,icon,pts:0,time:t.time,date:t.date});
+  await push(ref(db, 'history'), {user:ME,desc:`申請兌換${label}！`,icon,pts:0,time:t.time,date:t.date});
   toast(`💌 已送出${label}兌換申請！等小波確認 ♡`);
   closeModal('giftOverlay');
 };
@@ -932,6 +950,16 @@ async function initDefaults(){
   if(!sp.exists())await set(ref(db,'players/child1'),{points:0,totalEarned:0});
 }
 
+// ── 本月公費累積金額 ──
+function updateMonthlyLedgerTotal(allData){
+  const expenses = allData.expenses || {};
+  const today = new Date();
+  const thisMonth = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}`;
+  const total = Object.values(expenses).filter(e=>(e.date||'').startsWith(thisMonth)).reduce((s,e)=>s+(e.total||0),0);
+  const el = document.getElementById('monthlyLedgerTotal');
+  if(el) el.textContent = `$${total.toLocaleString()}`;
+}
+
 function startListen(){
   onValue(ref(db,'/'),snap=>{
     const d=snap.val()||{}; window._allData=d;
@@ -943,6 +971,7 @@ function startListen(){
     updateGameCreditsUI(getGameCredits());
     updateGiftUI();
     render();
+    updateMonthlyLedgerTotal(d);
   });
   onValue(ref(db, `notifications/${ME}`), snap => {
     const notifs = snap.val() || {};
