@@ -690,6 +690,7 @@ select.propose-input {
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, get, set, push, update, remove, onValue }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+  const GAS_API_URL = "https://script.google.com/macros/s/AKfycbwjpZ0IdIWcTQRPbnKSNoq7cNu4JhpYI-K0laUN6MbUUZBZ9caCrQZrpUhB0CuE593fhw/exec";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDO4WvP3hOQgA7YpZFtMClssawX5Xq-Kjw",
@@ -878,24 +879,35 @@ function renderCheckin(ci) {
   const btn=document.getElementById('checkinBtn'); btn.textContent=lastDate===today?'✅ 已簽':'簽到！'; btn.disabled=lastDate===today;
 }
 
-window.doCheckin=async function(){
-  const snap=await get(ref(db,`checkin/${ME}`)); let ci=snap.val()||{streak:0,lastDate:'',history7:[]};
-  const today=todayStr();
-  if(ci.lastDate===today){toast('今天已經簽到過囉！');return;}
-  const yesterday=new Date(); yesterday.setDate(yesterday.getDate()-1);
-  const yStr=`${yesterday.getFullYear()}-${String(yesterday.getMonth()+1).padStart(2,'0')}-${String(yesterday.getDate()).padStart(2,'0')}`;
-  const newStreak=(ci.lastDate===yStr)?(ci.streak||0)+1:1;
-  let h7=ci.history7||[]; h7.push(today); if(h7.length>7)h7=h7.slice(-7);
-  await set(ref(db,`checkin/${ME}`),{streak:newStreak,lastDate:today,history7:h7});
-  let msg=`✅ 簽到成功！連續 ${newStreak} 天`;
-  if(newStreak>0&&newStreak%7===0){
-    const pr=ref(db,`players/${ME}`); const ps=await get(pr); const pl=ps.val()||{points:0,totalEarned:0};
-    await update(pr,{points:(pl.points||0)+3,totalEarned:(pl.totalEarned||0)+3});
-    const t1=now(); await push(ref(db,'history'),{user:ME,desc:`連續簽到 ${newStreak} 天獎勵！`,icon:'🎉',pts:3,time:t1.time,date:t1.date});
-    msg=`🎉 連續簽到 ${newStreak} 天！獲得 3 顆星星！`; rainStars();
+window.doCheckin = async function() {
+  const btn = document.getElementById('checkinBtn');
+  btn.disabled = true; // 防止重複點擊
+
+  try {
+    // 傳送到 GAS API 進行簽到（小惠）
+    const response = await fetch(`${GAS_API_URL}?name=小惠&action=checkin`);
+    const res = await response.json();
+
+    if (res.status === 'already') {
+      toast(`${res.name} 今天已經簽到過囉！`);
+    } else if (res.status === 'success') {
+      let msg = `🎉 簽到成功！獲得 1 顆星星！目前連續 ${res.days} 天 🌟`;
+      
+      // 同步寫入原有的 Firebase 或發放特效
+      const btnEl = document.getElementById('checkinBtn');
+      if (btnEl) {
+        btnEl.classList.add('did-checkin');
+        setTimeout(() => btnEl.classList.remove('did-checkin'), 500);
+      }
+      rainStars(); // 顯示星星動畫
+      toast(msg);
+    }
+  } catch (err) {
+    console.error("簽到失敗", err);
+    toast("簽到連線失敗，請再試一次！");
+  } finally {
+    btn.disabled = false;
   }
-  const btn=document.getElementById('checkinBtn'); btn.classList.add('did-checkin'); setTimeout(()=>btn.classList.remove('did-checkin'),500);
-  toast(msg);
 };
 
 // ── GACHA ──
@@ -1595,6 +1607,30 @@ if ('serviceWorker' in navigator) {
 }
 loadAIHoroscope();
 initDefaults().then(()=>startListen());
+
+  function syncCheckinFromSheet() {
+  fetch(`${GAS_API_URL}?name=小惠`)
+    .then(res => res.json())
+    .then(data => {
+      if (data && data.days !== undefined) {
+        // 更新連續簽到天數顯示
+        const streakLabel = document.getElementById('streakLabel');
+        if (streakLabel) streakLabel.textContent = `連續 ${data.days} 天`;
+
+        // 如果今天已簽到，停用簽到按鈕
+        const today = new Date().toISOString().split('T')[0];
+        const checkinBtn = document.getElementById('checkinBtn');
+        if (data.lastDate === today && checkinBtn) {
+          checkinBtn.textContent = '✅ 已簽';
+          checkinBtn.disabled = true;
+        }
+      }
+    })
+    .catch(err => console.error("雲端簽到同步失敗", err));
+}
+
+// 頁面載入時觸發同步
+syncCheckinFromSheet();
 </script>
 </body>
 </html>
