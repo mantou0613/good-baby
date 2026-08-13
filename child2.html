@@ -977,7 +977,7 @@ function renderCheckin(ci){
 
 window.doCheckin = async function() {
   const btn = document.getElementById('checkinBtn');
-  btn.disabled = true; // 防止重複點擊
+  btn.disabled = true;
 
   try {
     const response = await fetch(`${GAS_API_URL}?name=小胖&action=checkin`);
@@ -991,31 +991,13 @@ window.doCheckin = async function() {
     }
 
     if (res.status === 'success') {
-      const msg = `🎉 簽到成功！獲得 1 顆星星！目前連續 ${res.days} 天 🌟`;
-
       btn.classList.add('did-checkin');
       setTimeout(() => btn.classList.remove('did-checkin'), 500);
       rainStars();
-      toast(msg);
-
-      // 同步簽到狀態到 Firebase（畫面用）
-      const today = todayStr();
-      const ciRef = ref(db, `checkin/${ME}`);
-      const ciSnap = await get(ciRef);
-      const ci = ciSnap.val() || { streak: 0, history7: [] };
-      const history7 = Array.isArray(ci.history7) ? ci.history7.slice() : [];
-      if (!history7.includes(today)) history7.push(today);
-      const trimmed = history7.slice(-7);
-
-      await update(ciRef, {
-        streak: res.days || (ci.streak || 0) + 1,
-        history7: trimmed,
-        lastDate: today
-      });
-
-      // ★ 同步加進網頁星星點數（會自動記錄歷史、檢查升級）
-      await addPts(1, `[簽到] 連續第 ${res.days} 天，獲得 1 顆星星！`, '📅');
-
+      toast(`🎉 簽到成功！獲得 1 顆星星！目前連續 ${res.days} 天 🌟`);
+      // Firebase 已由 GAS 端寫入（checkin/players/history 都處理好了）
+      // 這裡不再手動 update(ciRef,...) 或 addPts(...)，避免重複加分
+      // 畫面會透過 onValue(ref(db,'/')) 的即時監聽自動更新
       btn.textContent = '已簽到 ✓';
       btn.disabled = true;
     } else if (res.status === 'error') {
