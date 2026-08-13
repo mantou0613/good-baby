@@ -764,6 +764,8 @@ gtag('config', 'G-2MQ6X5YG1L');
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, get, set, push, update, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
+const GAS_API_URL = "https://script.google.com/macros/s/AKfycbwjpZ0IdIWcTQRPbnKSNoq7cNu4JhpYI-K0laUN6MbUUZBZ9caCrQZrpUhB0CuE593fhw/exec";
+
 const firebaseConfig={apiKey:"AIzaSyDO4WvP3hOQgA7YpZFtMClssawX5Xq-Kjw",authDomain:"baby-points.firebaseapp.com",databaseURL:"https://baby-points-default-rtdb.asia-southeast1.firebasedatabase.app",projectId:"baby-points",storageBucket:"baby-points.firebasestorage.app",messagingSenderId:"933648461033",appId:"1:933648461033:web:14bbf1387a1f741c9c5478"};
 
 const ME='child2', SIGN='射手座';
@@ -954,7 +956,7 @@ window.redeemGift=async function(type){
   closeModal('giftOverlay');
 };
 
-// ── 簽到 ──
+// ── 簽到（改為串接 Google 試算表 GAS API） ──
 function renderCheckin(ci){
   ci=ci||{};const streak=ci.streak||0,h7=ci.history7||[],today=todayStr();
   document.getElementById('streakLabel').textContent=`連續 ${streak} 天`;
@@ -973,26 +975,59 @@ function renderCheckin(ci){
   if(h7.includes(today)){btn.textContent='已簽到 ✓';btn.disabled=true;}
   else{btn.textContent='簽到！';btn.disabled=false;}
 }
-window.doCheckin=async function(){
-  const snap=await get(ref(db,`checkin/${ME}`));
-  let ci=snap.val()||{streak:0,lastDate:'',history7:[]};
-  const today=todayStr();
-  if(ci.lastDate===today){toast('今天已經簽到過囉！');return;}
-  const yesterday=new Date();yesterday.setDate(yesterday.getDate()-1);
-  const yStr=`${yesterday.getFullYear()}-${String(yesterday.getMonth()+1).padStart(2,'0')}-${String(yesterday.getDate()).padStart(2,'0')}`;
-  const newStreak=(ci.lastDate===yStr)?(ci.streak||0)+1:1;
-  let h7=ci.history7||[];h7.push(today);if(h7.length>7)h7=h7.slice(-7);
-  await set(ref(db,`checkin/${ME}`),{streak:newStreak,lastDate:today,history7:h7});
-  let msg=`✅ 簽到成功！連續 ${newStreak} 天`;
-  if(newStreak>0&&newStreak%7===0){
-    const pr=ref(db,`players/${ME}`);const ps=await get(pr);const pl=ps.val()||{points:0,totalEarned:0};
-    await update(pr,{points:(pl.points||0)+3,totalEarned:(pl.totalEarned||0)+3});
-    const t1=now();await push(ref(db,'history'),{user:ME,desc:`連續簽到 ${newStreak} 天獎勵！`,icon:'🎉',pts:3,time:t1.time,date:t1.date});
-    msg=`🎉 連續簽到 ${newStreak} 天！獲得 3 顆星星！`;rainStars();
+
+window.doCheckin = async function() {
+  const btn = document.getElementById('checkinBtn');
+  btn.disabled = true; // 防止重複點擊
+
+  try {
+    // 傳送到 GAS API 進行簽到（小胖）
+    const response = await fetch(`${GAS_API_URL}?name=小胖&action=checkin`);
+    const res = await response.json();
+
+    if (res.status === 'already') {
+      toast(`${res.name} 今天已經簽到過囉！`);
+    } else if (res.status === 'success') {
+      let msg = `🎉 簽到成功！獲得 1 顆星星！目前連續 ${res.days} 天 🌟`;
+
+      // 同步發放特效
+      const btnEl = document.getElementById('checkinBtn');
+      if (btnEl) {
+        btnEl.classList.add('did-checkin');
+        setTimeout(() => btnEl.classList.remove('did-checkin'), 500);
+      }
+      rainStars(); // 顯示星星動畫
+      toast(msg);
+    }
+  } catch (err) {
+    console.error("簽到失敗", err);
+    toast("簽到連線失敗，請再試一次！");
+  } finally {
+    btn.disabled = false;
   }
-  const btn=document.getElementById('checkinBtn');btn.classList.add('did-checkin');setTimeout(()=>btn.classList.remove('did-checkin'),500);
-  toast(msg);
 };
+
+// ── 從 Google 試算表同步簽到天數 ──
+function syncCheckinFromSheet() {
+  fetch(`${GAS_API_URL}?name=小胖`)
+    .then(res => res.json())
+    .then(data => {
+      if (data && data.days !== undefined) {
+        // 更新連續簽到天數顯示
+        const streakLabel = document.getElementById('streakLabel');
+        if (streakLabel) streakLabel.textContent = `連續 ${data.days} 天`;
+
+        // 如果今天已簽到，停用簽到按鈕
+        const today = new Date().toISOString().split('T')[0];
+        const checkinBtn = document.getElementById('checkinBtn');
+        if (data.lastDate === today && checkinBtn) {
+          checkinBtn.textContent = '✅ 已簽';
+          checkinBtn.disabled = true;
+        }
+      }
+    })
+    .catch(err => console.error("雲端簽到同步失敗", err));
+}
 
 // ── 扭蛋 ──
 function getGachaCredits(){return(window._allData?.gachaCredits?.[ME]?.count)||0;}
@@ -1586,6 +1621,7 @@ if(Notification?.permission==='granted'||localStorage.getItem('child2_notif')===
 if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').then(reg=>{window._swReg=reg;}).catch(()=>{});}
 loadAIHoroscope();
 onValue(ref(db,'/'),snap=>{onDataUpdate(snap.val()||{});});
+syncCheckinFromSheet();
 </script>
 </body>
 </html>
