@@ -2,23 +2,14 @@
 <html lang="zh-TW">
 <head>
   <!-- Google tag (gtag.js) -->
-
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-2MQ6X5YG1L"></script>
-
 <script>
-
 window.dataLayer = window.dataLayer || [];
-
 function gtag(){dataLayer.push(arguments);}
-
 gtag('js', new Date());
-
-
-
 gtag('config', 'G-2MQ6X5YG1L');
-
 </script> 
-
+<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
@@ -823,6 +814,19 @@ let _toastTimer=null;
 function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');if(_toastTimer)clearTimeout(_toastTimer);_toastTimer=setTimeout(()=>el.classList.remove('show'),2800);}
 function rainStars(){const c=document.getElementById('starsRain');for(let i=0;i<18;i++){const s=document.createElement('div');s.className='star-particle';s.textContent=['⭐','🌟','✨','💫'][Math.floor(Math.random()*4)];s.style.left=Math.random()*100+'vw';s.style.animationDelay=Math.random()*1+'s';s.style.fontSize=(14+Math.random()*16)+'px';c.appendChild(s);setTimeout(()=>s.remove(),2500);}}
 
+  document.addEventListener('DOMContentLoaded', function() {
+  liff.init({ liffId: "2011090467-GxN7gjxw" })
+    .then(() => {
+      if (liff.isLoggedIn()) {
+        liff.getProfile().then(profile => {
+          console.log("登入成功，使用者名稱：", profile.displayName);
+        });
+      }
+    })
+    .catch((err) => {
+      console.error("LIFF 初始化失敗", err);
+    });
+});
 // ── Mode 切換 ──
 window.setMode=function(mode){
   currentMode=mode;
