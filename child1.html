@@ -10,6 +10,7 @@
 
   gtag('config', 'G-2MQ6X5YG1L');
 </script>
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <link rel="apple-touch-icon" href="icon.png">
@@ -743,6 +744,19 @@ async function loadAIHoroscope() {
     document.getElementById('horoLuck').textContent='幸運色：粉紅色 🌸｜幸運數字：3';
   }
 }
+  document.addEventListener('DOMContentLoaded', function() {
+  liff.init({ liffId: "2011090467-GxN7gjxw" })
+    .then(() => {
+      if (liff.isLoggedIn()) {
+        liff.getProfile().then(profile => {
+          console.log("登入成功，使用者名稱：", profile.displayName);
+        });
+      }
+    })
+    .catch((err) => {
+      console.error("LIFF 初始化失敗", err);
+    });
+});
 
 // ── 日期工具 ──
 function todayStr() { const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
