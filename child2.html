@@ -981,32 +981,54 @@ window.doCheckin = async function() {
   btn.disabled = true; // 防止重複點擊
 
   try {
-    // 傳送到 GAS API 進行簽到（小胖）
     const response = await fetch(`${GAS_API_URL}?name=小胖&action=checkin`);
     const res = await response.json();
 
     if (res.status === 'already') {
       toast(`${res.name} 今天已經簽到過囉！`);
-    } else if (res.status === 'success') {
-      let msg = `🎉 簽到成功！獲得 1 顆星星！目前連續 ${res.days} 天 🌟`;
+      btn.textContent = '已簽到 ✓';
+      btn.disabled = true;
+      return;
+    }
 
-      // 同步發放特效
-      const btnEl = document.getElementById('checkinBtn');
-      if (btnEl) {
-        btnEl.classList.add('did-checkin');
-        setTimeout(() => btnEl.classList.remove('did-checkin'), 500);
-      }
-      rainStars(); // 顯示星星動畫
+    if (res.status === 'success') {
+      const msg = `🎉 簽到成功！獲得 1 顆星星！目前連續 ${res.days} 天 🌟`;
+
+      btn.classList.add('did-checkin');
+      setTimeout(() => btn.classList.remove('did-checkin'), 500);
+      rainStars();
       toast(msg);
+
+      // 同步簽到狀態到 Firebase（畫面用）
+      const today = todayStr();
+      const ciRef = ref(db, `checkin/${ME}`);
+      const ciSnap = await get(ciRef);
+      const ci = ciSnap.val() || { streak: 0, history7: [] };
+      const history7 = Array.isArray(ci.history7) ? ci.history7.slice() : [];
+      if (!history7.includes(today)) history7.push(today);
+      const trimmed = history7.slice(-7);
+
+      await update(ciRef, {
+        streak: res.days || (ci.streak || 0) + 1,
+        history7: trimmed,
+        lastDate: today
+      });
+
+      // ★ 同步加進網頁星星點數（會自動記錄歷史、檢查升級）
+      await addPts(1, `[簽到] 連續第 ${res.days} 天，獲得 1 顆星星！`, '📅');
+
+      btn.textContent = '已簽到 ✓';
+      btn.disabled = true;
+    } else if (res.status === 'error') {
+      toast(res.message || '簽到發生錯誤');
+      btn.disabled = false;
     }
   } catch (err) {
     console.error("簽到失敗", err);
     toast("簽到連線失敗，請再試一次！");
-  } finally {
     btn.disabled = false;
   }
 };
-
 // ── 從 Google 試算表同步簽到天數 ──
 function syncCheckinFromSheet() {
   fetch(`${GAS_API_URL}?name=小胖`)
@@ -1621,7 +1643,7 @@ if(Notification?.permission==='granted'||localStorage.getItem('child2_notif')===
 if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').then(reg=>{window._swReg=reg;}).catch(()=>{});}
 loadAIHoroscope();
 onValue(ref(db,'/'),snap=>{onDataUpdate(snap.val()||{});});
-syncCheckinFromSheet();
+
 </script>
 </body>
 </html>
