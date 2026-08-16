@@ -1159,11 +1159,13 @@ window.openTaskModal=function(id,name,icon,pts,taskType){
   document.getElementById('mTaskSub').textContent=sub;
   document.getElementById('taskOverlay').classList.add('open');
 };
-window.submitTask=async function(){
+window.submitTask=async()=>{
   if(!pendingTask)return;
-  const t=now();
-  await push(ref(db,'pending'),{user:ME,taskId:pendingTask.id,taskName:pendingTask.name,icon:pendingTask.icon,pts:pendingTask.pts,status:'pending',time:t.time,date:t.date});
-  closeModal('taskOverlay');toast(`💌 已申報「${pendingTask.name}」！等小波確認 ✦`);pendingTask=null;
+  const t4=now();
+  const pendingRef = await push(ref(db,'pending'),{user:ME,taskId:pendingTask.id,taskName:pendingTask.name,pts:pendingTask.pts,time:t4.time,date:t4.date});
+  closeModal('taskOverlay'); toast(`「${pendingTask.name}」已申報！等待審核 ✦`);
+  fetch(`${GAS_API_URL}?action=notifyApprover&uname=小惠&taskName=${encodeURIComponent(pendingTask.name)}&pts=${pendingTask.pts}&pid=${pendingRef.key}`).catch(()=>{});
+  pendingTask=null;
 };
 window.openShopModal=function(id,name,icon,cost){
   pendingShop={id,name,icon,cost};
