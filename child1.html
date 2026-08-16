@@ -1160,10 +1160,10 @@ window.openTaskModal=(id,name,icon,pts,taskType)=>{
 window.submitTask=async()=>{
   if(!pendingTask)return;
   const t4=now();
-  const pendingRef = await push(ref(db,'pending'),{user:ME,taskId:pendingTask.id,taskName:pendingTask.name,pts:pendingTask.pts,time:t4.time,date:t4.date});
-  closeModal('taskOverlay'); toast(`「${pendingTask.name}」已申報！等待審核 ✦`);
-  fetch(`${GAS_API_URL}?action=notifyApprover&uname=小惠&taskName=${encodeURIComponent(pendingTask.name)}&pts=${pendingTask.pts}&pid=${pendingRef.key}`).catch(()=>{});
-  pendingTask=null;
+  const {id:taskId, name:taskName, pts:taskPts}=pendingTask;
+  const pendingRef = await push(ref(db,'pending'),{user:ME,taskId,taskName,pts:taskPts,time:t4.time,date:t4.date});
+  closeModal('taskOverlay'); toast(`「${taskName}」已申報！等待審核 ✦`);
+  fetch(`${GAS_API_URL}?action=notifyApprover&uname=小惠&taskName=${encodeURIComponent(taskName)}&pts=${taskPts}&pid=${pendingRef.key}`).catch(()=>{});
 };
 window.openShopModal=(id,name,icon,cost)=>{pendingShop={id,name,icon,cost};document.getElementById('mShopIcon').textContent=icon;document.getElementById('mShopName').textContent=name;document.getElementById('mShopCost').textContent=cost;document.getElementById('shopOverlay').classList.add('open');};
 window.redeemShop=async()=>{
@@ -1171,8 +1171,9 @@ window.redeemShop=async()=>{
   const pts=data.points||0;
   if(pts<pendingShop.cost){toast('星星不夠喔！繼續加油 ♡');closeModal('shopOverlay');return;}
   const t5=now();
-  await push(ref(db,'shopPending'),{user:ME,shopId:pendingShop.id,shopName:pendingShop.name,icon:pendingShop.icon,cost:pendingShop.cost,time:t5.time,date:t5.date});
-  closeModal('shopOverlay'); toast(`💌 已送出兌換申請！等小波確認 ♡`); pendingShop=null;
+  const {id:shopId, name:shopName, icon:shopIcon, cost:shopCost}=pendingShop;
+  await push(ref(db,'shopPending'),{user:ME,shopId,shopName,icon:shopIcon,cost:shopCost,time:t5.time,date:t5.date});
+  closeModal('shopOverlay'); toast(`💌 已送出兌換申請！等小波確認 ♡`);
 };
 window.submitProposal = async () => {
   const icon = document.getElementById('proposeIcon').value.trim() || '💡';
