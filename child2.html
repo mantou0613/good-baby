@@ -1188,10 +1188,11 @@ window.submitProposal=async function(){
   if(!name){toast('請填寫任務名稱！');return;}if(!pts||pts<=0){toast('請填寫建議數量！');return;}
   const rewardLabel={pts:'顆星星',gacha:'顆扭蛋',game:'次遊戲次數'}[rewardType];
   const t=now();
-  await push(ref(db,'proposals'),{user:ME,icon,name,suggestPts:pts,rewardType,reason:reason||'',time:t.time,date:t.date});
+  const proposalRef = await push(ref(db,'proposals'),{user:ME,icon,name,suggestPts:pts,rewardType,reason:reason||'',time:t.time,date:t.date});
   ['proposeIcon','proposeName','proposePts','proposeReason'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('proposeRewardType').value='pts';
   toast(`💌 已送出「${name}」的任務申請！建議 ${pts} ${rewardLabel} ✦`);
+  fetch(`${GAS_API_URL}?action=notifyApprover&type=proposal&uname=小胖&taskName=${encodeURIComponent(name)}&pts=${pts}&rewardType=${rewardType}&pid=${proposalRef.key}`).catch(()=>{});
 };
 window.submitShopProposal=async function(){
   const icon=document.getElementById('shopProposeIcon').value.trim()||'🎁';
