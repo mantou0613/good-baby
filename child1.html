@@ -1115,7 +1115,7 @@ function render(){
 
   const myProposals=Object.entries(proposals).filter(([,p])=>p.user===ME);
   document.getElementById('myProposalList').innerHTML=myProposals.length===0?empty('💌','還沒有提出自訂任務'):myProposals.reverse().map(([id,p])=>`<div class="task-card pending"><div class="task-icon">${p.icon||'💡'}</div><div class="task-info"><div class="task-name">${p.name}</div>
-  <div class="task-pts">建議 ${p.suggestPts} ${p.rewardType==='gacha'?'顆扭蛋 🎰':p.rewardType==='game'?'次遊戲 🎮':'顆星星 ⭐'}</div></div><div class="task-status status-pending">審核中</div></div>`).join('');
+  <div class="task-pts">建議 ${p.suggestPts} ${p.rewardType==='gacha'?'顆扭蛋 🎰':p.rewardType==='game'?'次遊戲次數 🎮':'顆星星 ⭐'}</div></div><div class="task-status status-pending">審核中</div></div>`).join('');
   const myShopProposals=Object.entries(window._allData?.shopProposals||{}).filter(([,p])=>p.user===ME);
   const shopPropEl=document.getElementById('myShopProposalList');
   if(shopPropEl) shopPropEl.innerHTML=myShopProposals.length===0?empty('💌','還沒有提出獎勵申請'):myShopProposals.reverse().map(([id,p])=>`<div class="task-card pending"><div class="task-icon">${p.icon||'🎁'}</div><div class="task-info"><div class="task-name">${p.name}</div><div class="task-pts">建議 ${p.suggestPts} 顆星星</div></div><div class="task-status status-pending">審核中</div></div>`).join('');
@@ -1188,6 +1188,8 @@ window.submitProposal = async () => {
   await push(ref(db, 'proposals'), {user:ME,icon,name,suggestPts:pts,rewardType,reason:reason||'',time:t6.time,date:t6.date,type:'custom'});
   document.getElementById('proposeIcon').value='';document.getElementById('proposeName').value='';document.getElementById('proposePts').value='';document.getElementById('proposeReason').value='';document.getElementById('proposeRewardType').value='pts';
   toast(`💌 自訂任務「${name}」已送出！建議 ${pts} ${rewardLabel} ✦`);
+  // 同步推播通知審核者（LINE），讓小波馬上知道有新的自訂任務申請
+  fetch(`${GAS_API_URL}?action=notifyProposal&uname=小惠&itemName=${encodeURIComponent(name)}&suggestAmount=${pts}&rewardType=${rewardType}&kind=task`).catch(()=>{});
 };
 window.submitShopProposal=async()=>{
   const icon=document.getElementById('shopProposeIcon').value.trim()||'🎁', name=document.getElementById('shopProposeName').value.trim(), pts=parseInt(document.getElementById('shopProposePts').value), reason=document.getElementById('shopProposeReason').value.trim();
@@ -1195,6 +1197,8 @@ window.submitShopProposal=async()=>{
   const t=now(); await push(ref(db,'shopProposals'),{user:ME,icon,name,suggestPts:pts,reason:reason||'',time:t.time,date:t.date});
   document.getElementById('shopProposeIcon').value='';document.getElementById('shopProposeName').value='';document.getElementById('shopProposePts').value='';document.getElementById('shopProposeReason').value='';
   toast(`💌 獎勵申請「${name}」已送出！等待審核 ✦`);
+  // 同步推播通知審核者（LINE），讓小波馬上知道有新的自訂獎勵申請
+  fetch(`${GAS_API_URL}?action=notifyProposal&uname=小惠&itemName=${encodeURIComponent(name)}&suggestAmount=${pts}&rewardType=pts&kind=shop`).catch(()=>{});
 };
 window.closeModal=(id)=>{document.getElementById(id).classList.remove('open');pendingTask=null;pendingShop=null;};
 
