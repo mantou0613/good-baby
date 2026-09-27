@@ -462,11 +462,11 @@
   <div class="ledger-hero">
     <div class="ledger-stat">
       <div class="ledger-stat-val" id="ledgerMonthTotal">$0</div>
-      <div class="ledger-stat-label">本月支出</div>
+      <div class="ledger-stat-label" id="ledgerMonthTotalLabel">本月支出</div>
     </div>
     <div class="ledger-stat">
       <div class="ledger-stat-val" id="ledgerMonthCount">0</div>
-      <div class="ledger-stat-label">本月筆數</div>
+      <div class="ledger-stat-label" id="ledgerMonthCountLabel">本月筆數</div>
     </div>
   </div>
 
@@ -1589,12 +1589,19 @@ function renderLedger() {
     ? entries
     : entries.filter(([,e]) => (e.date||'').startsWith(selectedMonth));
 
-  // 本月統計（用實際目前月份，而非篩選月份，維持頂部卡片穩定）
+  // 頂部統計：跟著目前選擇的月份走。選「全部月份」時顯示當月統計（本月）；
+  // 選特定月份時顯示該月統計，並把標籤改成「該月支出／筆數」。
   const thisMonth = ledgerTodayISO().slice(0,7);
-  const thisMonthEntries = entries.filter(([,e]) => (e.date||'').startsWith(thisMonth));
-  const thisMonthTotal = thisMonthEntries.reduce((s,[,e]) => s + (e.total||0), 0);
-  document.getElementById('ledgerMonthTotal').textContent = '$' + thisMonthTotal;
-  document.getElementById('ledgerMonthCount').textContent = thisMonthEntries.length;
+  const statsMonth = selectedMonth === 'all' ? thisMonth : selectedMonth;
+  const statsEntries = entries.filter(([,e]) => (e.date||'').startsWith(statsMonth));
+  const statsTotal = statsEntries.reduce((s,[,e]) => s + (e.total||0), 0);
+
+  document.getElementById('ledgerMonthTotal').textContent = '$' + statsTotal;
+  document.getElementById('ledgerMonthCount').textContent = statsEntries.length;
+
+  const isCurrentMonth = statsMonth === thisMonth;
+  document.getElementById('ledgerMonthTotalLabel').textContent = isCurrentMonth ? '本月支出' : `${statsMonth} 支出`;
+  document.getElementById('ledgerMonthCountLabel').textContent = isCurrentMonth ? '本月筆數' : `${statsMonth} 筆數`;
 
   listEl.innerHTML = filtered.length === 0
     ? `<div class="empty"><div class="empty-icon">🧾</div>還沒有記帳紀錄，拍張明細開始吧！</div>`
